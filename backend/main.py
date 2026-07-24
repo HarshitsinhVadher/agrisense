@@ -1,7 +1,7 @@
 import os
 import sys
 import uvicorn
-from fastapi import FastAPI, UploadFile, File, Form, Query, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, Query, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -11,9 +11,10 @@ from typing import Optional, List, Dict, Any
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from models.crop_recommender import CropRecommender
-from services.weather_service import get_weather_data
+from services.weather_service import get_weather_data, geocode_city
 from services.ocr_service import process_soil_card_image, parse_soil_health_card_text
 from services.label_service import scan_and_interpret_label, load_products_db
+from services.auth_service import register_user, login_user, get_user_id_from_token
 from services.db_service import (
     init_sql_db, get_farmer_profile, update_farmer_profile,
     record_soil_report_sql, record_label_scan_sql, record_crop_recommendation_sql,
@@ -21,9 +22,9 @@ from services.db_service import (
 )
 
 app = FastAPI(
-    title="AgriSense API — Expo Mobile & FastAPI SQL Backend",
-    version="2.0.0",
-    description="Backend REST API for Expo Go Mobile App: Crop ML, Weather Advisories, Soil OCR, Label Scanner & Relational SQL DB"
+    title="AgriSense API v3.0 — Auth, GPS, AI Vision",
+    version="3.0.0",
+    description="Backend REST API: Authentication, GPS Weather, Gemini Vision Label Scanner, Crop ML, Soil OCR & SQL DB"
 )
 
 app.add_middleware(
@@ -35,6 +36,12 @@ app.add_middleware(
 )
 
 recommender = CropRecommender()
+
+# ─── Pydantic Models ───
+
+class AuthRequest(BaseModel):
+    username: str
+    password: str
 
 class CropRequest(BaseModel):
     farmer_id: int = 1
@@ -48,9 +55,9 @@ class CropRequest(BaseModel):
 
 class FarmerProfileUpdate(BaseModel):
     id: int = 1
-    name: str = "Ramesh Patel"
-    phone: str = "+91 98765 43210"
-    location: str = "Anand, Gujarat"
+    name: str = "Farmer"
+    phone: str = ""
+    location: str = ""
     latitude: float = 22.57
     longitude: float = 72.93
     soil_type: str = "Loamy Soil"
@@ -62,62 +69,110 @@ class FarmerProfileUpdate(BaseModel):
     OC: float = 0.52
     preferred_language: str = "en"
 
+# ─── Helper: Extract user_id from Authorization header ───
+
+def _get_user_id(request: Request) -> Optional[int]:
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:]
+        return get_user_id_from_token(token)
+    return None
+
+# ─── Startup ───
+
 @app.on_event("startup")
 def startup_event():
     init_sql_db()
+
+# ─── Health Check ───
 
 @app.get("/api/health")
 def health_check():
     return {
         "status": "online",
-        "app": "AgriSense Backend",
-        "version": "2.0.0",
-        "database": "SQLite Relational DB",
+        "app": "AgriSense Backend v3.0",
+        "version": "3.0.0",
+        "features": ["auth", "gps_weather", "gemini_vision", "crop_ml", "soil_ocr"],
+        "gemini_api_key_set": bool(os.environ.get("GEMINI_API_KEY")),
         "model_loaded": recommender.model is not None
     }
 
+# ─── Authentication Endpoints ───
+
+@app.post("/api/auth/register")
+def auth_register(data: AuthRequest):
+    result = register_user(data.username, data.password)
+    if result.get("error"):
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+@app.post("/api/auth/login")
+def auth_login(data: AuthRequest):
+    result = login_user(data.username, data.password)
+    if result.get("error"):
+        raise HTTPException(status_code=401, detail=result["error"])
+    return result
+
+@app.get("/api/auth/me")
+def auth_me(request: Request):
+    user_id = _get_user_id(request)
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    profile = get_farmer_profile(user_id=user_id)
+    return {"user_id": user_id, "profile": profile}
+
+# ─── Geocoding Endpoint ───
+
+@app.get("/api/geocode")
+def geocode(query: str = Query(..., description="City name to search")):
+    results = geocode_city(query)
+    return {"results": results}
+
+# ─── Weather ───
+
 @app.get("/api/weather")
 def fetch_weather(
+    request: Request,
     lat: float = Query(22.57, description="Latitude"),
     lon: float = Query(72.93, description="Longitude"),
     location_name: str = Query("Anand, Gujarat", description="Location Display Name")
 ):
     return get_weather_data(lat=lat, lon=lon, location_name=location_name)
 
+# ─── Crop Recommendation ───
+
 @app.post("/api/recommend-crop")
-def recommend_crop(data: CropRequest):
+def recommend_crop(data: CropRequest, request: Request):
+    user_id = _get_user_id(request)
     predictions = recommender.predict(
-        N=data.N,
-        P=data.P,
-        K=data.K,
-        temperature=data.temperature,
-        humidity=data.humidity,
-        ph=data.ph,
-        rainfall=data.rainfall
+        N=data.N, P=data.P, K=data.K,
+        temperature=data.temperature, humidity=data.humidity,
+        ph=data.ph, rainfall=data.rainfall
     )
-    
+
     top_crop = predictions[0]['name'] if predictions else "Unknown"
     confidence = predictions[0]['confidence'] if predictions else 0.0
-    
+
     record_crop_recommendation_sql(
-        farmer_id=data.farmer_id,
-        top_crop=top_crop,
-        confidence=confidence,
+        farmer_id=data.farmer_id, top_crop=top_crop, confidence=confidence,
         n=data.N, p=data.P, k=data.K, ph=data.ph,
-        temp=data.temperature, humidity=data.humidity, rain=data.rainfall
+        temp=data.temperature, humidity=data.humidity, rain=data.rainfall,
+        user_id=user_id
     )
-    
-    return {
-        "input_parameters": data.dict(),
-        "recommendations": predictions
-    }
+
+    return {"input_parameters": data.dict(), "recommendations": predictions}
+
+# ─── Soil Health Card Parser ───
 
 @app.post("/api/parse-soil-card")
 async def parse_soil_card(
+    request: Request,
     farmer_id: int = Form(1),
     file: Optional[UploadFile] = File(None),
     raw_text: Optional[str] = Form(None)
 ):
+    user_id = _get_user_id(request)
+
     if file:
         contents = await file.read()
         parsed = process_soil_card_image(contents)
@@ -130,56 +185,70 @@ async def parse_soil_card(
     record_soil_report_sql(
         farmer_id=farmer_id,
         sample_id=f"SHC-{farmer_id}-2026",
-        n=params.get("N", 180.0),
-        p=params.get("P", 42.0),
-        k=params.get("K", 160.0),
-        ph=params.get("pH", 7.2),
-        ec=params.get("EC", 0.65),
-        oc=params.get("OC", 0.52),
+        n=params.get("N", 180.0), p=params.get("P", 42.0),
+        k=params.get("K", 160.0), ph=params.get("pH", 7.2),
+        ec=params.get("EC", 0.65), oc=params.get("OC", 0.52),
         status=parsed.get("soil_status", {}),
-        snippet=parsed.get("raw_text_snippet", "")
+        snippet=parsed.get("raw_text_snippet", ""),
+        user_id=user_id
     )
     return parsed
 
+# ─── Label Scanner (Gemini Vision + Fallback) ───
+
 @app.post("/api/scan-label")
 async def scan_product_label(
+    request: Request,
     farmer_id: int = Form(1),
     file: Optional[UploadFile] = File(None),
     text_input: Optional[str] = Form(None),
     lang: str = Form("en")
 ):
+    user_id = _get_user_id(request)
     image_bytes = None
     if file:
         image_bytes = await file.read()
 
     result = scan_and_interpret_label(image_bytes=image_bytes, text_input=text_input, lang=lang)
-    matched_prod = result.get("matched_product", {})
-    
+    matched_prod = result.get("matched_product", {}) or {}
+
     record_label_scan_sql(
         farmer_id=farmer_id,
         product_name=matched_prod.get("name", "Unknown"),
         confidence=result.get("match_confidence", 0.0),
         ocr_text=result.get("raw_ocr_text", ""),
         summary=result.get("ai_summary", ""),
-        disclaimer=result.get("disclaimer", "")
+        disclaimer=result.get("disclaimer", ""),
+        user_id=user_id
     )
     return result
+
+# ─── Products Database ───
 
 @app.get("/api/products")
 def get_products():
     return load_products_db()
 
+# ─── Farmer Profile ───
+
 @app.get("/api/profile")
-def read_profile(farmer_id: int = 1):
-    return get_farmer_profile(farmer_id)
+def read_profile(request: Request, farmer_id: int = 1):
+    user_id = _get_user_id(request)
+    return get_farmer_profile(farmer_id=farmer_id, user_id=user_id)
 
 @app.post("/api/profile")
-def write_profile(profile: FarmerProfileUpdate):
-    return update_farmer_profile(profile.dict(), profile.id)
+def write_profile(profile: FarmerProfileUpdate, request: Request):
+    user_id = _get_user_id(request)
+    return update_farmer_profile(profile.dict(), farmer_id=profile.id, user_id=user_id)
+
+# ─── History ───
 
 @app.get("/api/history")
-def read_history(farmer_id: int = 1):
-    return fetch_all_history_sql(farmer_id)
+def read_history(request: Request, farmer_id: int = 1):
+    user_id = _get_user_id(request)
+    return fetch_all_history_sql(farmer_id=farmer_id, user_id=user_id)
+
+# ─── Static Frontend Mount ───
 
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend')
 if os.path.exists(frontend_dir):
@@ -190,7 +259,7 @@ if os.path.exists(frontend_dir):
         index_file = os.path.join(frontend_dir, "index.html")
         if os.path.exists(index_file):
             return FileResponse(index_file)
-        return {"message": "AgriSense Expo & FastAPI API Server Active."}
+        return {"message": "AgriSense v3.0 API Server Active."}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

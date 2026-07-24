@@ -2,7 +2,7 @@
   "expo": {
     "name": "AgriSense",
     "slug": "agrisense",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "backgroundColor": "#1b4332",
@@ -10,14 +10,28 @@
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
       ]
+    },
+    "ios": {
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "AgriSense needs your location to show local weather and agricultural advisories.",
+        "NSCameraUsageDescription": "AgriSense needs camera access to scan product labels and soil health cards."
+      }
     },
     "plugins": [
       [
         "expo-image-picker",
         {
           "photosPermission": "Allow AgriSense to access your photos for label analysis."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow AgriSense to use your location for weather forecasts."
         }
       ]
     ]

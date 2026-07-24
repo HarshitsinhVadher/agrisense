@@ -23,6 +23,29 @@ WEATHER_CODES = {
     96: {"desc": "Thunderstorm with Hail", "icon": "⛈️"}
 }
 
+def geocode_city(query: str) -> list:
+    """Search for cities using Open-Meteo Geocoding API (free, no API key needed)."""
+    url = "https://geocoding-api.open-meteo.com/v1/search"
+    params = {"name": query, "count": 8, "language": "en", "format": "json"}
+    try:
+        response = requests.get(url, params=params, timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        results = []
+        for r in data.get("results", []):
+            results.append({
+                "name": r.get("name", ""),
+                "country": r.get("country", ""),
+                "admin1": r.get("admin1", ""),  # State/Province
+                "latitude": r.get("latitude", 0),
+                "longitude": r.get("longitude", 0),
+                "display": f"{r.get('name', '')}, {r.get('admin1', '')}, {r.get('country', '')}"
+            })
+        return results
+    except Exception as e:
+        print(f"Geocoding error: {e}")
+        return []
+
 def get_weather_data(lat: float = 22.57, lon: float = 72.93, location_name: str = "Anand, Gujarat") -> Dict[str, Any]:
     """
     Fetches real-time weather & 7-day forecast from Open-Meteo API.
