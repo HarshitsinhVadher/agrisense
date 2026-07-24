@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AgriSense — AI-Powered Farming Assistant</title>
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#1b4332">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+<div id="app-frame">
+  <!-- Top Header Bar -->
+  <header>
+    <div class="brand-container">
+      <span class="brand-icon">🌱</span>
+      <div class="brand-text">
+        <h1 data-i18n="app_title">AgriSense</h1>
+        <p data-i18n="subtitle">AI-Powered Farming Assistant</p>
+      </div>
+    </div>
+    <select id="lang-select" class="lang-selector">
+      <option value="en">English</option>
+      <option value="gu">ગુજરાતી</option>
+      <option value="hi">हिन्दी</option>
+    </select>
+  </header>
+
+  <!-- Toast Notification Overlay -->
+  <div id="toast-container"></div>
+
+  <!-- Main View Container -->
+  <main>
+    <!-- TAB 1: WEATHER & ADVISORY -->
+    <div id="tab-weather" class="tab-content active">
+      <div id="weather-hero" class="weather-hero">
+        <div class="spinner"></div>
+        <p style="margin-top:8px;">Fetching location weather...</p>
+      </div>
+
+      <div style="margin-top:14px; text-align:right;">
+        <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:12px;" onclick="searchLocation()" data-i18n="search_location">📍 Change Location / City</button>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <h3 class="card-title" data-i18n="advisory_heading">Agricultural Advisories</h3>
+        <div id="advisories-container"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="forecast_heading">7-Day Forecast</h3>
+        <div id="forecast-container" class="forecast-list"></div>
+      </div>
+    </div>
+
+    <!-- TAB 2: CROP RECOMMENDATION -->
+    <div id="tab-recommend" class="tab-content">
+      <div class="card">
+        <h2 class="card-title" data-i18n="recommend_title">AI Crop Recommendation</h2>
+        <p class="card-subtitle" data-i18n="recommend_subtitle">Random Forest ML model trained on 2,200 soil-climate profiles</p>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="autofillFromSoilCard()" data-i18n="btn_auto_fill_soil">📋 Auto-fill Soil Card</button>
+          <button class="btn btn-secondary" onclick="autofillFromWeather()" data-i18n="btn_auto_fill_weather">🌤️ Auto-fill Weather</button>
+        </div>
+
+        <form onsubmit="submitCropRecommendation(event)">
+          <div class="form-group">
+            <label data-i18n="nitrogen">Nitrogen (N) kg/ha</label>
+            <div class="range-slider-group">
+              <input type="range" id="input-N" min="0" max="140" value="80" oninput="syncSlider('input-N', 'val-N')">
+              <span id="val-N" class="range-val">80</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="phosphorus">Phosphorus (P) kg/ha</label>
+            <div class="range-slider-group">
+              <input type="range" id="input-P" min="0" max="145" value="45" oninput="syncSlider('input-P', 'val-P')">
+              <span id="val-P" class="range-val">45</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="potassium">Potassium (K) kg/ha</label>
+            <div class="range-slider-group">
+              <input type="range" id="input-K" min="0" max="205" value="50" oninput="syncSlider('input-K', 'val-K')">
+              <span id="val-K" class="range-val">50</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="ph_level">Soil pH Level</label>
+            <div class="range-slider-group">
+              <input type="range" id="input-ph" min="3.5" max="10.0" step="0.1" value="6.5" oninput="syncSlider('input-ph', 'val-ph')">
+              <span id="val-ph" class="range-val">6.5</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="temperature">Avg Temp (°C)</label>
+            <div class="range-slider-group">
+              <input type="range" id="input-temp" min="10" max="45" value="26" oninput="syncSlider('input-temp', 'val-temp')">
+              <span id="val-temp" class="range-val">26</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="humidity">Humidity (%)</label>
+            <div class="range-slider-group">
+              <input type="range" id="input-humidity" min="10" max="100" value="75" oninput="syncSlider('input-humidity', 'val-humidity')">
+              <span id="val-humidity" class="range-val">75</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="rainfall">Rainfall (mm)</label>
+            <div class="range-slider-group">
+              <input type="range" id="input-rain" min="20" max="300" value="110" oninput="syncSlider('input-rain', 'val-rain')">
+              <span id="val-rain" class="range-val">110</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn" data-i18n="btn_get_recommendation">🌱 Recommend Suitable Crops</button>
+        </form>
+      </div>
+
+      <div id="recommend-results"></div>
+    </div>
+
+    <!-- TAB 3: SOIL HEALTH CARD READER -->
+    <div id="tab-soil" class="tab-content">
+      <div class="card">
+        <h2 class="card-title" data-i18n="soil_card_title">Soil Health Card Reader</h2>
+        <p class="card-subtitle" data-i18n="soil_card_subtitle">Upload Govt Soil Health Card photo or PDF to parse N, P, K, pH & micronutrients</p>
+
+        <label for="soil-file-input" class="upload-dropzone">
+          <div class="upload-icon">📸</div>
+          <div class="upload-text" data-i18n="upload_soil_btn">Upload Soil Card / Take Photo</div>
+          <input type="file" id="soil-file-input" accept="image/*,.pdf" style="display:none;" onchange="handleSoilCardUpload(this)">
+        </label>
+
+        <button class="btn btn-secondary" onclick="useSampleSoilCard()" data-i18n="parse_sample_btn">📄 Use Sample Gujarat Soil Card</button>
+      </div>
+
+      <div id="soil-card-results"></div>
+    </div>
+
+    <!-- TAB 4: LABEL SCANNER -->
+    <div id="tab-scan" class="tab-content">
+      <div class="card">
+        <h2 class="card-title" data-i18n="scanner_title">Seed / Fertilizer Label Scanner</h2>
+        <p class="card-subtitle" data-i18n="scanner_subtitle">OCR extracts label text -> matched with curated Indian DB -> Gemini AI plain summary</p>
+
+        <label for="label-file-input" class="upload-dropzone">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text" data-i18n="upload_label_btn">Upload Product Photo / Camera</div>
+          <input type="file" id="label-file-input" accept="image/*" style="display:none;" onchange="handleLabelScanUpload(this)">
+        </label>
+
+        <div class="form-group" style="margin-top:10px;">
+          <label data-i18n="or_type_text">Or enter product text / name</label>
+          <input type="text" id="label-text-input" placeholder="e.g. Neem Shield, Chlorpyrifos, Urea 46%, Coragen">
+        </div>
+
+        <button class="btn" onclick="submitTextLabelScan()" data-i18n="scan_btn">🔍 Scan & Analyze Label</button>
+      </div>
+
+      <div id="label-scan-results"></div>
+    </div>
+
+    <!-- TAB 5: FARMER PROFILE -->
+    <div id="tab-profile" class="tab-content">
+      <div class="card">
+        <h2 class="card-title" data-i18n="profile_title">Farmer Profile & Settings</h2>
+
+        <form onsubmit="saveProfileData(event)">
+          <div class="form-group">
+            <label data-i18n="farmer_name">Farmer Name</label>
+            <input type="text" id="prof-name" value="Ramesh Patel">
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="phone">Mobile Number</label>
+            <input type="text" id="prof-phone" value="+91 98765 43210">
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="farm_location">Farm Village / District</label>
+            <input type="text" id="prof-location" value="Anand, Gujarat">
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="soil_type">Soil Type</label>
+            <select id="prof-soil-type">
+              <option value="Loamy Soil">Loamy Soil (ગોરાડુ જમીન)</option>
+              <option value="Black Cotton Soil">Black Cotton Soil (કાળી જમીન)</option>
+              <option value="Sandy Soil">Sandy Arid Soil (રેતાળ જમીન)</option>
+              <option value="Alluvial Soil">Alluvial Soil (કાંપ વાળી જમીન)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn" data-i18n="save_profile_btn">Save Profile</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="history_title">Recent Activity History</h3>
+        <div id="history-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <div id="nav-weather" class="nav-item active" onclick="switchTab('weather')">
+      <div class="nav-icon">🌤️</div>
+      <div data-i18n="tab_weather">Weather</div>
+    </div>
+    <div id="nav-recommend" class="nav-item" onclick="switchTab('recommend')">
+      <div class="nav-icon">🌱</div>
+      <div data-i18n="tab_recommend">Crop Advice</div>
+    </div>
+    <div id="nav-soil" class="nav-item" onclick="switchTab('soil')">
+      <div class="nav-icon">📄</div>
+      <div data-i18n="tab_soil">Soil Health</div>
+    </div>
+    <div id="nav-scan" class="nav-item" onclick="switchTab('scan')">
+      <div class="nav-icon">🏷️</div>
+      <div data-i18n="tab_scan">Scanner</div>
+    </div>
+    <div id="nav-profile" class="nav-item" onclick="switchTab('profile')">
+      <div class="nav-icon">👤</div>
+      <div data-i18n="tab_profile">Profile</div>
+    </div>
+  </nav>
+</div>
+
+<!-- JavaScript Component Dependencies -->
+<script src="/static/js/translations.js"></script>
+<script src="/static/js/weather_ui.js"></script>
+<script src="/static/js/recommendation_ui.js"></script>
+<script src="/static/js/soil_card_ui.js"></script>
+<script src="/static/js/label_scanner_ui.js"></script>
+<script src="/static/js/profile_ui.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+</html>
