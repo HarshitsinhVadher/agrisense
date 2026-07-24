@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Image, Modal, ActivityIndicator, Alert } from 'react-native';
 import CameraScanner from './components/CameraScanner';
 
-// API Config (Replace with your backend local IP for device testing e.g. http://192.168.1.10:8000)
-const API_BASE_URL = 'http://localhost:8000';
+// Auto-detect PC LAN IP for physical mobile phone connectivity
+const API_BASE_URL = 'http://192.168.16.197:8000';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('weather');
@@ -34,7 +34,7 @@ export default function App() {
 
   // Camera Modal State
   const [cameraVisible, setCameraVisible] = useState(false);
-  const [cameraMode, setCameraMode] = useState('label'); // 'label' or 'soil'
+  const [cameraMode, setCameraMode] = useState('label');
 
   // Farmer Profile State
   const [farmerName, setFarmerName] = useState('Ramesh Patel');
