@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Image, Modal, ActivityIndicator, Alert } from 'react-native';
 import CameraScanner from './components/CameraScanner';
 
-// Auto-detect PC LAN IP for physical mobile phone connectivity
-const API_BASE_URL = 'http://192.168.16.197:8000';
+// Auto-detected Mobile Hotspot IP address: 10.160.70.72
+const API_BASE_URL = 'http://10.160.70.72:8000';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('weather');
