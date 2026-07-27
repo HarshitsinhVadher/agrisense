@@ -5,24 +5,8 @@ import * as Location from 'expo-location';
 import Constants from 'expo-constants';
 import CameraScanner from './components/CameraScanner';
 
-// Auto-detect PC IP address from Expo Go hostUri so mobile phone connects seamlessly over Wi-Fi
-const getApiBaseUrl = () => {
-  try {
-    const hostUri = Constants.expoConfig?.hostUri || Constants.manifest?.debuggerHost || Constants.manifest2?.extra?.expoGo?.debuggerHost;
-    if (hostUri) {
-      const ip = hostUri.split(':')[0];
-      if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
-        return `http://${ip}:8000`;
-      }
-    }
-  } catch (e) {
-    console.log("Host URI resolution error:", e);
-  }
-  // Standalone APK fallback IP for local Wi-Fi testing
-  return 'http://10.160.70.72:8000';
-};
-
-const API_BASE_URL = getApiBaseUrl();
+// Live 24/7 Render Cloud Backend Endpoint
+const API_BASE_URL = 'https://agrisense-00qs.onrender.com';
 
 const TRANSLATIONS = {
   en: {
