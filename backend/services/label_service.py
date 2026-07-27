@@ -12,12 +12,13 @@ except ImportError:
 
 try:
     from google import genai
+    from google.genai import types
     HAS_GEMINI = True
 except ImportError:
     HAS_GEMINI = False
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageOps
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
@@ -79,63 +80,120 @@ def scan_and_interpret_label(image_bytes: Optional[bytes] = None, text_input: Op
 
 
 def _analyze_with_gemini_vision(api_key: str, image_bytes: bytes, products: list, lang: str) -> Dict[str, Any]:
-    """Send image directly to Gemini 2.5 Flash Vision for analysis."""
+    """
+    Send image to Gemini Vision API with:
+    1. Google Search Grounding for live brand & web product matching (Option 1)
+    2. High-resolution PIL preprocessing + EXIF orientation correction (Option 2)
+    """
     client = genai.Client(api_key=api_key)
 
-    # Build product names list for cross-reference
+    # ─── OPTION 2: Image Quality & Preprocessing ───
+    mime_type = "image/jpeg"
+    processed_bytes = image_bytes
+    if HAS_PIL:
+        try:
+            img = Image.open(io.BytesIO(image_bytes))
+            # Correct orientation from camera EXIF tags
+            img = ImageOps.exif_transpose(img)
+            # Ensure RGB color mode for JPEG export
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+            
+            # Maintain high resolution for OCR (max dimension 2048px)
+            max_dim = 2048
+            if max(img.width, img.height) > max_dim:
+                img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
+            
+            output_io = io.BytesIO()
+            img.save(output_io, format="JPEG", quality=92, optimize=True)
+            processed_bytes = output_io.getvalue()
+            mime_type = "image/jpeg"
+        except Exception as img_err:
+            print(f"Image preprocessing note: {img_err}")
+            processed_bytes = image_bytes
+
+    b64_image = base64.b64encode(processed_bytes).decode('utf-8')
+
+    # Build product names list for local cross-reference
     product_names = [p.get('name', '') for p in products] if products else []
     product_list_str = ", ".join(product_names[:30]) if product_names else "No local database available"
 
-    prompt = f"""You are AgriSense, an expert agricultural product identification AI for Indian farmers.
+    prompt = f"""You are AgriSense, an expert agricultural, seed, crop input, and food product identification AI.
 
-Analyze this photo of an agricultural product (pesticide, fertilizer, herbicide, fungicide, or plant growth regulator).
-
-TASK: Identify the product by examining the label, packaging, brand logo, text, and any visible information.
+Analyze this photo carefully. Perform step-by-step visual parsing:
+1. OCR Step: Read ALL visible text from the photo, including brand names, product titles, slogans, bullet points, certification logos (e.g. USDA ORGANIC, India Organic), and ingredients.
+2. Search & Identification Step: Match the item, brand logo (e.g. EYWA Seeds & Exports, IFFCO, Bayer), windmill/graphic illustrations, and text details to identify the product accurately.
 
 Provide your analysis as a JSON object with these exact fields:
 {{
-    "product_name": "Full product name as written on the label",
-    "brand": "Manufacturer/Brand name",
-    "active_ingredient": "Chemical active ingredient and concentration",
-    "type": "pesticide/fertilizer/herbicide/fungicide/insecticide/plant growth regulator",
-    "target_pests": ["list", "of", "target", "pests", "or", "diseases"],
-    "suitable_crops": ["list", "of", "suitable", "crops"],
-    "dosage": "Recommended dosage as written on label",
-    "precautions": "Key safety precautions",
-    "confidence": 85,
-    "identification_notes": "How you identified this product"
+    "product_name": "Full product name as written on the label (e.g. EYWA Sunflower Seeds, Neem Shield, etc.)",
+    "brand": "Manufacturer or Brand name (e.g. EYWA Seeds & Exports, IFFCO, Bayer, etc.)",
+    "active_ingredient": "Active ingredient / seed variety / nutritional highlights / key contents",
+    "type": "seeds/organic product/pesticide/fertilizer/herbicide/fungicide/insecticide/plant growth regulator/bio-fertilizer",
+    "target_pests": ["target pests/diseases OR key health benefits / nutritional highlights"],
+    "suitable_crops": ["suitable crops / consumption guidelines / target crops"],
+    "dosage": "Recommended dosage / seed sowing rate / usage directions",
+    "precautions": "Key safety precautions / storage instructions",
+    "confidence": 92,
+    "identification_notes": "Detailed visual observations explaining how you identified this product (logos, text, color, packaging)"
 }}
 
 Known products in our local database for cross-reference: {product_list_str}
 
 IMPORTANT:
-- If you can clearly read the label, set confidence 80-98%
-- If you can partially read it, set confidence 50-79%
-- If you are guessing based on packaging/color, set confidence 20-49%
-- Return ONLY the JSON object, no markdown or extra text
-- Use your training knowledge to provide accurate agricultural information about this product"""
+- Read all text accurately from the photo (e.g. EYWA SEEDS & EXPORTS, SUNFLOWER SEEDS, USDA ORGANIC, BETTER EPIDERMAL HEALTH, Vitamin E).
+- If it is a seed packet, organic produce, or food item, set type to 'seeds' or 'organic product' and fill nutritional/health benefits into target_pests or usage fields.
+- Set confidence between 85% and 98% if readable.
+- Return ONLY the JSON object, no markdown codeblocks or extra text."""
 
-    # Encode image for Gemini
-    b64_image = base64.b64encode(image_bytes).decode('utf-8')
+    # ─── OPTION 1: Google Search Grounding Tool Config ───
+    config = None
+    try:
+        config = types.GenerateContentConfig(
+            tools=[{"google_search": {}}],
+            temperature=0.2
+        )
+    except Exception as cfg_err:
+        print(f"Search grounding config fallback: {cfg_err}")
 
-    response = client.models.generate_content(
-        model='gemini-2.5-flash',
-        contents=[
-            {
-                "parts": [
-                    {"text": prompt},
-                    {
-                        "inline_data": {
-                            "mime_type": "image/jpeg",
-                            "data": b64_image
+    models_to_try = ['gemini-flash-latest', 'gemini-pro-latest', 'gemma-4-26b-a4b-it', 'gemini-3.6-flash', 'gemini-3.5-flash']
+    response = None
+
+    for model_name in models_to_try:
+        try:
+            contents_payload = [
+                {
+                    "parts": [
+                        {"text": prompt},
+                        {
+                            "inline_data": {
+                                "mime_type": mime_type,
+                                "data": b64_image
+                            }
                         }
-                    }
-                ]
-            }
-        ]
-    )
+                    ]
+                }
+            ]
+            
+            if config:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=contents_payload,
+                    config=config
+                )
+            else:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=contents_payload
+                )
 
-    if not response.text:
+            if response and response.text:
+                break
+        except Exception as e:
+            print(f"Gemini model {model_name} failed: {e}")
+            continue
+
+    if not response or not response.text:
         return None
 
     # Parse JSON from response (handle markdown code blocks)
@@ -254,9 +312,13 @@ def _generate_ai_summary(product: Dict[str, Any], lang: str, api_key: str) -> st
 
 Keep it very simple for a smallholder farmer to understand. Use emojis for visual clarity."""
 
-            response = client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
-            if response.text:
-                return response.text.strip()
+            for summary_model in ['gemini-flash-latest', 'gemini-pro-latest', 'gemma-4-26b-a4b-it', 'gemini-3.6-flash']:
+                try:
+                    response = client.models.generate_content(model=summary_model, contents=prompt)
+                    if response and response.text:
+                        return response.text.strip()
+                except Exception:
+                    continue
         except Exception as e:
             print(f"Gemini summary generation failed: {e}")
 

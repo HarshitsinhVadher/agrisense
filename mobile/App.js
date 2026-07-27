@@ -1,11 +1,71 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Modal, ActivityIndicator, Alert, Animated, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Modal, ActivityIndicator, Alert, Animated, Dimensions, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
+import Constants from 'expo-constants';
 import CameraScanner from './components/CameraScanner';
 
-// Auto-detected Mobile Hotspot IP address
-const API_BASE_URL = 'http://10.160.70.72:8000';
+// Auto-detect PC IP address from Expo Go hostUri so mobile phone connects seamlessly over Wi-Fi
+const getApiBaseUrl = () => {
+  try {
+    const hostUri = Constants.expoConfig?.hostUri || Constants.manifest?.debuggerHost || Constants.manifest2?.extra?.expoGo?.debuggerHost;
+    if (hostUri) {
+      const ip = hostUri.split(':')[0];
+      if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
+        return `http://${ip}:8000`;
+      }
+    }
+  } catch (e) {
+    console.log("Host URI resolution error:", e);
+  }
+  // Standalone APK fallback IP for local Wi-Fi testing
+  return 'http://10.160.70.72:8000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
+
+const TRANSLATIONS = {
+  en: {
+    app_title: "AgriSense", subtitle: "AI-Powered Farming Assistant",
+    tab_weather: "Weather", tab_recommend: "Crop AI", tab_soil: "Soil Card", tab_scan: "Label Scanner", tab_profile: "Profile",
+    weather_title: "Weather & 3-Month Forecast", set_location: "📍 Set Location", use_gps: "📍 Use My GPS Location", search_city: "Or search a city:",
+    advisories_title: "📢 Agricultural Advisories", seasonal_title: "🗓️ 3-Month Seasonal Forecast", forecast_7day: "📅 7-Day Weather Forecast",
+    soil_title: "📄 Soil Health Card Reader", capture_soil: "📸 Capture Soil Health Card", extracted_params: "Extracted Soil Parameters",
+    scanner_title: "🏷️ AI Label Scanner", scanner_sub: "Powered by Gemini Vision AI — Take a photo of any pesticide, fertilizer, or seed package",
+    take_photo: "📷 Take Photo of Product", capture_sub: "Capture the label, bag, or bottle", type_product: "Or type product name (e.g. Urea, Chlorpyrifos)",
+    analyze_btn: "🔍 Analyze Product", confidence: "Confidence", brand: "Manufacturer / Brand", active: "Active Ingredient", dosage: "Dosage / Directions",
+    crop_title: "🌱 AI Crop Recommender", crop_sub: "Random Forest ML model trained on 2,200 soil-climate profiles", predict_btn: "🌱 Predict Suitable Crops",
+    water_req: "Water Requirement", season: "Optimal Season", tips: "Agricultural Tip", profile_title: "👨‍🌾 Farmer Profile & Settings", save_profile: "💾 Save Profile"
+  },
+  gu: {
+    app_title: "એગ્રીસેન્સ", subtitle: "એઆઈ આધારિત ખેતી સહાયક",
+    tab_weather: "હવામાન", tab_recommend: "પાક ભલામણ", tab_soil: "જમીન કાર્ડ", tab_scan: "લેબલ સ્કેનર", tab_profile: "પ્રોફાઇલ",
+    weather_title: "હવામાન અને ૩-મહિનાનું અનુમાન", set_location: "📍 સ્થળ પસંદ કરો", use_gps: "📍 મારૂં જીપીએસ સ્થળ વાપરો", search_city: "અથવા શહેર શોધો:",
+    advisories_title: "📢 ખેતીવાડી સલાહ", seasonal_title: "🗓️ ૩-મહિનાનું મોસમી અનુમાન", forecast_7day: "📅 ૭-દિવસનું હવામાન અનુમાન",
+    soil_title: "📄 સોઇલ હેલ્થ કાર્ડ રીડર", capture_soil: "📸 સોઇલ કાર્ડનો ફોટો પાડો", extracted_params: "મેળવેલ જમીન ઘટકો",
+    scanner_title: "🏷️ એઆઈ લેબલ સ્કેનર", scanner_sub: "જેમિનાઈ એઆઈ વિઝન દ્વારા — દવા, ખાતર કે બિયારણનો ફોટો પાડો",
+    take_photo: "📷 દવા/ખાતરના લેબલનો ફોટો પાડો", capture_sub: "બેગ, બોટલ કે લેબલનો ફોટો લો", type_product: "અથવા દવાનું નામ લખો (દા.ત. યુરિયા, કપાસ)",
+    analyze_btn: "🔍 લેબલ વિશ્લેષણ કરો", confidence: "ચોકસાઈ", brand: "ઉત્પાદક / બ્રાન્ડ", active: "સક્રિય ઘટક", dosage: "છંટકાવ / વાવણી પ્રમાણ",
+    crop_title: "🌱 એઆઈ પાક પસંદગી ભલામણ", crop_sub: "૨,૨૦૦ જમીન-હવામાન ડેટા આધારિત મોડેલ", predict_btn: "🌱 યોગ્ય પાકની ભલામણ મેળવો",
+    water_req: "પાણીની જરૂરિયાત", season: "યોગ્ય ઋતુ", tips: "ખેતી સલાહ", profile_title: "👨‍🌾 ખેડૂત પ્રોફાઇલ અને સેટિંગ્સ", save_profile: "💾 પ્રોફાઇલ સાચવો"
+  },
+  hi: {
+    app_title: "एग्रीसेंस", subtitle: "एआई संचालित कृषि सहायक",
+    tab_weather: "मौसम", tab_recommend: "फसल सलाह", tab_soil: "मृदा कार्ड", tab_scan: "लेबल स्कैनर", tab_profile: "प्रोफ़ाइल",
+    weather_title: "मौसम और 3-महीने का पूर्वानुमान", set_location: "📍 स्थान चुनें", use_gps: "📍 मेरा जीपीएस स्थान उपयोग करें", search_city: "या शहर खोजें:",
+    advisories_title: "📢 कृषि सलाह", seasonal_title: "🗓️ 3-महीने का मौसमी पूर्वानुमान", forecast_7day: "📅 7-दिवसीय मौसम पूर्वानुमान",
+    soil_title: "📄 मृदा स्वास्थ्य कार्ड रीडर", capture_soil: "📸 मृदा कार्ड की फोटो लें", extracted_params: "निकाले गए मृदा मापदंड",
+    scanner_title: "🏷️ एआई लेबल स्कैनर", scanner_sub: "जेमिनी एआई विजन द्वारा — कीटनाशक या बीज का फोटो लें",
+    take_photo: "📷 उत्पाद लेबल का फोटो लें", capture_sub: "बोतल या पैकेट का फोटो खींचें", type_product: "या उत्पाद का नाम लिखें (जैसे यूरिया)",
+    analyze_btn: "🔍 विश्लेषण करें", confidence: "सटीकता", brand: "निर्माता / ब्रांड", active: "सक्रिय घटक", dosage: "अनुशंसित खुराक",
+    crop_title: "🌱 एआई फसल सिफारिश", crop_sub: "2,200 मृदा-जलवायु डेटा पर आधारित मॉडल", predict_btn: "🌱 उपयुक्त फसलों की सिफारिश पाएं",
+    water_req: "पानी की आवश्यकता", season: "उपयुक्त मौसम", tips: "कृषि सलाह", profile_title: "👨‍🌾 किसान प्रोफ़ाइल", save_profile: "💾 प्रोफ़ाइल सहेजें"
+  }
+};
+
+function t(key, lang = 'en') {
+  return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || (TRANSLATIONS['en'] && TRANSLATIONS['en'][key]) || key;
+}
 
 export default function App() {
   // ─── Auth State ───
@@ -42,7 +102,9 @@ export default function App() {
   const [tempVal, setTempVal] = useState('26');
   const [humVal, setHumVal] = useState('75');
   const [rainVal, setRainVal] = useState('110');
+  const [selectedSoilType, setSelectedSoilType] = useState('Auto-Detect');
   const [recommendations, setRecommendations] = useState(null);
+  const [aiPlanResult, setAiPlanResult] = useState(null);
   const [recLoading, setRecLoading] = useState(false);
 
   // ─── Soil Health OCR State ───
@@ -276,16 +338,23 @@ export default function App() {
   // ─── Crop Recommendation ───
   const handleRecommend = async () => {
     setRecLoading(true);
+    setAiPlanResult(null);
     try {
       const res = await fetch(`${API_BASE_URL}/api/recommend-crop`, {
         method: 'POST',
         headers: authHeaders(),
-        body: JSON.stringify({ N: parseFloat(nVal), P: parseFloat(pVal), K: parseFloat(kVal),
+        body: JSON.stringify({
+          N: parseFloat(nVal), P: parseFloat(pVal), K: parseFloat(kVal),
           ph: parseFloat(phVal), temperature: parseFloat(tempVal),
-          humidity: parseFloat(humVal), rainfall: parseFloat(rainVal) })
+          humidity: parseFloat(humVal), rainfall: parseFloat(rainVal),
+          soil_type: selectedSoilType,
+          location_name: weatherLocation,
+          lang: lang
+        })
       });
       const data = await res.json();
       setRecommendations(data.recommendations);
+      setAiPlanResult(data.ai_agronomic_plan);
     } catch (e) {
       Alert.alert("Error", "Could not connect to backend server.");
     } finally {
@@ -469,12 +538,12 @@ export default function App() {
           <View>
             {/* GPS & City Search */}
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>📍 Set Location</Text>
+              <Text style={styles.cardTitle}>{t('set_location', lang)}</Text>
               <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: '#2563eb' }]} onPress={useGPSLocation} disabled={gpsLoading}>
-                {gpsLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>📍 Use My GPS Location</Text>}
+                {gpsLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('use_gps', lang)}</Text>}
               </TouchableOpacity>
 
-              <Text style={[styles.label, { marginTop: 12 }]}>Or search a city:</Text>
+              <Text style={[styles.label, { marginTop: 12 }]}>{t('search_city', lang)}</Text>
               <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
                 <TextInput style={[styles.input, { flex: 1 }]} value={cityQuery} onChangeText={setCityQuery}
                   placeholder="e.g. Mumbai, Ahmedabad..." onSubmitEditing={searchCity} />
@@ -506,8 +575,9 @@ export default function App() {
               </View>
             </View>
 
+            {/* Advisories */}
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>Agricultural Advisories</Text>
+              <Text style={styles.cardTitle}>{t('advisories_title', lang)}</Text>
               {weather?.advisories?.map((adv, idx) => (
                 <View key={idx} style={styles.advisoryBox}>
                   <Text style={styles.advTitle}>{adv[`title_${lang}`] || adv.title}</Text>
@@ -515,14 +585,69 @@ export default function App() {
                 </View>
               ))}
             </View>
+
+            {/* 🗓️ 3-Month Seasonal Forecast Card */}
+            {weather?.seasonal_3month && (
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>{t('seasonal_title', lang)}</Text>
+                <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#1b4332', marginBottom: 6 }}>
+                  {weather.seasonal_3month[`season_name_${lang}`] || weather.seasonal_3month.season_name}
+                </Text>
+                <View style={{ backgroundColor: '#eef7f2', padding: 10, borderRadius: 8, marginBottom: 12 }}>
+                  <Text style={{ fontSize: 12, color: '#2d6a4f', lineHeight: 18 }}>
+                    {weather.seasonal_3month[`advisory_${lang}`] || weather.seasonal_3month.advisory_en}
+                  </Text>
+                </View>
+
+                {/* Monthly Breakdowns */}
+                {weather.seasonal_3month.months?.map((m, idx) => (
+                  <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomWidth: idx < 2 ? 1 : 0, borderColor: '#eee' }}>
+                    <View>
+                      <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#1b4332' }}>{m[`month_${lang}`] || m.month_en}</Text>
+                      <Text style={{ fontSize: 11, color: '#666', marginTop: 2 }}>{m[`status_${lang}`] || m.status_en}</Text>
+                    </View>
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#2563eb' }}>🌧️ {m.expected_rain_mm} mm</Text>
+                      <Text style={{ fontSize: 11, color: '#666', marginTop: 2 }}>🌡️ {m.avg_temp_c}°C</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         )}
 
         {/* ─── CROP RECOMMEND TAB ─── */}
         {activeTab === 'recommend' && (
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>🌱 AI Crop Recommender</Text>
-            <Text style={styles.cardSub}>Random Forest ML model trained on 2,200 soil-climate profiles</Text>
+            <Text style={styles.cardTitle}>{t('crop_title', lang)}</Text>
+            <Text style={styles.cardSub}>4-Layer Context Fusion: Location + Soil Type + NPK Deficits + 3-Month Weather</Text>
+
+            {/* Target Region Badge */}
+            <View style={{ backgroundColor: '#eef7f2', padding: 8, borderRadius: 6, marginBottom: 12, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 12, color: '#1b4332', fontWeight: 'bold' }}>📍 Target Region: {weatherLocation}</Text>
+            </View>
+
+            {/* Soil Type Pills */}
+            <Text style={styles.label}>Soil Type & Texture:</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginVertical: 6 }}>
+              {[
+                { id: 'Auto-Detect', label: '✨ Auto-Detect' },
+                { id: 'Black Cotton Soil (કાળી જમીન)', label: '⚫ Black Cotton' },
+                { id: 'Sandy Loam Soil (રેતાળ જમીન)', label: '🏖️ Sandy Loam' },
+                { id: 'Alluvial Soil (કાંપ જમીન)', label: '🏞️ Alluvial' },
+                { id: 'Red Clay Soil (લાલ જમીન)', label: '🔴 Red Clay' }
+              ].map((st) => (
+                <TouchableOpacity key={st.id}
+                  style={[styles.methodBadge, { marginRight: 6, backgroundColor: selectedSoilType === st.id ? '#1b4332' : '#e5e7eb' }]}
+                  onPress={() => setSelectedSoilType(st.id)}>
+                  <Text style={{ color: selectedSoilType === st.id ? '#fff' : '#374151', fontSize: 11, fontWeight: 'bold' }}>
+                    {st.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
             <Text style={styles.label}>Nitrogen (N) kg/ha</Text>
             <TextInput style={styles.input} value={nVal} onChangeText={setNVal} keyboardType="numeric" />
             <Text style={styles.label}>Phosphorus (P) kg/ha</Text>
@@ -533,15 +658,75 @@ export default function App() {
             <TextInput style={styles.input} value={phVal} onChangeText={setPhVal} keyboardType="numeric" />
 
             <TouchableOpacity style={styles.btnPrimary} onPress={handleRecommend}>
-              {recLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>🌱 Predict Suitable Crops</Text>}
+              {recLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('predict_btn', lang)}</Text>}
             </TouchableOpacity>
 
-            {recommendations && recommendations.map((rec, i) => (
-              <View key={i} style={styles.recBox}>
-                <Text style={styles.recName}>{i+1}. {rec.name} ({rec.confidence}% Match)</Text>
-                <Text style={styles.recTips}>💡 {rec.tips}</Text>
+            {/* 🤖 AI Agronomic Plan Result Card */}
+            {aiPlanResult && (
+              <View style={{ marginTop: 16 }}>
+                <View style={{ backgroundColor: '#7c3aed', padding: 10, borderRadius: 8, marginBottom: 12 }}>
+                  <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>
+                    🤖 Geographical AI Agronomic Action Plan
+                  </Text>
+                  <Text style={{ color: '#e9d5ff', fontSize: 11, marginTop: 2 }}>
+                    Zone: {aiPlanResult.agro_climatic_zone || 'Middle Gujarat Zone'} | Soil: {aiPlanResult.detected_soil_type}
+                  </Text>
+                </View>
+
+                {/* Recommended Crops */}
+                <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#1b4332', marginBottom: 8 }}>🌾 Recommended Crops & Varieties:</Text>
+                {aiPlanResult.recommended_crops?.map((crop, idx) => (
+                  <View key={idx} style={styles.recBox}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={styles.recName}>{idx + 1}. {crop.crop_name}</Text>
+                      <View style={[styles.methodBadge, { backgroundColor: '#1b4332' }]}>
+                        <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold' }}>{crop.suitability_score}% Match</Text>
+                      </View>
+                    </View>
+                    {crop.recommended_variety && (
+                      <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#2563eb', marginTop: 2 }}>
+                        🌱 Variety: {crop.recommended_variety}
+                      </Text>
+                    )}
+                    <Text style={styles.recTips}>💡 {crop.suitability_reason}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 }}>
+                      <Text style={{ fontSize: 11, color: '#4b5563' }}>⏱️ Duration: {crop.season_duration}</Text>
+                      <Text style={{ fontSize: 11, color: '#059669', fontWeight: 'bold' }}>📈 Yield: {crop.expected_yield_per_acre}</Text>
+                    </View>
+                  </View>
+                ))}
+
+                {/* Fertilizer Schedule */}
+                {aiPlanResult.custom_fertilizer_plan && (
+                  <View style={{ backgroundColor: '#f0fdf4', padding: 12, borderRadius: 8, marginTop: 12, borderLeftWidth: 4, borderLeftColor: '#10b981' }}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 13, color: '#065f46', marginBottom: 6 }}>🧪 Custom Fertilizer & Soil Schedule:</Text>
+                    <Text style={{ fontSize: 12, color: '#166534', marginBottom: 4 }}>• Basal Dose: {aiPlanResult.custom_fertilizer_plan.basal_dose}</Text>
+                    <Text style={{ fontSize: 12, color: '#166534', marginBottom: 4 }}>• 30-Day Top Dressing: {aiPlanResult.custom_fertilizer_plan.top_dressing_stage1}</Text>
+                    <Text style={{ fontSize: 12, color: '#166534' }}>• 60-Day Flowering Dose: {aiPlanResult.custom_fertilizer_plan.top_dressing_stage2}</Text>
+                  </View>
+                )}
+
+                {/* Intercropping Advice */}
+                {aiPlanResult.intercropping_strategy && (
+                  <View style={{ backgroundColor: '#fffbeb', padding: 12, borderRadius: 8, marginTop: 10, borderLeftWidth: 4, borderLeftColor: '#f59e0b' }}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 13, color: '#92400e', marginBottom: 4 }}>🌿 Intercropping Strategy:</Text>
+                    <Text style={{ fontSize: 12, color: '#78350f' }}>
+                      Suggested Companion Crop: <Text style={{ fontWeight: 'bold' }}>{aiPlanResult.intercropping_strategy.suggested_intercrop}</Text>
+                    </Text>
+                    <Text style={{ fontSize: 11, color: '#92400e', marginTop: 2 }}>{aiPlanResult.intercropping_strategy.benefits}</Text>
+                  </View>
+                )}
+
+                {/* Regional Market Notes */}
+                {aiPlanResult.regional_market_notes && (
+                  <View style={{ backgroundColor: '#f3f4f6', padding: 10, borderRadius: 8, marginTop: 10 }}>
+                    <Text style={{ fontSize: 11, color: '#4b5563', fontStyle: 'italic' }}>
+                      🏦 Regional Market Outlook: {aiPlanResult.regional_market_notes}
+                    </Text>
+                  </View>
+                )}
               </View>
-            ))}
+            )}
           </View>
         )}
 
@@ -673,7 +858,7 @@ export default function App() {
               {tab === 'weather' ? '🌤️' : tab === 'recommend' ? '🌱' : tab === 'soil' ? '📄' : tab === 'scan' ? '🏷️' : '👤'}
             </Text>
             <Text style={{ fontSize: 10, color: activeTab === tab ? '#1b4332' : '#999', fontWeight: activeTab === tab ? 'bold' : 'normal' }}>
-              {tab.toUpperCase()}
+              {t(`tab_${tab}`, lang)}
             </Text>
           </TouchableOpacity>
         ))}

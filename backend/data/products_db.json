@@ -193,5 +193,31 @@
     "composition": "Potassium Humate 98% soluble powder",
     "usage_notes": "Enhances soil microbial activity, white root development, and nutrient cation exchange capacity.",
     "precautions": "Compatible with most fertilizers. Dissolve fully in water before pouring into spray tank."
+  },
+  {
+    "id": "p16",
+    "name": "EYWA Organic Sunflower Seeds",
+    "brand": "EYWA SEEDS & EXPORTS",
+    "type": "Seeds & Organic Food",
+    "active_ingredient": "USDA Organic Sunflower Seeds (Vitamin E, Essential Fatty Acids)",
+    "target_pests": ["Epidermal Health Boost", "Cholesterol Balance", "Hormone Regulation", "Gastrointestinal Support"],
+    "suitable_crops": ["Human Nutrition", "Dietary Consumption", "Oilseed Cultivation"],
+    "dosage": "30-50g daily consumption or 3-4 kg/acre for crop sowing",
+    "composition": "100% Certified USDA Organic Raw Sunflower Seeds",
+    "usage_notes": "Rich in Vitamin E, antioxidants, promotes skin/epidermal health, lowers cholesterol and supports digestive wellness.",
+    "precautions": "Store in a cool, dry place away from direct sunlight."
+  },
+  {
+    "id": "p17",
+    "name": "Hybrid Cotton Seeds (Bt-II)",
+    "brand": "Mahyco (Bollgard II)",
+    "type": "Seeds",
+    "active_ingredient": "Cry1Ac + Cry2Ab gene (Bt Cotton Hybrid)",
+    "target_pests": ["American Bollworm", "Pink Bollworm", "Spotted Bollworm"],
+    "suitable_crops": ["Cotton Farming"],
+    "dosage": "1.5 to 2.0 packets (450g each) per acre with non-Bt refuge seed border",
+    "composition": "Genetically modified hybrid cotton seed with insect protection",
+    "usage_notes": "High yield hybrid cotton with built-in protection against lepidopteran bollworms.",
+    "precautions": "Plant non-Bt refuge seeds on field borders as mandated to manage resistance."
   }
 ]

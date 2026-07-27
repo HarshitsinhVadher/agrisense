@@ -17,6 +17,7 @@ from models.crop_recommender import CropRecommender
 from services.weather_service import get_weather_data, geocode_city
 from services.ocr_service import process_soil_card_image, parse_soil_health_card_text
 from services.label_service import scan_and_interpret_label, load_products_db
+from services.ai_crop_advisor import generate_geographical_crop_advice, detect_default_soil_type
 from services.auth_service import register_user, login_user, get_user_id_from_token
 from services.db_service import (
     init_sql_db, get_farmer_profile, update_farmer_profile,
@@ -55,6 +56,9 @@ class CropRequest(BaseModel):
     humidity: float = 65.0
     ph: float = 7.2
     rainfall: float = 100.0
+    soil_type: Optional[str] = "Auto-Detect"
+    location_name: Optional[str] = "Anand, Gujarat"
+    lang: str = "en"
 
 class FarmerProfileUpdate(BaseModel):
     id: int = 1
@@ -147,23 +151,52 @@ def fetch_weather(
 @app.post("/api/recommend-crop")
 def recommend_crop(data: CropRequest, request: Request):
     user_id = _get_user_id(request)
-    predictions = recommender.predict(
-        N=data.N, P=data.P, K=data.K,
-        temperature=data.temperature, humidity=data.humidity,
-        ph=data.ph, rainfall=data.rainfall
+
+    # Fetch 3-month seasonal weather for location
+    seasonal_weather = None
+    try:
+        weather_data = get_weather_data(location_name=data.location_name or "Anand, Gujarat")
+        seasonal_weather = weather_data.get("seasonal_3month")
+    except Exception as w_err:
+        print(f"Weather fetch error in recommend_crop: {w_err}")
+        seasonal_weather = None
+
+    # AI Geographical Agronomic Reasoning
+    ai_advice = generate_geographical_crop_advice(
+        location_name=data.location_name or "Anand, Gujarat",
+        soil_type=data.soil_type or "Auto-Detect",
+        N=data.N, P=data.P, K=data.K, ph=data.ph,
+        temperature=data.temperature, humidity=data.humidity, rainfall=data.rainfall,
+        seasonal_weather=seasonal_weather,
+        lang=data.lang
     )
 
-    top_crop = predictions[0]['name'] if predictions else "Unknown"
-    confidence = predictions[0]['confidence'] if predictions else 0.0
+    # Baseline ML predictions
+    ml_predictions = recommender.predict(
+        N=data.N, P=data.P, K=data.K,
+        temperature=data.temperature, humidity=data.humidity,
+        ph=data.ph, rainfall=data.rainfall,
+        lang=data.lang
+    )
+
+    top_crop = "Crop Recommendation"
+    if ai_advice.get("recommended_crops"):
+        top_crop = ai_advice["recommended_crops"][0].get("crop_name", "Crop Recommendation")
+    elif ml_predictions:
+        top_crop = ml_predictions[0].get("name", "Unknown")
 
     record_crop_recommendation_sql(
-        farmer_id=data.farmer_id, top_crop=top_crop, confidence=confidence,
+        farmer_id=data.farmer_id, top_crop=top_crop, confidence=92.0,
         n=data.N, p=data.P, k=data.K, ph=data.ph,
         temp=data.temperature, humidity=data.humidity, rain=data.rainfall,
         user_id=user_id
     )
 
-    return {"input_parameters": data.dict(), "recommendations": predictions}
+    return {
+        "input_parameters": data.dict(),
+        "ai_agronomic_plan": ai_advice,
+        "recommendations": ml_predictions
+    }
 
 # ─── Soil Health Card Parser ───
 

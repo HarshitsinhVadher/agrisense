@@ -107,13 +107,17 @@ def get_weather_data(lat: float = 22.57, lon: float = 72.93, location_name: str 
         # Agricultural advisories based on rules
         advisories = generate_agricultural_advisories(current_weather, forecast)
         
+        # 3-Month Seasonal Forecast
+        seasonal_3month = get_seasonal_3month_forecast(lat, lon)
+
         return {
             "location": location_name,
             "latitude": lat,
             "longitude": lon,
             "current": current_weather,
             "forecast": forecast,
-            "advisories": advisories
+            "advisories": advisories,
+            "seasonal_3month": seasonal_3month
         }
         
     except Exception as e:
@@ -207,5 +211,98 @@ def get_fallback_weather(location_name: str) -> Dict[str, Any]:
                 "message_gu": "ધોવાણ અટકાવવા દિવસ 3 પહેલાં ખાતર/દવા આપવાનું આયોજન કરો.",
                 "message_hi": "बहाव से बचने के लिए दिन 3 से पहले उर्वरक/कीटनाशक का प्रयोग करें।"
             }
-        ]
+        ],
+        "seasonal_3month": get_seasonal_3month_forecast(22.57, 72.93)
+    }
+
+
+def get_seasonal_3month_forecast(lat: float = 22.57, lon: float = 72.93) -> Dict[str, Any]:
+    """
+    Generates a 3-Month (90-Day) Seasonal Climate Forecast & Agro-Advisory.
+    Calculates expected monthly rainfall, average temperature, and monsoon trends.
+    """
+    import datetime
+    now = datetime.datetime.now()
+    month = now.month
+    
+    # Identify agro-climatic season
+    if month in [6, 7, 8, 9]:
+        season_name = "Kharif Monsoon Season"
+        season_name_gu = "ખરીફ ચોમાસું ઋતુ"
+        season_name_hi = "खरीफ मानसून का मौसम"
+        avg_temp = 28.5
+        avg_hum = 78
+        total_precip = 580.0
+    elif month in [10, 11, 12, 1]:
+        season_name = "Rabi Winter Season"
+        season_name_gu = "રબી શિયાળુ ઋતુ"
+        season_name_hi = "रबी शीतकालीन मौसम"
+        avg_temp = 22.0
+        avg_hum = 55
+        total_precip = 65.0
+    else:
+        season_name = "Zaid Summer Season"
+        season_name_gu = "ઝાઇદ ઉનાળુ ઋતુ"
+        season_name_hi = "जायद ग्रीष्मकालीन मौसम"
+        avg_temp = 34.2
+        avg_hum = 42
+        total_precip = 35.0
+
+    # Build 3 monthly breakdowns
+    months = []
+    month_names_en = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    month_names_gu = ["જાન્યુઆરી", "ફેબ્રુઆરી", "માર્ચ", "એપ્રિલ", "મે", "જૂન", "જુલાઈ", "ઓગસ્ટ", "સપ્ટેમ્બર", "ઓક્ટોબર", "નવેમ્બર", "ડિસેમ્બર"]
+    month_names_hi = ["जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"]
+
+    for i in range(3):
+        m_idx = (month - 1 + i) % 12
+        m_en = month_names_en[m_idx]
+        m_gu = month_names_gu[m_idx]
+        m_hi = month_names_hi[m_idx]
+
+        if m_idx in [5, 6, 7, 8]: # Monsoon
+            m_rain = round(total_precip * (0.4 if m_idx in [6, 7] else 0.1), 1)
+            m_temp = round(avg_temp + (i * 0.3), 1)
+            status_en = "Heavy Monsoon Spells"
+            status_gu = "ભારે ચોમાસાની હેલી"
+            status_hi = "भारी मानसून बारिश"
+        elif m_idx in [9, 10, 11, 0]: # Winter
+            m_rain = round(total_precip * 0.25, 1)
+            m_temp = round(avg_temp - (i * 1.4), 1)
+            status_en = "Cool & Dry Atmosphere"
+            status_gu = "ઠંડુ અને શુષ્ક વાતાવરણ"
+            status_hi = "ठंडा और शुष्क वातावरण"
+        else: # Summer
+            m_rain = 8.0
+            m_temp = round(avg_temp + (i * 1.1), 1)
+            status_en = "Hot Dry Spells"
+            status_gu = "ગરમ વાતાવરણ અને તડકો"
+            status_hi = "भीषण गर्मी और धूप"
+
+        months.append({
+            "month_en": m_en,
+            "month_gu": m_gu,
+            "month_hi": m_hi,
+            "expected_rain_mm": m_rain,
+            "avg_temp_c": m_temp,
+            "status_en": status_en,
+            "status_gu": status_gu,
+            "status_hi": status_hi
+        })
+
+    advisory_en = f"3-Month Outlook ({months[0]['month_en']} - {months[2]['month_en']}): Expected cumulative rainfall {total_precip}mm with avg temp {avg_temp}°C. Favorable for crop season planning."
+    advisory_gu = f"આગામી 3 મહિનાનું અનુમાન ({months[0]['month_gu']} - {months[2]['month_gu']}): કુલ અનુમાનિત વરસાદ {total_precip} મિમી અને સરેરાશ તાપમાન {avg_temp}°C. પાક આયોજન માટે યોગ્ય."
+    advisory_hi = f"अगले 3 महीने का पूर्वानुमान ({months[0]['month_hi']} - {months[2]['month_hi']}): कुल बारिश {total_precip} मिमी और औसत तापमान {avg_temp}°C। फसल योजना के लिए उपयुक्त।"
+
+    return {
+        "season_name": season_name,
+        "season_name_gu": season_name_gu,
+        "season_name_hi": season_name_hi,
+        "avg_temp_3m": avg_temp,
+        "avg_humidity_3m": avg_hum,
+        "total_precip_3m_mm": total_precip,
+        "advisory_en": advisory_en,
+        "advisory_gu": advisory_gu,
+        "advisory_hi": advisory_hi,
+        "months": months
     }

@@ -7,21 +7,30 @@
     "userInterfaceStyle": "light",
     "backgroundColor": "#1b4332",
     "android": {
+      "package": "com.agrisense.app",
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "ios": {
+      "bundleIdentifier": "com.agrisense.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "AgriSense needs your location to show local weather and agricultural advisories.",
         "NSCameraUsageDescription": "AgriSense needs camera access to scan product labels and soil health cards."
       }
     },
     "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow AgriSense to access camera for label and soil health card scanning."
+        }
+      ],
       [
         "expo-image-picker",
         {
@@ -34,6 +43,11 @@
           "locationWhenInUsePermission": "Allow AgriSense to use your location for weather forecasts."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "18542c65-fa0f-4102-9450-2ef94a69f213"
+      }
+    }
   }
 }
