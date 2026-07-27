@@ -10,8 +10,9 @@ from typing import Optional, List, Dict, Any
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Gemini API Key for AI Vision Label Scanner
-os.environ["GEMINI_API_KEY"] = "AQ.Ab8RN6Js5DtkFTelDeudUBsR7OvYgi6u-45Ic7PMFR4d_h0RZA"
+# Gemini API Key read safely from environment variable
+if "GEMINI_API_KEY" not in os.environ:
+    os.environ["GEMINI_API_KEY"] = os.getenv("GEMINI_API_KEY", "")
 
 from models.crop_recommender import CropRecommender
 from services.weather_service import get_weather_data, geocode_city
