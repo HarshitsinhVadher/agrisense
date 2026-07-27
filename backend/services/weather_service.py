@@ -46,11 +46,28 @@ def geocode_city(query: str) -> list:
         print(f"Geocoding error: {e}")
         return []
 
+import time
+
+_WEATHER_CACHE: Dict[str, Dict[str, Any]] = {}
+_CACHE_TTL = 900  # 15 minutes cache in seconds
+
 def get_weather_data(lat: float = 22.57, lon: float = 72.93, location_name: str = "Anand, Gujarat") -> Dict[str, Any]:
     """
     Fetches real-time weather & 7-day forecast from Open-Meteo API.
     Defaults to Anand/Gujarat agricultural hub coordinates.
+    Uses 15-minute in-memory cache to prevent 429 rate limits.
     """
+    cache_key = f"{round(lat, 2)}_{round(lon, 2)}"
+    now = time.time()
+    
+    # Return valid cached result if within 15 mins TTL
+    if cache_key in _WEATHER_CACHE:
+        cached_entry = _WEATHER_CACHE[cache_key]
+        if now - cached_entry["timestamp"] < _CACHE_TTL:
+            res = dict(cached_entry["data"])
+            res["location"] = location_name  # preserve custom location display name
+            return res
+
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": lat,
@@ -110,7 +127,7 @@ def get_weather_data(lat: float = 22.57, lon: float = 72.93, location_name: str 
         # 3-Month Seasonal Forecast
         seasonal_3month = get_seasonal_3month_forecast(lat, lon)
 
-        return {
+        result = {
             "location": location_name,
             "latitude": lat,
             "longitude": lon,
@@ -120,9 +137,21 @@ def get_weather_data(lat: float = 22.57, lon: float = 72.93, location_name: str 
             "seasonal_3month": seasonal_3month
         }
         
+        # Save to memory cache
+        _WEATHER_CACHE[cache_key] = {
+            "timestamp": now,
+            "data": result
+        }
+        
+        return result
+        
     except Exception as e:
-        # Fallback realistic weather data if internet is offline
-        print(f"Weather API error fallback: {e}")
+        # If rate limit 429 or network issue occurs, use previous cache if available
+        if cache_key in _WEATHER_CACHE:
+            res = dict(_WEATHER_CACHE[cache_key]["data"])
+            res["location"] = location_name
+            return res
+            
         return get_fallback_weather(location_name)
 
 def generate_agricultural_advisories(current: Dict[str, Any], forecast: List[Dict[str, Any]]) -> List[Dict[str, str]]:
