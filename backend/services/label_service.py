@@ -118,40 +118,36 @@ def _analyze_with_gemini_vision(api_key: str, image_bytes: bytes, products: list
     product_names = [p.get('name', '') for p in products] if products else []
     product_list_str = ", ".join(product_names[:30]) if product_names else "No local database available"
 
-    prompt = f"""You are AgriSense, an expert agricultural, seed, crop input, and food product identification AI.
+    prompt = f"""You are AgriSense AI, an expert agricultural inputs, pesticide, fertilizer, seed, and chemical label identification system.
 
-Analyze this photo carefully. Perform step-by-step visual parsing:
-1. OCR Step: Read ALL visible text from the photo, including brand names, product titles, slogans, bullet points, certification logos (e.g. USDA ORGANIC, India Organic), and ingredients.
-2. Search & Identification Step: Match the item, brand logo (e.g. EYWA Seeds & Exports, IFFCO, Bayer), windmill/graphic illustrations, and text details to identify the product accurately.
+Analyze the provided label photo carefully and extract structured information into a single JSON object with these EXACT fields:
 
-Provide your analysis as a JSON object with these exact fields:
 {{
-    "product_name": "Full product name as written on the label (e.g. EYWA Sunflower Seeds, Neem Shield, etc.)",
-    "brand": "Manufacturer or Brand name (e.g. EYWA Seeds & Exports, IFFCO, Bayer, etc.)",
-    "active_ingredient": "Active ingredient / seed variety / nutritional highlights / key contents",
-    "type": "seeds/organic product/pesticide/fertilizer/herbicide/fungicide/insecticide/plant growth regulator/bio-fertilizer",
-    "target_pests": ["target pests/diseases OR key health benefits / nutritional highlights"],
-    "suitable_crops": ["suitable crops / consumption guidelines / target crops"],
-    "dosage": "Recommended dosage / seed sowing rate / usage directions",
-    "precautions": "Key safety precautions / storage instructions",
-    "confidence": 92,
-    "identification_notes": "Detailed visual observations explaining how you identified this product (logos, text, color, packaging)"
+    "product_name": "Full trade / brand product name as written on label or null if unreadable",
+    "manufacturer": "Company / Manufacturer / Brand Name (e.g. Bayer, Syngenta, IFFCO, Tata Rallis) or null",
+    "active_ingredient": "Active ingredient chemical name WITH percentage concentration (e.g. Chlorpyrifos 20% EC, Imidacloprid 17.8% SL, NPK 19:19:19) or null",
+    "formulation_type": "Formulation type code (e.g. SC, EC, WP, WDG, SL, GR, SP, DP, Liquid, Powder, Granules) or null",
+    "dosage_per_acre": "Recommended application dosage per acre (e.g. 250 ml/acre, 50 kg/acre) or null",
+    "dosage_per_liter_water": "Recommended dilution ratio per liter of water (e.g. 2 ml/L water, 1.5 g/L) or null",
+    "target_pests_or_crops": ["List of target crops, insects, weeds, fungi, or diseases listed on label"],
+    "confidence_score": 88,
+    "unreadable_reason": null,
+    "identification_notes": "Step-by-step visual notes explaining how you identified this product (logos, text, bottle shape, label colors)"
 }}
 
 Known products in our local database for cross-reference: {product_list_str}
 
-IMPORTANT:
-- Read all text accurately from the photo (e.g. EYWA SEEDS & EXPORTS, SUNFLOWER SEEDS, USDA ORGANIC, BETTER EPIDERMAL HEALTH, Vitamin E).
-- If it is a seed packet, organic produce, or food item, set type to 'seeds' or 'organic product' and fill nutritional/health benefits into target_pests or usage fields.
-- Set confidence between 85% and 98% if readable.
-- Return ONLY the JSON object, no markdown codeblocks or extra text."""
+INSTRUCTIONS:
+1. ACCURACY & PARTIAL LABELS: If the label image is unclear or partially cut off, extract whatever text is legible and mark confidence_score accordingly (e.g., 40-70%) instead of returning empty fields.
+2. UNREADABLE IMAGES FALLBACK: If no readable text is found at all, return a JSON with all text fields set to null, confidence_score set to 0, and unreadable_reason explaining why (e.g. "Image too blurry", "Excessive glare on plastic bottle", "Angle obscures text", "Low resolution photo"), instead of returning a generic error.
+3. CONCENTRATION & FORMULATION: Always capture percentage concentration in active_ingredient (e.g., 5% SC, 50% WP) and specify formulation_type if present.
+4. Output ONLY the raw JSON object. No markdown formatting, no extra explanation."""
 
     models_to_try = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
     response = None
 
     for model_name in models_to_try:
         try:
-            # Use official google-genai types.Part or PIL image for multimodal vision
             if HAS_PIL:
                 try:
                     pil_img = Image.open(io.BytesIO(processed_bytes))
@@ -164,7 +160,7 @@ IMPORTANT:
             response = client.models.generate_content(
                 model=model_name,
                 contents=contents_payload,
-                config=types.GenerateContentConfig(temperature=0.2)
+                config=types.GenerateContentConfig(temperature=0.1)
             )
 
             if response and response.text:
@@ -186,7 +182,6 @@ IMPORTANT:
     try:
         ai_result = json.loads(response_text)
     except json.JSONDecodeError:
-        # Try to extract JSON from response
         import re
         json_match = re.search(r'\{[\s\S]*\}', response_text)
         if json_match:
@@ -194,36 +189,67 @@ IMPORTANT:
         else:
             return None
 
+    # Handle unreadable image response fallback from model
+    unreadable_reason = ai_result.get("unreadable_reason")
+    confidence = ai_result.get("confidence_score") if ai_result.get("confidence_score") is not None else ai_result.get("confidence", 75)
+
+    if unreadable_reason or (not ai_result.get("product_name") and confidence < 20):
+        reason_msg = unreadable_reason or "Label photo is blurry, obscured by glare, or taken from an unreadable angle."
+        return {
+            "raw_ocr_text": f"[Unreadable Image] {reason_msg}",
+            "match_confidence": 0,
+            "matched_product": None,
+            "ai_summary": f"📷 Could not read product label. Reason: {reason_msg}. Please re-take photo with clear lighting and straight angle.",
+            "analysis_method": "gemini_vision_unreadable",
+            "disclaimer": f"⚠️ Photo Unreadable: {reason_msg}. Try capturing a clearer photo of the product label."
+        }
+
     # Cross-reference with local database
     local_match = None
     local_score = 0
-    if HAS_RAPIDFUZZ and products and ai_result.get("product_name"):
+    prod_name = ai_result.get("product_name") or ""
+    if HAS_RAPIDFUZZ and products and prod_name:
         names = [f"{p['name']} {p.get('brand', '')} {p.get('active_ingredient', '')}" for p in products]
-        match_result = process.extractOne(ai_result["product_name"], names, scorer=fuzz.token_set_ratio)
+        match_result = process.extractOne(prod_name, names, scorer=fuzz.token_set_ratio)
         if match_result and match_result[1] > 50:
             local_match = products[match_result[2]]
             local_score = match_result[1]
 
+    # Combine dosage fields
+    dosage_parts = []
+    if ai_result.get("dosage_per_acre"):
+        dosage_parts.append(f"Per Acre: {ai_result['dosage_per_acre']}")
+    if ai_result.get("dosage_per_liter_water"):
+        dosage_parts.append(f"Per Liter Water: {ai_result['dosage_per_liter_water']}")
+    dosage_str = " | ".join(dosage_parts) if dosage_parts else ai_result.get("dosage", "See product label for exact dosage")
+
+    # Format active ingredient with formulation type
+    act_ing = ai_result.get("active_ingredient") or "Not identified"
+    form_type = ai_result.get("formulation_type")
+    if form_type and form_type.lower() not in act_ing.lower():
+        act_ing = f"{act_ing} ({form_type})"
+
     # Build matched_product from AI result
     matched_product = {
-        "name": ai_result.get("product_name", "Unknown Product"),
-        "brand": ai_result.get("brand", "Unknown Brand"),
-        "active_ingredient": ai_result.get("active_ingredient", "Not identified"),
+        "name": prod_name or "Unknown Product",
+        "brand": ai_result.get("manufacturer") or ai_result.get("brand") or "Unknown Brand",
+        "active_ingredient": act_ing,
+        "formulation_type": form_type or "Standard",
         "type": ai_result.get("type", "agricultural product"),
-        "target_pests": ai_result.get("target_pests", []),
-        "suitable_crops": ai_result.get("suitable_crops", []),
-        "dosage": ai_result.get("dosage", "See label for dosage"),
+        "target_pests": ai_result.get("target_pests_or_crops") or ai_result.get("target_pests", []),
+        "suitable_crops": ai_result.get("suitable_crops") or ai_result.get("target_pests_or_crops", []),
+        "dosage": dosage_str,
+        "dosage_per_acre": ai_result.get("dosage_per_acre"),
+        "dosage_per_liter_water": ai_result.get("dosage_per_liter_water"),
         "precautions": ai_result.get("precautions", "Follow safety guidelines on label"),
         "usage_notes": ai_result.get("identification_notes", "")
     }
 
-    # If we found a strong local match, merge the local data for completeness
+    # Merge local database info if match score > 70
     if local_match and local_score > 70:
         for key in ['dosage', 'precautions', 'usage_notes', 'suitable_crops', 'target_pests']:
             if local_match.get(key) and not matched_product.get(key):
                 matched_product[key] = local_match[key]
-
-    confidence = ai_result.get("confidence", 75)
 
     # Generate farmer-friendly summary
     summary = _generate_ai_summary(matched_product, lang, api_key)
