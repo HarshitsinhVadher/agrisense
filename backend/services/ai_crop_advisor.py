@@ -39,12 +39,13 @@ DISTRICT_SOIL_DEFAULTS = {
     "kheda": "Alluvial Loam (kamp-goradu)",
     "nadiad": "Alluvial (kamp)",
     "vadodara": "Alluvial Medium Black (kamp-kaali)",
-    "narmada": "Medium Black Red (madhyam kaali-lal)",
-    "surat": "Alluvial Coastal Sandy (kamp-dariyai)",
-    "navsari": "Coastal Alluvial Laterite (kamp-khad)",
-    "valsad": "Coastal Laterite Alluvial (lal-kamp)",
+    "surat": "Deep Black Clayey Soil (Vertisols) / Heavy Alluvial",
+    "navsari": "Heavy Black Alluvial Soil (kaali-kamp)",
+    "valsad": "Coastal Black Alluvial Soil (kaali-kamp)",
+    "bharuch": "Deep Black Cotton Soil (Vertisols)",
+    "tapi": "Deep Black Clayey Soil (undi kaali)",
+    "narmada": "Medium Black Cotton Soil (madhyam kaali)",
     "dang": "Forest Red Laterite Soil (jangal lal)",
-    "tapi": "Medium Black Red (kaali-lal)",
     "sabarkantha": "Shallow Black Red Loamy (chichri kaali-lal)",
     "aravalli": "Red Sandy Loam (lal goradu)",
     "mahisagar": "Medium Black Soil (madhyam kaali)",
@@ -279,16 +280,16 @@ def detect_default_soil_type(location_name: str) -> str:
 def _get_soil_key(soil_type: str) -> str:
     """Map a soil type string to the crop pool key."""
     s = (soil_type or "").lower()
-    # Sandy arid / desert must be checked BEFORE general sandy
+    # Explicit Black / Clayey / Vertisol / Heavy soils MUST map to black cotton
+    if "deep black" in s or "clay" in s or "vertisol" in s or ("black" in s and "sandy" not in s) or "kaali" in s:
+        return "black cotton"
+    # Sandy arid / desert (Kutch, Rajasthan, arid North Gujarat)
     if "arid" in s or "desert" in s or "sukhi" in s or "retaad" in s:
         return "sandy arid"
-    if "coastal" in s or "dariyai" in s:
+    if "coastal sandy" in s:
         return "coastal sandy"
     if "later" in s:
         return "laterite"
-    # Black cotton must check that sandy is NOT also present
-    if ("black" in s or "regur" in s or "cotton" in s or "kaali" in s) and "sandy" not in s:
-        return "black cotton"
     if "alluvial" in s or "kamp" in s:
         return "alluvial"
     if "sandy" in s or "goradu" in s or "retaal" in s:

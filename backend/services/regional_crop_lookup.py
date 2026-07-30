@@ -204,24 +204,45 @@ DISTRICT_CROP_DB: Dict[str, Dict] = {
     },
     "surat": {
         "state": "Gujarat",
-        "soil": "Alluvial / Coastal Sandy (કાંપ-દરિયાઈ)",
-        "soil_key": "alluvial",
-        "kharif": ["Paddy", "Sugarcane", "Vegetables", "Banana"],
-        "rabi":   ["Wheat", "Vegetables", "Chickpea"],
-        "perennial": ["Sugarcane", "Banana", "Mango", "Chiku (Sapota)"],
-        "major_crops": ["Paddy", "Sugarcane", "Banana"],
-        "apmc_note": "Surat region: Sugarcane, Paddy and coastal vegetables. Alphonso/Kesar Mango in Valsad/Navsari proximity."
+        "soil": "Deep Black Clayey Soil / Heavy Alluvial (ઊંડી કાળી - કાંપ જમીન)",
+        "soil_key": "black cotton",
+        "kharif": ["Sugarcane", "Paddy (Rice)", "Cotton", "Pigeonpea (Tur/Arhar)", "Banana", "Okra"],
+        "rabi":   ["Wheat", "Chickpea", "Sweet Corn", "Vegetables"],
+        "perennial": ["Sugarcane", "Banana", "Mango (Alphonso/Kesar)", "Papaya", "Chiku (Sapota)"],
+        "major_crops": ["Sugarcane", "Paddy", "Cotton", "Banana"],
+        "emerging_crops": ["Dragon Fruit", "Sweet Corn", "Exotic Vegetables"],
+        "apmc_note": "Surat (South Gujarat): Sub-humid climate with 1000–1500mm high annual rainfall and canal network. Deep black clayey soil is ideal for Sugarcane, Paddy, Cotton, and Banana. High demand in Surat APMC."
     },
     "navsari": {
         "state": "Gujarat",
-        "soil": "Coastal Alluvial / Laterite (કાંપ-ખડ)",
-        "soil_key": "alluvial",
-        "kharif": ["Paddy", "Banana", "Sugarcane", "Groundnut"],
-        "rabi":   ["Wheat", "Vegetables"],
+        "soil": "Heavy Black Alluvial Soil / Clayey Loam (કાળી - કાંપ જમીન)",
+        "soil_key": "black cotton",
+        "kharif": ["Paddy (Rice)", "Sugarcane", "Banana", "Pigeonpea", "Groundnut"],
+        "rabi":   ["Wheat", "Vegetables", "Pulses"],
         "perennial": ["Chiku (Sapota)", "Mango (Alphonso/Kesar)", "Coconut", "Banana"],
-        "major_crops": ["Chiku", "Mango", "Paddy", "Banana"],
-        "emerging_crops": ["Dragon Fruit", "Avocado"],
-        "apmc_note": "Navsari: Chiku (Sapota) capital of Gujarat. Alphonso and Kesar Mango orchards. Strong horticulture belt."
+        "major_crops": ["Chiku", "Mango", "Sugarcane", "Paddy"],
+        "emerging_crops": ["Dragon Fruit", "Avocado", "Papaya"],
+        "apmc_note": "Navsari: Chiku (Sapota) capital of Gujarat. High rainfall and heavy alluvial soil support Mango orchards, Sugarcane, and Paddy."
+    },
+    "valsad": {
+        "state": "Gujarat",
+        "soil": "Heavy Black Coastal Soil / Alluvial (કાળી - કાંપ જમીન)",
+        "soil_key": "black cotton",
+        "kharif": ["Paddy (Rice)", "Sugarcane", "Banana", "Vegetables"],
+        "rabi":   ["Wheat", "Pulses", "Vegetables"],
+        "perennial": ["Mango (Alphonso/Valsadi Hapus)", "Chiku", "Coconut", "Banana"],
+        "major_crops": ["Alphonso Mango", "Sugarcane", "Paddy", "Chiku"],
+        "apmc_note": "Valsad: Famous for Valsadi Alphonso (Hapus) Mango and Sugarcane. High annual rainfall and rich black soils."
+    },
+    "bharuch": {
+        "state": "Gujarat",
+        "soil": "Deep Black Cotton Soil (Vertisols) (ઊંડી કાળી જમીન)",
+        "soil_key": "black cotton",
+        "kharif": ["Cotton", "Sugarcane", "Paddy (Rice)", "Pigeonpea (Tur)", "Banana"],
+        "rabi":   ["Wheat", "Chickpea", "Mustard"],
+        "perennial": ["Sugarcane", "Banana", "Papaya"],
+        "major_crops": ["Cotton", "Sugarcane", "Paddy", "Pigeonpea"],
+        "apmc_note": "Bharuch: Narmada basin deep black cotton soil. Cotton, Sugarcane, and Tur (Pigeonpea) are major crops with high yields."
     },
     "vadodara": {
         "state": "Gujarat",
@@ -420,19 +441,20 @@ def reverse_geocode_district(lat: float, lon: float) -> Dict[str, str]:
     return {"district": "", "state": "", "country": "in", "display_name": "", "raw_address": {}}
 
 
-def lookup_district_crops(district: str, state: str) -> Optional[Dict]:
+def lookup_district_crops(district: str, state: str, display_name: str = "") -> Optional[Dict]:
     """Look up crops + soil from district crop database with fuzzy matching."""
-    d = district.lower().strip()
-    s = state.lower().strip()
+    d = (district or "").lower().strip()
+    s = (state or "").lower().strip()
+    disp = (display_name or "").lower().strip()
+    search_text = f"{d} {disp}"
 
-    # Exact or partial district match
+    # Exact or partial district match across district name and full location string
     for key in DISTRICT_CROP_DB:
         db_entry = DISTRICT_CROP_DB[key]
-        # Only match if state also aligns
         db_state = db_entry.get("state", "").lower()
         state_match = not db_state or s in db_state or db_state in s
 
-        if state_match and (key in d or d in key or (len(d) > 3 and d[:4] in key)):
+        if state_match and (key in search_text or (len(d) > 3 and d in key)):
             return db_entry
 
     # State-level fallback
@@ -479,7 +501,7 @@ def fetch_real_crops_for_location(
     print(f"Geocoded: district='{result['district']}', state='{result['state']}', display='{geo.get('display_name','')[:60]}'")
 
     # Step 2: Database lookup for instant offline result
-    db_data = lookup_district_crops(result["district"], result["state"])
+    db_data = lookup_district_crops(result["district"], result["state"], display_name=f"{location_name} {geo.get('display_name','')}")
     if db_data:
         result["kharif_crops"] = db_data.get("kharif", [])
         result["rabi_crops"] = db_data.get("rabi", [])
@@ -490,7 +512,7 @@ def fetch_real_crops_for_location(
         result["soil_key"] = db_data.get("soil_key", "")
         result["apmc_note"] = db_data.get("apmc_note", "") or db_data.get("note", "")
         result["source"] = "district_database"
-        print(f"DB Match: {result['district']}/{result['state']} → soil: {result['soil_type_regional']}")
+        print(f"DB Match: {result['district']}/{result['state']} -> source: {result['source']}")
 
     # Step 3: Gemini + Google Search for live, specific data (production statistics)
     if api_key and HAS_GEMINI:
