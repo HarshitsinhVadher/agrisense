@@ -12,15 +12,142 @@ except ImportError:
 
 SOIL_TYPE_DEFAULTS = {
     "gujarat": "Black Cotton Soil (કાળી જમીન)",
-    "maharashtra": "Black Cotton Soil (કાળી જમીન)",
-    "punjab": "Alluvial Soil (ગોરાડુ/કાંપ જમીન)",
-    "haryana": "Alluvial Soil (ગોરાડુ/કાંપ જમીન)",
-    "uttar pradesh": "Alluvial Soil (કાંપ જમીન)",
-    "rajasthan": "Sandy Loam Soil (રેતાળ જમીન)",
-    "madhya pradesh": "Black Cotton Soil (કાળી જમીન)",
-    "karnataka": "Red Loamy Soil (લાલ જમીન)",
-    "tamil nadu": "Red Clay Soil (લાલ જમીન)",
-    "andhra pradesh": "Red Clay Soil (લાલ જમીન)",
+    "maharashtra": "Black Cotton Soil (Regur)",
+    "punjab": "Alluvial Soil (Sandy Loam)",
+    "haryana": "Alluvial Soil (Sandy Loam)",
+    "uttar pradesh": "Alluvial Soil (Loamy)",
+    "rajasthan": "Sandy Loam Soil (Arid)",
+    "madhya pradesh": "Black Cotton Soil (Regur)",
+    "karnataka": "Red Loamy Soil",
+    "tamil nadu": "Red Clay Soil",
+    "andhra pradesh": "Red Clay Soil",
+    "telangana": "Red Loamy Soil",
+    "bihar": "Alluvial Soil (Clay Loam)",
+    "west bengal": "Alluvial Soil (Laterite)",
+    "odisha": "Red Laterite Soil",
+    "assam": "Alluvial Soil (Acidic)",
+}
+
+# ── Smart rule-based crop pools by soil type ──────────────────────────────────
+CROP_POOL_BY_SOIL = {
+    "black cotton": [
+        {"crop_name": "Cotton", "recommended_variety": "G.Cot-20 / Hybrid-6 / RCH-134",
+         "suitability_score": 95, "expected_yield_per_acre": "12-18 Quintal/Acre",
+         "season_duration": "150-170 Days", "water_requirement": "Medium",
+         "suitability_reason": "Black cotton soil retains moisture well and provides deep root zone; ideal for cotton."},
+        {"crop_name": "Soybean", "recommended_variety": "JS-335 / MAUS-71 / Gujarat Soybean-1",
+         "suitability_score": 88, "expected_yield_per_acre": "8-12 Quintal/Acre",
+         "season_duration": "90-100 Days", "water_requirement": "Medium",
+         "suitability_reason": "Soybean thrives in black soil with good organic matter; fixes atmospheric nitrogen benefiting next crop."},
+        {"crop_name": "Sorghum (Jowar)", "recommended_variety": "CSH-16 / CSH-23 / Gujarat Jowar-1",
+         "suitability_score": 85, "expected_yield_per_acre": "15-20 Quintal/Acre",
+         "season_duration": "110-120 Days", "water_requirement": "Low",
+         "suitability_reason": "Drought-tolerant; thrives in deep black soil; good fodder and grain crop."},
+        {"crop_name": "Pigeonpea (Tur/Arhar)", "recommended_variety": "BSMR-853 / Pusa-992 / Asha",
+         "suitability_score": 83, "expected_yield_per_acre": "6-10 Quintal/Acre",
+         "season_duration": "160-180 Days", "water_requirement": "Low",
+         "suitability_reason": "Deep-rooted legume; improves soil fertility; thrives in well-drained black soils."},
+        {"crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1 / HD-2967",
+         "suitability_score": 80, "expected_yield_per_acre": "18-25 Quintal/Acre",
+         "season_duration": "120-130 Days", "water_requirement": "Medium",
+         "suitability_reason": "Excellent rabi crop for black cotton soil; high market demand and stable returns."},
+        {"crop_name": "Chickpea (Chana)", "recommended_variety": "GG-2 / JG-11 / Phule G-5",
+         "suitability_score": 78, "expected_yield_per_acre": "8-12 Quintal/Acre",
+         "season_duration": "95-110 Days", "water_requirement": "Low",
+         "suitability_reason": "Good rabi pulse for black soils; nitrogen fixer; strong APMC demand."},
+    ],
+    "alluvial": [
+        {"crop_name": "Rice (Paddy)", "recommended_variety": "Gujarat Anand Paddy-1 / Swarna / IR-64",
+         "suitability_score": 95, "expected_yield_per_acre": "20-30 Quintal/Acre",
+         "season_duration": "120-145 Days", "water_requirement": "High",
+         "suitability_reason": "Alluvial soil with good water retention is ideal for paddy cultivation."},
+        {"crop_name": "Wheat", "recommended_variety": "HD-3086 / GW-496 / Lok-1",
+         "suitability_score": 92, "expected_yield_per_acre": "22-28 Quintal/Acre",
+         "season_duration": "120-130 Days", "water_requirement": "Medium",
+         "suitability_reason": "Alluvial plains are India's wheat belt; high productivity with irrigation."},
+        {"crop_name": "Sugarcane", "recommended_variety": "CoJ-64 / CoSe-95422",
+         "suitability_score": 87, "expected_yield_per_acre": "300-400 Quintal/Acre",
+         "season_duration": "10-12 Months", "water_requirement": "High",
+         "suitability_reason": "Deep, fertile alluvial soil supports vigorous sugarcane growth."},
+        {"crop_name": "Maize (Corn)", "recommended_variety": "Pioneer 30V92 / HQPM-1 / DKC-9144",
+         "suitability_score": 85, "expected_yield_per_acre": "25-35 Quintal/Acre",
+         "season_duration": "90-100 Days", "water_requirement": "Medium",
+         "suitability_reason": "Well-drained alluvial soils support excellent maize yields."},
+        {"crop_name": "Mustard (Sarson)", "recommended_variety": "Pusa Bold / RH-749 / Kranti",
+         "suitability_score": 82, "expected_yield_per_acre": "8-12 Quintal/Acre",
+         "season_duration": "110-120 Days", "water_requirement": "Low",
+         "suitability_reason": "Major rabi oilseed in alluvial zones; good APMC returns."},
+        {"crop_name": "Potato", "recommended_variety": "Kufri Jyoti / Kufri Sindhuri / Chipsona",
+         "suitability_score": 80, "expected_yield_per_acre": "80-120 Quintal/Acre",
+         "season_duration": "90-100 Days", "water_requirement": "Medium",
+         "suitability_reason": "Sandy loam alluvial soils are ideal for potato tuber development."},
+    ],
+    "sandy loam": [
+        {"crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31 / TAG-24",
+         "suitability_score": 95, "expected_yield_per_acre": "10-14 Quintal/Acre",
+         "season_duration": "110-120 Days", "water_requirement": "Medium",
+         "suitability_reason": "Sandy loam allows easy pod penetration and harvest; ideal for groundnut."},
+        {"crop_name": "Pearl Millet (Bajra)", "recommended_variety": "GHB-558 / HHB-67 / Pusa 322",
+         "suitability_score": 90, "expected_yield_per_acre": "12-18 Quintal/Acre",
+         "season_duration": "75-90 Days", "water_requirement": "Low",
+         "suitability_reason": "Highly drought-tolerant; thrives in sandy soils of arid and semi-arid regions."},
+        {"crop_name": "Sesame (Til)", "recommended_variety": "Gujarat Til-1 / Purva-1 / RT-346",
+         "suitability_score": 85, "expected_yield_per_acre": "3-5 Quintal/Acre",
+         "season_duration": "80-90 Days", "water_requirement": "Low",
+         "suitability_reason": "Drought-resistant oilseed; excellent for light sandy soils with low water."},
+        {"crop_name": "Castor", "recommended_variety": "GAUCH-1 / Aruna / GCH-7",
+         "suitability_score": 82, "expected_yield_per_acre": "10-15 Quintal/Acre",
+         "season_duration": "180-210 Days", "water_requirement": "Low",
+         "suitability_reason": "Deep-rooted oilseed crop; thrives in well-drained sandy loam; Gujarat is India's top producer."},
+        {"crop_name": "Cowpea (Chawli)", "recommended_variety": "V-240 / EC-4216 / Pusa Komal",
+         "suitability_score": 78, "expected_yield_per_acre": "5-8 Quintal/Acre",
+         "season_duration": "60-75 Days", "water_requirement": "Low",
+         "suitability_reason": "Short-duration legume; fixes nitrogen; good for light sandy soils."},
+    ],
+    "red loamy": [
+        {"crop_name": "Ragi (Finger Millet)", "recommended_variety": "GPU-28 / VL-149 / HR-911",
+         "suitability_score": 90, "expected_yield_per_acre": "8-12 Quintal/Acre",
+         "season_duration": "100-120 Days", "water_requirement": "Low",
+         "suitability_reason": "Ragi is highly suited to red loamy soils; drought-tolerant and nutritious."},
+        {"crop_name": "Maize (Corn)", "recommended_variety": "HQPM-1 / Pioneer 30V92 / NK-6240",
+         "suitability_score": 87, "expected_yield_per_acre": "22-30 Quintal/Acre",
+         "season_duration": "90-100 Days", "water_requirement": "Medium",
+         "suitability_reason": "Red loamy soil supports excellent maize growth with good drainage."},
+        {"crop_name": "Groundnut", "recommended_variety": "TMV-2 / JL-24 / K-134",
+         "suitability_score": 85, "expected_yield_per_acre": "8-12 Quintal/Acre",
+         "season_duration": "110-120 Days", "water_requirement": "Medium",
+         "suitability_reason": "Groundnut pod formation benefits from loose red loamy texture."},
+        {"crop_name": "Sunflower", "recommended_variety": "KBSH-44 / PAC-36 / Modern Vijay",
+         "suitability_score": 82, "expected_yield_per_acre": "6-10 Quintal/Acre",
+         "season_duration": "90-100 Days", "water_requirement": "Medium",
+         "suitability_reason": "Sunflower adapts well to red soils; high oil content and market demand."},
+        {"crop_name": "Pigeonpea (Tur)", "recommended_variety": "ICP-8863 / BDN-711 / BSMR-736",
+         "suitability_score": 80, "expected_yield_per_acre": "6-9 Quintal/Acre",
+         "season_duration": "150-180 Days", "water_requirement": "Low",
+         "suitability_reason": "Legume suited to red soils; improves soil fertility through nitrogen fixation."},
+    ],
+    "laterite": [
+        {"crop_name": "Cashew", "recommended_variety": "Vengurla-4 / BPP-8 / Ullal-2",
+         "suitability_score": 92, "expected_yield_per_acre": "4-6 Quintal/Acre",
+         "season_duration": "Annual (3-5 years to bear)", "water_requirement": "Low",
+         "suitability_reason": "Cashew thrives in acidic laterite soils; major plantation crop in coastal areas."},
+        {"crop_name": "Coconut", "recommended_variety": "West Coast Tall / Chandra Sankara",
+         "suitability_score": 88, "expected_yield_per_acre": "50-70 Nuts/Palm/Year",
+         "season_duration": "Annual (perennial)", "water_requirement": "Medium",
+         "suitability_reason": "Coastal laterite soils with good drainage are ideal for coconut cultivation."},
+        {"crop_name": "Tapioca (Cassava)", "recommended_variety": "H-226 / Sree Visakham",
+         "suitability_score": 85, "expected_yield_per_acre": "80-120 Quintal/Acre",
+         "season_duration": "270-300 Days", "water_requirement": "Low",
+         "suitability_reason": "Tapioca is well-adapted to acidic laterite soils; starch industry demand."},
+        {"crop_name": "Pineapple", "recommended_variety": "Kew / Queen / Mauritius",
+         "suitability_score": 82, "expected_yield_per_acre": "150-200 Quintal/Acre",
+         "season_duration": "12-14 Months", "water_requirement": "Medium",
+         "suitability_reason": "Pineapple thrives in well-drained acidic laterite soils."},
+        {"crop_name": "Ragi (Finger Millet)", "recommended_variety": "PR-202 / GPU-28 / VL-149",
+         "suitability_score": 80, "expected_yield_per_acre": "8-10 Quintal/Acre",
+         "season_duration": "100-115 Days", "water_requirement": "Low",
+         "suitability_reason": "Drought-resistant cereal well-adapted to acidic laterite soils."},
+    ],
 }
 
 def detect_default_soil_type(location_name: str) -> str:
@@ -29,8 +156,61 @@ def detect_default_soil_type(location_name: str) -> str:
     for state, default_soil in SOIL_TYPE_DEFAULTS.items():
         if state in loc_lower:
             return default_soil
-    # Default fallback for Gujarat/Western India agricultural hubs
     return "Black Cotton Soil (કાળી જમીન)"
+
+
+def _get_soil_key(soil_type: str) -> str:
+    """Map a soil type string to the crop pool key."""
+    s = (soil_type or "").lower()
+    if "black" in s or "regur" in s or "cotton" in s:
+        return "black cotton"
+    if "alluvial" in s or "loam" in s and "sandy" not in s:
+        return "alluvial"
+    if "sandy" in s:
+        return "sandy loam"
+    if "red" in s and "later" not in s:
+        return "red loamy"
+    if "later" in s:
+        return "laterite"
+    return "black cotton"  # default
+
+
+def _npk_filter_and_rank(crops: List[Dict], N: float, P: float, K: float, ph: float) -> List[Dict]:
+    """Adjust suitability scores based on actual NPK values and return top 5."""
+    ranked = []
+    for crop in crops:
+        score = crop["suitability_score"]
+        name = crop["crop_name"].lower()
+        # Nitrogen logic
+        if N < 100:
+            if "legume" in crop.get("suitability_reason","").lower() or "nitrogen fix" in crop.get("suitability_reason","").lower():
+                score += 5  # legumes preferred when N is low
+        if N > 200:
+            if "wheat" in name or "rice" in name or "maize" in name or "sugarcane" in name:
+                score += 4  # N-hungry crops preferred when N is high
+        # Phosphorus logic
+        if P < 30:
+            if "groundnut" in name or "soybean" in name:
+                score -= 3  # P-demanding crops penalized
+        # Potassium logic
+        if K < 50:
+            if "potato" in name or "banana" in name or "sugarcane" in name:
+                score -= 3  # K-demanding crops penalized
+        # pH adjustment
+        if ph > 8.5:  # very alkaline
+            if "barley" in name or "mustard" in name:
+                score += 3
+        if ph < 5.5:  # acidic
+            if "rice" in name or "ragi" in name or "cashew" in name or "pineapple" in name:
+                score += 4
+        # Clamp score
+        score = min(98, max(55, score))
+        c = dict(crop)
+        c["suitability_score"] = score
+        ranked.append(c)
+    ranked.sort(key=lambda x: x["suitability_score"], reverse=True)
+    return ranked[:5]
+
 
 def generate_geographical_crop_advice(
     location_name: str,
@@ -49,7 +229,7 @@ def generate_geographical_crop_advice(
     """
     Geographical AI Crop Recommendation Engine:
     Combines NPK test metrics, Soil Type, 3-Month Weather Forecast, and District location
-    using Gemini AI with Google Search Grounding to generate personalized agronomic advice.
+    using Gemini AI to generate personalized agronomic advice with 5 diverse crops.
     """
     if not api_key:
         api_key = os.environ.get("GEMINI_API_KEY")
@@ -83,165 +263,183 @@ FARMER AGRO-CLIMATIC DATA:
 
 LANGUAGE REQUIREMENT: {lang_instructions}
 
-TASK: Perform a specialized 4-layer agronomic evaluation (Location suitability + Soil type + NPK deficits + 3-Month Weather) and output a JSON object with these exact fields:
+TASK: Perform a specialized 4-layer agronomic evaluation and recommend EXACTLY 5 DIFFERENT, DIVERSE crops best suited to this farmer's specific conditions. DO NOT always recommend only Cotton and Groundnut — vary crops based on soil type, NPK levels, and climate.
+
+DIVERSITY RULES:
+- For {soil_type}: consider crops like Soybean, Sorghum, Pigeonpea, Wheat, Chickpea, Maize, Sesame, Castor, Pearl Millet, Ragi, Mustard, Sunflower, Sugarcane, Rice, Potato, or other regionally suitable crops.
+- If N={N} is low (< 120 kg/ha): prioritize nitrogen-fixing legumes (e.g. Soybean, Pigeonpea, Chickpea, Cowpea).
+- If P={P} is low (< 40 kg/ha): avoid heavy phosphorus-demanding crops; prefer drought-tolerant crops.
+- If rainfall is low (< 500mm/season): prioritize drought-tolerant crops (Pearl Millet, Castor, Sesame, Sorghum).
+- Include at least 1 short-duration crop (under 100 days) and 1 long-duration crop (over 150 days).
+- Include at least 1 legume/pulse crop and 1 cereal or oilseed crop.
+
+Output ONLY a JSON object with exactly this structure:
 
 {{
     "detected_soil_type": "{soil_type}",
-    "agro_climatic_zone": "Name of agro-climatic region (e.g. Middle Gujarat Zone / Saurashtra / Vidarbha / Malwa)",
+    "agro_climatic_zone": "Name of agro-climatic region (e.g. Middle Gujarat Zone / Saurashtra / Vidarbha / Malwa Plateau)",
     "recommended_crops": [
         {{
-            "crop_name": "Name of crop (e.g. Cotton / કપાસ, Paddy / ડાંગર, Groundnut / મગફળી)",
-            "recommended_variety": "High yielding regional variety name (e.g. G.Cot-20 / Gujarat Anand Paddy-1)",
-            "suitability_score": 94,
-            "suitability_reason": "Detailed reason why this crop fits this location, soil type, NPK test, and 90-day rainfall",
-            "expected_yield_per_acre": "Expected yield (e.g. 12-15 Quintals/Acre)",
-            "season_duration": "Duration (e.g. 110-120 days)",
+            "crop_name": "Crop Name (English / Local Language)",
+            "recommended_variety": "High-yielding regional variety (e.g. GJG-31 / JS-335)",
+            "suitability_score": 92,
+            "suitability_reason": "Specific 2-sentence reason why THIS crop suits THIS soil type, NPK values, and 90-day climate",
+            "expected_yield_per_acre": "e.g. 12-15 Quintal/Acre",
+            "season_duration": "e.g. 110-120 Days",
             "water_requirement": "High / Medium / Low"
         }}
     ],
     "soil_health_assessment": {{
-        "nutrient_status": "Summary of N, P, K deficiencies or excesses",
-        "ph_evaluation": "Evaluation of pH {ph} and correction advice if alkaline/acidic",
-        "organic_carbon_advice": "Practical advice to improve soil organic carbon and health"
+        "nutrient_status": "Specific analysis of N={N}, P={P}, K={K} — which is deficient/excess and what to do",
+        "ph_evaluation": "Analysis of pH {ph}: is it acidic/alkaline/neutral and what correction is needed",
+        "organic_carbon_advice": "Practical manure/compost advice for improving soil organic matter"
     }},
     "custom_fertilizer_plan": {{
-        "basal_dose": "Recommended basal fertilizer application per acre before sowing",
-        "top_dressing_stage1": "Application at 30 days stage",
-        "top_dressing_stage2": "Application at 60 days flowering stage"
+        "basal_dose": "Specific fertilizer dose per acre before sowing based on actual NPK values",
+        "top_dressing_stage1": "Application at 30-day stage with specific dose",
+        "top_dressing_stage2": "Application at 60-day flowering stage with specific dose"
     }},
     "intercropping_strategy": {{
-        "suggested_intercrop": "Recommended intercrop / companion crop for extra income and soil nitrogen fixation",
-        "benefits": "Key agricultural benefits of this combination"
+        "suggested_intercrop": "Best intercrop pair for this specific soil and primary crop",
+        "benefits": "Specific agronomic and economic benefits"
     }},
-    "regional_market_notes": "Brief guidance on local market demand, harvesting window, and economic returns in {location_name}"
+    "regional_market_notes": "Specific APMC market insight, price trend, and best harvesting window for {location_name}"
 }}
 
-CRITICAL INSTRUCTIONS:
-- Tailor the crop recommendations specifically to crops grown in {location_name} and suitable for {soil_type}.
-- Return ONLY the JSON object, no markdown codeblocks or surrounding conversational text."""
+CRITICAL: Return ONLY the raw JSON. No markdown, no ``` blocks, no explanation text. recommended_crops MUST contain exactly 5 different crops."""
 
     if api_key and HAS_GEMINI:
         try:
             client = genai.Client(api_key=api_key)
-            config = None
-            try:
-                config = types.GenerateContentConfig(
-                    tools=[{"google_search": {}}],
-                    temperature=0.3
-                )
-            except Exception:
-                config = None
 
-            models_to_try = ['gemini-flash-latest', 'gemini-pro-latest', 'gemma-4-26b-a4b-it', 'gemini-3.6-flash']
-            
+            models_to_try = [
+                'gemini-2.0-flash',
+                'gemini-2.0-flash-lite',
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-flash-latest',
+            ]
+
             for model_name in models_to_try:
                 try:
-                    kwargs = {"model": model_name, "contents": prompt}
-                    if config:
-                        kwargs["config"] = config
-                    res = client.models.generate_content(**kwargs)
+                    res = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt,
+                        config=types.GenerateContentConfig(temperature=0.4)
+                    )
                     if res and res.text:
                         text_resp = res.text.strip()
+                        # Strip markdown code fences if present
                         if text_resp.startswith("```"):
                             lines = text_resp.split("\n")
                             text_resp = "\n".join([l for l in lines if not l.startswith("```")])
-                        
                         try:
                             parsed = json.loads(text_resp)
-                            return parsed
+                            # Validate we have at least 3 crops
+                            if isinstance(parsed.get("recommended_crops"), list) and len(parsed["recommended_crops"]) >= 2:
+                                print(f"AI Crop Advisor: success with {model_name}, {len(parsed['recommended_crops'])} crops")
+                                return parsed
                         except Exception:
-                            # Extract JSON substring
                             import re
                             match = re.search(r'\{[\s\S]*\}', text_resp)
                             if match:
-                                return json.loads(match.group())
+                                parsed = json.loads(match.group())
+                                if isinstance(parsed.get("recommended_crops"), list) and len(parsed["recommended_crops"]) >= 2:
+                                    return parsed
                 except Exception as err:
                     print(f"AI Crop Advisor model {model_name} failed: {err}")
                     continue
         except Exception as global_err:
             print(f"AI Crop Advisor global error: {global_err}")
 
-    # Fallback response if API offline/quota exceeded
-    return _build_fallback_advice(location_name, soil_type, N, P, K, ph, lang)
+    print(f"AI Crop Advisor: falling back to smart rule-based system for soil={soil_type}")
+    return _build_smart_fallback(location_name, soil_type, N, P, K, ph, temperature, rainfall, lang)
 
-def _build_fallback_advice(location: str, soil_type: str, N: float, P: float, K: float, ph: float, lang: str) -> Dict[str, Any]:
-    if lang == "gu":
-        return {
-            "detected_soil_type": soil_type,
-            "agro_climatic_zone": f"મધ્ય-દક્ષિણ પ્રદેશ ({location})",
-            "recommended_crops": [
-                {
-                    "crop_name": "કપાસ (Cotton)",
-                    "recommended_variety": "જી.કોટ-૨૦ / હાઇબ્રિડ-૬",
-                    "suitability_score": 92,
-                    "suitability_reason": f"{soil_type} અને નાઇટ્રોજન સ્તર માટે કપાસનું વાવેતર અનુકૂળ છે.",
-                    "expected_yield_per_acre": "૧૨-૧૫ ક્વિન્ટલ/એકર",
-                    "season_duration": "૧૫૦-૧૭૦ દિવસ",
-                    "water_requirement": "મધ્યમ"
-                },
-                {
-                    "crop_name": "મગફળી (Groundnut)",
-                    "recommended_variety": "જી.જી.-૨૦ / જી.જે.જી.-૩૧",
-                    "suitability_score": 88,
-                    "suitability_reason": "ફોસ્ફરસ અને જમીન બંધારણ સાથે ઉત્તમ અનુકૂળતા.",
-                    "expected_yield_per_acre": "૧૦-૧૨ ક્વિન્ટલ/એકર",
-                    "season_duration": "૧૧૦-૧૨૦ દિવસ",
-                    "water_requirement": "મધ્યમ"
-                }
-            ],
-            "soil_health_assessment": {
-                "nutrient_status": f"નાઇટ્રોજન (N={N}), ફોસ્ફરસ (P={P}), પોટાશ (K={K}). નાઇટ્રોજન સ્તર સુધારવાની જરૂર છે.",
-                "ph_evaluation": f"જમીનનો pH સ્તર {ph} અનુકૂળ છે.",
-                "organic_carbon_advice": "જમીનમાં દેશી છાણિયું ખાતર અથવા વર્મીકમ્પોસ્ટ ઉમેરો."
-            },
-            "custom_fertilizer_plan": {
-                "basal_dose": "વાવણી વખતે ડી.એ.પી. ૫૦ કિગ્રા અને યુરિયા ૨૫ કિગ્રા/એકર",
-                "top_dressing_stage1": "૩૦ દિવસે યુરિયા ૨૫ કિગ્રા/એકર",
-                "top_dressing_stage2": "૬૦ દિવસે પોટાશ (MOP) ૨૦ કિગ્રા/એકર"
-            },
-            "intercropping_strategy": {
-                "suggested_intercrop": "કપાસ સાથે તુવેર અથવા મગ",
-                "benefits": "જમીનમાં નાઇટ્રોજન સ્થિરીકરણ અને વધારાની આવક"
-            },
-            "regional_market_notes": f"{location} વિસ્તારમાં કપાસ અને મગફળીનું સ્થાનિક મંડળી અને યાર્ડમાં સારું વેચાણ મૂલ્ય મળે છે."
-        }
+
+def _build_smart_fallback(
+    location: str, soil_type: str, N: float, P: float, K: float,
+    ph: float, temperature: float, rainfall: float, lang: str
+) -> Dict[str, Any]:
+    """
+    Smart rule-based fallback: picks 5 diverse crops based on soil type + NPK + climate.
+    Much better than hardcoded Cotton+Groundnut.
+    """
+    soil_key = _get_soil_key(soil_type)
+    base_crops = CROP_POOL_BY_SOIL.get(soil_key, CROP_POOL_BY_SOIL["black cotton"])
+
+    # If pool has fewer than 5, add from adjacent pools
+    if len(base_crops) < 5:
+        for fallback_key in ["black cotton", "alluvial", "sandy loam"]:
+            if fallback_key != soil_key:
+                base_crops = base_crops + CROP_POOL_BY_SOIL[fallback_key]
+                break
+
+    crops = _npk_filter_and_rank(base_crops, N, P, K, ph)
+
+    # NPK status assessment
+    n_status = "Deficient" if N < 120 else ("Adequate" if N < 200 else "High")
+    p_status = "Deficient" if P < 40 else ("Adequate" if P < 80 else "High")
+    k_status = "Deficient" if K < 80 else ("Adequate" if K < 150 else "High")
+
+    # Fertilizer plan based on actual NPK
+    urea_kg = max(25, int((200 - N) / 4)) if N < 200 else 15
+    dap_kg = max(25, int((80 - P) / 1.5)) if P < 80 else 15
+    mop_kg = max(15, int((150 - K) / 3)) if K < 150 else 10
+
+    ph_eval = ""
+    if ph < 6.0:
+        ph_eval = f"pH {ph} is acidic. Apply agricultural lime (CaCO3) @ 2-3 tonnes/acre to raise pH."
+    elif ph > 8.0:
+        ph_eval = f"pH {ph} is alkaline. Apply gypsum @ 1-2 tonnes/acre or sulphur to lower pH."
     else:
-        return {
-            "detected_soil_type": soil_type,
-            "agro_climatic_zone": f"Agricultural Zone ({location})",
-            "recommended_crops": [
-                {
-                    "crop_name": "Cotton",
-                    "recommended_variety": "G.Cot-20 / Hybrid-6",
-                    "suitability_score": 92,
-                    "suitability_reason": f"Highly suited for {soil_type} and local climate.",
-                    "expected_yield_per_acre": "12-15 Quintal/Acre",
-                    "season_duration": "150-170 Days",
-                    "water_requirement": "Medium"
-                },
-                {
-                    "crop_name": "Groundnut",
-                    "recommended_variety": "GG-20 / GJG-31",
-                    "suitability_score": 88,
-                    "suitability_reason": "Matches phosphorus levels and loamy texture.",
-                    "expected_yield_per_acre": "10-12 Quintal/Acre",
-                    "season_duration": "110-120 Days",
-                    "water_requirement": "Medium"
-                }
-            ],
-            "soil_health_assessment": {
-                "nutrient_status": f"NPK metrics: N={N}, P={P}, K={K}. Moderate nitrogen enhancement required.",
-                "ph_evaluation": f"Soil pH is {ph}, which is within normal limits.",
-                "organic_carbon_advice": "Apply farmyard manure (FYM) or compost before sowing."
-            },
-            "custom_fertilizer_plan": {
-                "basal_dose": "DAP 50 kg + Urea 25 kg per acre before sowing",
-                "top_dressing_stage1": "Urea 25 kg per acre at 30 days",
-                "top_dressing_stage2": "MOP (Potash) 20 kg per acre at 60 days"
-            },
-            "intercropping_strategy": {
-                "suggested_intercrop": "Pigeonpea (Tuver) or Mungbean with Cotton",
-                "benefits": "Improves soil nitrogen balance and reduces pest pressure"
-            },
-            "regional_market_notes": f"Strong APMC yard demand and price stability for Cotton and Groundnut in {location} region."
-        }
+        ph_eval = f"pH {ph} is ideal (6.0–8.0 range). No pH correction needed."
+
+    # Intercrop logic
+    primary_crop = crops[0]["crop_name"] if crops else "Cotton"
+    if "cotton" in primary_crop.lower():
+        intercrop = "Pigeonpea (Tur) with Cotton (4:1 row ratio)"
+        intercrop_benefits = "Pigeonpea fixes atmospheric nitrogen reducing fertilizer cost by 30%; provides extra income of ₹8,000–12,000/acre."
+    elif "groundnut" in primary_crop.lower() or "soybean" in primary_crop.lower():
+        intercrop = "Sorghum or Pearl Millet as border crop"
+        intercrop_benefits = "Windbreak reduces soil erosion; provides fodder income; pest trap crop."
+    elif "rice" in primary_crop.lower() or "paddy" in primary_crop.lower():
+        intercrop = "Azolla as green manure in paddy fields"
+        intercrop_benefits = "Azolla fixes 20–30 kg N/ha reducing urea requirement significantly."
+    else:
+        intercrop = "Cowpea or Mungbean as intercrop"
+        intercrop_benefits = "Short-duration legume fixes nitrogen and provides quick additional income."
+
+    return {
+        "detected_soil_type": soil_type,
+        "agro_climatic_zone": f"Agricultural Zone — {location}",
+        "recommended_crops": crops,
+        "soil_health_assessment": {
+            "nutrient_status": (
+                f"Nitrogen: {N} kg/ha ({n_status}). "
+                f"Phosphorus: {P} kg/ha ({p_status}). "
+                f"Potassium: {K} kg/ha ({k_status}). "
+                f"{'Apply 20-25 kg extra Urea/acre to boost nitrogen.' if n_status == 'Deficient' else ''}"
+                f"{'Increase DAP application at basal dose.' if p_status == 'Deficient' else ''}"
+                f"{'Apply MOP 15-20 kg/acre to correct potassium.' if k_status == 'Deficient' else ''}"
+            ),
+            "ph_evaluation": ph_eval,
+            "organic_carbon_advice": (
+                "Apply well-decomposed FYM (Farmyard Manure) @ 5–8 tonnes/acre or Vermicompost @ 2–3 tonnes/acre "
+                "before sowing. Consider green manuring with Dhaincha (Sesbania) for rapid organic matter build-up."
+            )
+        },
+        "custom_fertilizer_plan": {
+            "basal_dose": f"DAP {dap_kg} kg + Urea {urea_kg} kg + MOP {mop_kg} kg per acre before sowing (based on actual N={N}, P={P}, K={K} kg/ha test values)",
+            "top_dressing_stage1": f"Urea {max(15, urea_kg//2)} kg per acre at 25-30 days after sowing (vegetative stage)",
+            "top_dressing_stage2": f"MOP (Potash) {mop_kg} kg + Urea 10 kg per acre at 55-65 days (pre-flowering/flowering stage)"
+        },
+        "intercropping_strategy": {
+            "suggested_intercrop": intercrop,
+            "benefits": intercrop_benefits
+        },
+        "regional_market_notes": (
+            f"In {location}, {crops[0]['crop_name'] if crops else 'primary crops'} fetch strong APMC prices. "
+            f"Best harvesting window: October–November for Kharif, March–April for Rabi. "
+            f"Register with e-NAM portal for better price discovery and direct market access."
+        )
+    }
