@@ -224,7 +224,8 @@ def generate_geographical_crop_advice(
     rainfall: float,
     seasonal_weather: Optional[Dict[str, Any]] = None,
     lang: str = "en",
-    api_key: Optional[str] = None
+    api_key: Optional[str] = None,
+    regional_crops: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
     Geographical AI Crop Recommendation Engine:
@@ -253,25 +254,46 @@ def generate_geographical_crop_advice(
         "en": "Respond in English with practical Indian agricultural terminology."
     }.get(lang, "Respond in English.")
 
+    # Build regional crops context string
+    regional_context = ""
+    if regional_crops and (regional_crops.get("kharif_crops") or regional_crops.get("major_crops")):
+        kharif = ", ".join(regional_crops.get("kharif_crops", [])[:6])
+        rabi = ", ".join(regional_crops.get("rabi_crops", [])[:5])
+        perennial = ", ".join(regional_crops.get("perennial_crops", [])[:4])
+        major = ", ".join(regional_crops.get("major_crops", [])[:4])
+        emerging = ", ".join(regional_crops.get("emerging_crops", [])[:3])
+        apmc_note = regional_crops.get("apmc_note", "")
+        src = regional_crops.get("source", "database")
+        regional_context = f"""
+- REAL CROPS VERIFIED IN THIS DISTRICT (Source: {src}):
+  * Kharif Season Crops ACTUALLY GROWN: {kharif}
+  * Rabi Season Crops ACTUALLY GROWN: {rabi}
+  * Perennial / Horticulture Crops: {perennial}
+  * Major Commercial/Cash Crops: {major}
+  {f'* Emerging New Crops (last 5 years): {emerging}' if emerging else ''}
+  * Local APMC Market Note: {apmc_note}"""
+
     prompt = f"""You are AgriSense AI, an expert Senior Agricultural Scientist and Agronomist specializing in Indian farming regions.
 
 FARMER AGRO-CLIMATIC DATA:
 - Location (District/State): {location_name}
 - Soil Physical Type: {soil_type}
 - Soil Chemical Analysis: Nitrogen (N) = {N} kg/ha, Phosphorus (P) = {P} kg/ha, Potassium (K) = {K} kg/ha, Soil pH = {ph}
-- Weather & 90-Day Climate Outlook: {season_info}
+- Weather & 90-Day Climate Outlook: {season_info}{regional_context}
 
 LANGUAGE REQUIREMENT: {lang_instructions}
 
-TASK: Perform a specialized 4-layer agronomic evaluation and recommend EXACTLY 5 DIFFERENT, DIVERSE crops best suited to this farmer's specific conditions. DO NOT always recommend only Cotton and Groundnut — vary crops based on soil type, NPK levels, and climate.
+TASK: Perform a specialized 4-layer agronomic evaluation and recommend EXACTLY 5 DIFFERENT, DIVERSE crops best suited to this farmer's specific conditions.
 
 DIVERSITY RULES:
-- For {soil_type}: consider crops like Soybean, Sorghum, Pigeonpea, Wheat, Chickpea, Maize, Sesame, Castor, Pearl Millet, Ragi, Mustard, Sunflower, Sugarcane, Rice, Potato, or other regionally suitable crops.
+- PRIORITIZE crops from the "REAL CROPS VERIFIED IN THIS DISTRICT" list above — these are what farmers in this exact location actually grow and sell profitably.
+- For {soil_type}: also consider Soybean, Sorghum, Pigeonpea, Wheat, Chickpea, Maize, Sesame, Castor, Pearl Millet, Ragi, Mustard, Sunflower, Sugarcane, Rice, Potato.
 - If N={N} is low (< 120 kg/ha): prioritize nitrogen-fixing legumes (e.g. Soybean, Pigeonpea, Chickpea, Cowpea).
 - If P={P} is low (< 40 kg/ha): avoid heavy phosphorus-demanding crops; prefer drought-tolerant crops.
 - If rainfall is low (< 500mm/season): prioritize drought-tolerant crops (Pearl Millet, Castor, Sesame, Sorghum).
 - Include at least 1 short-duration crop (under 100 days) and 1 long-duration crop (over 150 days).
 - Include at least 1 legume/pulse crop and 1 cereal or oilseed crop.
+- Mention in suitability_reason if the crop is ACTUALLY GROWN in this district (verified local crop).
 
 Output ONLY a JSON object with exactly this structure:
 

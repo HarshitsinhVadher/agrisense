@@ -20,6 +20,7 @@ from services.ocr_service import process_soil_card_image, parse_soil_health_card
 from services.label_service import scan_and_interpret_label, load_products_db
 from services.ai_crop_advisor import generate_geographical_crop_advice, detect_default_soil_type
 from services.auth_service import register_user, login_user, get_user_id_from_token
+from services.regional_crop_lookup import fetch_real_crops_for_location
 from services.db_service import (
     init_sql_db, get_farmer_profile, update_farmer_profile,
     record_soil_report_sql, record_label_scan_sql, record_crop_recommendation_sql,
@@ -59,6 +60,8 @@ class CropRequest(BaseModel):
     rainfall: float = 100.0
     soil_type: Optional[str] = "Auto-Detect"
     location_name: Optional[str] = "Anand, Gujarat"
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     lang: str = "en"
 
 class FarmerProfileUpdate(BaseModel):
@@ -163,13 +166,29 @@ def recommend_crop(data: CropRequest, request: Request):
         seasonal_weather = None
 
     # AI Geographical Agronomic Reasoning
+    # Step 1: Fetch real crops from GPS location
+    regional_crops = None
+    try:
+        lat = data.latitude or 22.57
+        lon = data.longitude or 72.93
+        regional_crops = fetch_real_crops_for_location(
+            lat=lat, lon=lon,
+            location_name=data.location_name or "Anand, Gujarat"
+        )
+        print(f"GPS Crop Lookup: {regional_crops.get('district')}/{regional_crops.get('state')} — source: {regional_crops.get('source')}")
+    except Exception as geo_err:
+        print(f"GPS crop lookup error: {geo_err}")
+        regional_crops = None
+
+    # Step 2: AI recommendation with regional crop context
     ai_advice = generate_geographical_crop_advice(
         location_name=data.location_name or "Anand, Gujarat",
         soil_type=data.soil_type or "Auto-Detect",
         N=data.N, P=data.P, K=data.K, ph=data.ph,
         temperature=data.temperature, humidity=data.humidity, rainfall=data.rainfall,
         seasonal_weather=seasonal_weather,
-        lang=data.lang
+        lang=data.lang,
+        regional_crops=regional_crops
     )
 
     # Baseline ML predictions

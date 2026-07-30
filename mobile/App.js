@@ -333,6 +333,8 @@ export default function App() {
           humidity: parseFloat(humVal), rainfall: parseFloat(rainVal),
           soil_type: selectedSoilType,
           location_name: weatherLocation,
+          latitude: weatherLat,
+          longitude: weatherLon,
           lang: lang
         })
       });
