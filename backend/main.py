@@ -181,9 +181,17 @@ def recommend_crop(data: CropRequest, request: Request):
         regional_crops = None
 
     # Step 2: AI recommendation with regional crop context
+    # Use GPS-detected soil type if user selected Auto-Detect
+    effective_soil_type = data.soil_type or "Auto-Detect"
+    if (not effective_soil_type or effective_soil_type == "Auto-Detect") and regional_crops:
+        detected_soil = regional_crops.get("soil_type_regional", "")
+        if detected_soil:
+            effective_soil_type = detected_soil
+            print(f"GPS Soil Override: Using '{detected_soil}' from district database")
+
     ai_advice = generate_geographical_crop_advice(
         location_name=data.location_name or "Anand, Gujarat",
-        soil_type=data.soil_type or "Auto-Detect",
+        soil_type=effective_soil_type,
         N=data.N, P=data.P, K=data.K, ph=data.ph,
         temperature=data.temperature, humidity=data.humidity, rainfall=data.rainfall,
         seasonal_weather=seasonal_weather,

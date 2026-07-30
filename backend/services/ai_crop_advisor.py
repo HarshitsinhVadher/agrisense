@@ -10,13 +10,73 @@ try:
 except ImportError:
     HAS_GEMINI = False
 
-SOIL_TYPE_DEFAULTS = {
-    "gujarat": "Black Cotton Soil (કાળી જમીન)",
+# District-level soil type mapping — granular and correct per district
+DISTRICT_SOIL_DEFAULTS = {
+    # Gujarat Districts
+    "kutch": "Sandy Arid Soil (retaad sukhi jamin)",
+    "bhuj": "Sandy Arid Soil (retaad sukhi jamin)",
+    "anjar": "Sandy Loam Arid (goradu-retaal)",
+    "mandvi": "Coastal Sandy Soil (dariyai retaal)",
+    "gandhidham": "Sandy Arid Soil (goradu-retaal)",
+    "banaskantha": "Sandy Alluvial (retaal-kamp)",
+    "palanpur": "Sandy Alluvial (retaal-kamp)",
+    "patan": "Sandy Saline Alluvial (khaari-retaal)",
+    "mehsana": "Light Sandy Alluvial (goradu-retaal)",
+    "rajkot": "Sandy Loam Light Black (goradu-kaali)",
+    "amreli": "Sandy Loam Light Black (goradu-kaali)",
+    "junagadh": "Sandy Loam Laterite (goradu-lal)",
+    "gir somnath": "Sandy Loam Red Laterite (goradu-lal)",
+    "porbandar": "Coastal Sandy Soil (dariyai goradu)",
+    "jamnagar": "Sandy Loam (goradu)",
+    "devbhumi dwarka": "Coastal Sandy (goradu-dariyai)",
+    "morbi": "Sandy Loam Medium Black (goradu-kaali)",
+    "surendranagar": "Medium Black Cotton Soil (madhyam kaali)",
+    "bhavnagar": "Medium Black Cotton Soil (madhyam kaali)",
+    "botad": "Deep Black Cotton Soil (undi kaali)",
+    "ahmedabad": "Black Cotton Sandy Loam (kaali-goradu)",
+    "gandhinagar": "Sandy Loam Alluvial (goradu-kamp)",
+    "anand": "Alluvial Sandy Loam (goradu-kamp)",
+    "kheda": "Alluvial Loam (kamp-goradu)",
+    "nadiad": "Alluvial (kamp)",
+    "vadodara": "Alluvial Medium Black (kamp-kaali)",
+    "narmada": "Medium Black Red (madhyam kaali-lal)",
+    "surat": "Alluvial Coastal Sandy (kamp-dariyai)",
+    "navsari": "Coastal Alluvial Laterite (kamp-khad)",
+    "valsad": "Coastal Laterite Alluvial (lal-kamp)",
+    "dang": "Forest Red Laterite Soil (jangal lal)",
+    "tapi": "Medium Black Red (kaali-lal)",
+    "sabarkantha": "Shallow Black Red Loamy (chichri kaali-lal)",
+    "aravalli": "Red Sandy Loam (lal goradu)",
+    "mahisagar": "Medium Black Soil (madhyam kaali)",
+    "panchmahals": "Red Mixed Black Soil (lal-kaali)",
+    "dahod": "Red Tribal Forest Soil (adivasi lal)",
+    # Rajasthan Districts
+    "jaipur": "Sandy Loam Semi-Arid",
+    "jodhpur": "Sandy Desert Soil",
+    "barmer": "Sandy Desert Arid Soil",
+    "bikaner": "Sandy Desert Soil",
+    "jaisalmer": "Sandy Desert Thar Soil",
+    "nagaur": "Sandy Loam Arid",
+    "ajmer": "Sandy Loam Brown Soil",
+    # Maharashtra
+    "nagpur": "Black Cotton Soil (Vidarbha)",
+    "pune": "Black Cotton Red Laterite",
+    "nashik": "Red Laterite Black",
+    "amravati": "Black Cotton Soil",
+    "latur": "Black Cotton Soil (Marathwada)",
+    # Other states
+    "ludhiana": "Alluvial Sandy Loam",
+    "lucknow": "Alluvial Indo-Gangetic Plain",
+    "indore": "Black Cotton Soil (Malwa)",
+}
+
+STATE_SOIL_DEFAULTS = {
+    "gujarat": "Mixed Gujarat Soil (varies: Sandy Arid in Kutch, Sandy Loam in Saurashtra, Black Cotton in central)",
     "maharashtra": "Black Cotton Soil (Regur)",
     "punjab": "Alluvial Soil (Sandy Loam)",
     "haryana": "Alluvial Soil (Sandy Loam)",
     "uttar pradesh": "Alluvial Soil (Loamy)",
-    "rajasthan": "Sandy Loam Soil (Arid)",
+    "rajasthan": "Sandy Arid Soil",
     "madhya pradesh": "Black Cotton Soil (Regur)",
     "karnataka": "Red Loamy Soil",
     "tamil nadu": "Red Clay Soil",
@@ -148,31 +208,94 @@ CROP_POOL_BY_SOIL = {
          "season_duration": "100-115 Days", "water_requirement": "Low",
          "suitability_reason": "Drought-resistant cereal well-adapted to acidic laterite soils."},
     ],
+    "sandy arid": [
+        {"crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67 / GHB-732",
+         "suitability_score": 97, "expected_yield_per_acre": "10-16 Quintal/Acre",
+         "season_duration": "70-85 Days", "water_requirement": "Very Low",
+         "suitability_reason": "Bajra is THE crop for sandy arid soil — extremely drought-tolerant, thrives with minimal rainfall (<400mm). Primary Kharif staple in Kutch/Saurashtra arid zones."},
+        {"crop_name": "Castor (Erand)", "recommended_variety": "GCH-7 / GAUCH-1 / DCH-177",
+         "suitability_score": 94, "expected_yield_per_acre": "10-15 Quintal/Acre",
+         "season_duration": "180-210 Days", "water_requirement": "Very Low",
+         "suitability_reason": "Castor is ideal for sandy arid soil — deep taproot accesses subsoil moisture; Gujarat produces 80%+ of India's castor from Kutch/Saurashtra sandy arid zones."},
+        {"crop_name": "Isabgol (Psyllium Husk)", "recommended_variety": "GI-2 / HI-5 / Niharika",
+         "suitability_score": 91, "expected_yield_per_acre": "4-6 Quintal/Acre",
+         "season_duration": "100-110 Days", "water_requirement": "Low",
+         "suitability_reason": "Isabgol thrives in well-drained sandy soils of arid regions; Kutch and Patan are India's top districts with export value Rs.80,000-1,20,000/quintal."},
+        {"crop_name": "Cumin (Jeera)", "recommended_variety": "Gujarat Cumin-1 / GC-4 / RZ-19",
+         "suitability_score": 88, "expected_yield_per_acre": "3-5 Quintal/Acre",
+         "season_duration": "90-100 Days", "water_requirement": "Low",
+         "suitability_reason": "Cumin is well-suited to light sandy soils of Kutch/North Gujarat; high-value spice with strong APMC and export demand."},
+        {"crop_name": "Sesame (Til)", "recommended_variety": "Gujarat Til-1 / Purva-1 / RT-346",
+         "suitability_score": 85, "expected_yield_per_acre": "3-5 Quintal/Acre",
+         "season_duration": "75-90 Days", "water_requirement": "Very Low",
+         "suitability_reason": "Sesame is extremely drought-tolerant and ideal for sandy arid soil; short duration fits within limited monsoon window."},
+        {"crop_name": "Date Palm (Khajoor)", "recommended_variety": "Medjool / Barhee / Halawy",
+         "suitability_score": 83, "expected_yield_per_acre": "20-30 Quintal/Acre",
+         "season_duration": "Perennial (3-5 years to bear)", "water_requirement": "Low",
+         "suitability_reason": "Date Palm naturally adapted to hot, arid, sandy conditions; Kutch has India's largest plantation with premium market value."},
+        {"crop_name": "Guar (Cluster Bean)", "recommended_variety": "HG-365 / RGC-936 / CAZG-0234",
+         "suitability_score": 80, "expected_yield_per_acre": "5-8 Quintal/Acre",
+         "season_duration": "90-100 Days", "water_requirement": "Very Low",
+         "suitability_reason": "Guar is a drought-hardy nitrogen-fixing legume; guar gum is major industrial export from arid Gujarat/Rajasthan sandy soils."},
+    ],
+    "coastal sandy": [
+        {"crop_name": "Coconut", "recommended_variety": "West Coast Tall / East Coast Tall / Hybrid",
+         "suitability_score": 95, "expected_yield_per_acre": "50-70 Nuts/Palm/Year",
+         "season_duration": "Perennial", "water_requirement": "Medium",
+         "suitability_reason": "Coastal sandy soil with salinity tolerance is ideal for Coconut; major plantation crop along Gujarat/Maharashtra coast."},
+        {"crop_name": "Chiku (Sapota)", "recommended_variety": "Cricket Ball / Kalipatti / PKM-1",
+         "suitability_score": 90, "expected_yield_per_acre": "40-60 Quintal/Acre",
+         "season_duration": "Perennial (3-4 years to bear)", "water_requirement": "Medium",
+         "suitability_reason": "Chiku thrives in warm coastal sandy soils; Navsari and Surat produce top-quality Chiku."},
+        {"crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31 / SB-XI",
+         "suitability_score": 88, "expected_yield_per_acre": "8-12 Quintal/Acre",
+         "season_duration": "110-120 Days", "water_requirement": "Medium",
+         "suitability_reason": "Coastal sandy soils with good drainage are ideal for groundnut pod development."},
+        {"crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67",
+         "suitability_score": 85, "expected_yield_per_acre": "10-15 Quintal/Acre",
+         "season_duration": "75-90 Days", "water_requirement": "Low",
+         "suitability_reason": "Bajra adapted to warm coastal sandy soil; primary food crop in coastal areas."},
+        {"crop_name": "Banana", "recommended_variety": "G9 / Grand Naine / Robusta",
+         "suitability_score": 82, "expected_yield_per_acre": "120-180 Quintal/Acre",
+         "season_duration": "11-14 Months", "water_requirement": "High",
+         "suitability_reason": "Banana suits coastal warm sandy soils with drip irrigation; high commercial returns."},
+    ],
 }
 
 def detect_default_soil_type(location_name: str) -> str:
-    """Auto-detect default regional soil type based on location/state."""
+    """Auto-detect soil type: checks district-level map first, then state-level."""
     loc_lower = (location_name or "").lower()
-    for state, default_soil in SOIL_TYPE_DEFAULTS.items():
+    # District-level check (most accurate)
+    for district, soil in DISTRICT_SOIL_DEFAULTS.items():
+        if district in loc_lower:
+            return soil
+    # State-level fallback
+    for state, soil in STATE_SOIL_DEFAULTS.items():
         if state in loc_lower:
-            return default_soil
-    return "Black Cotton Soil (કાળી જમીન)"
+            return soil
+    return "Mixed Soil (Auto-detected)"
 
 
 def _get_soil_key(soil_type: str) -> str:
     """Map a soil type string to the crop pool key."""
     s = (soil_type or "").lower()
-    if "black" in s or "regur" in s or "cotton" in s:
-        return "black cotton"
-    if "alluvial" in s or "loam" in s and "sandy" not in s:
-        return "alluvial"
-    if "sandy" in s:
-        return "sandy loam"
-    if "red" in s and "later" not in s:
-        return "red loamy"
+    # Sandy arid / desert must be checked BEFORE general sandy
+    if "arid" in s or "desert" in s or "sukhi" in s or "retaad" in s:
+        return "sandy arid"
+    if "coastal" in s or "dariyai" in s:
+        return "coastal sandy"
     if "later" in s:
         return "laterite"
-    return "black cotton"  # default
+    # Black cotton must check that sandy is NOT also present
+    if ("black" in s or "regur" in s or "cotton" in s or "kaali" in s) and "sandy" not in s:
+        return "black cotton"
+    if "alluvial" in s or "kamp" in s:
+        return "alluvial"
+    if "sandy" in s or "goradu" in s or "retaal" in s:
+        return "sandy loam"
+    if "red" in s or "lal" in s:
+        return "red loamy"
+    return "black cotton"  # final fallback
 
 
 def _npk_filter_and_rank(crops: List[Dict], N: float, P: float, K: float, ph: float) -> List[Dict]:
