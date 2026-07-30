@@ -146,51 +146,31 @@ IMPORTANT:
 - Set confidence between 85% and 98% if readable.
 - Return ONLY the JSON object, no markdown codeblocks or extra text."""
 
-    # ─── OPTION 1: Google Search Grounding Tool Config ───
-    config = None
-    try:
-        config = types.GenerateContentConfig(
-            tools=[{"google_search": {}}],
-            temperature=0.2
-        )
-    except Exception as cfg_err:
-        print(f"Search grounding config fallback: {cfg_err}")
-
-    models_to_try = ['gemini-flash-latest', 'gemini-pro-latest', 'gemma-4-26b-a4b-it', 'gemini-3.6-flash', 'gemini-3.5-flash']
+    models_to_try = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
     response = None
 
     for model_name in models_to_try:
         try:
-            contents_payload = [
-                {
-                    "parts": [
-                        {"text": prompt},
-                        {
-                            "inline_data": {
-                                "mime_type": mime_type,
-                                "data": b64_image
-                            }
-                        }
-                    ]
-                }
-            ]
-            
-            if config:
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=contents_payload,
-                    config=config
-                )
+            # Use official google-genai types.Part or PIL image for multimodal vision
+            if HAS_PIL:
+                try:
+                    pil_img = Image.open(io.BytesIO(processed_bytes))
+                    contents_payload = [prompt, pil_img]
+                except Exception:
+                    contents_payload = [prompt, types.Part.from_bytes(data=processed_bytes, mime_type=mime_type)]
             else:
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=contents_payload
-                )
+                contents_payload = [prompt, types.Part.from_bytes(data=processed_bytes, mime_type=mime_type)]
+
+            response = client.models.generate_content(
+                model=model_name,
+                contents=contents_payload,
+                config=types.GenerateContentConfig(temperature=0.2)
+            )
 
             if response and response.text:
                 break
         except Exception as e:
-            print(f"Gemini model {model_name} failed: {e}")
+            print(f"Gemini Vision model {model_name} failed: {e}")
             continue
 
     if not response or not response.text:
@@ -312,7 +292,7 @@ def _generate_ai_summary(product: Dict[str, Any], lang: str, api_key: str) -> st
 
 Keep it very simple for a smallholder farmer to understand. Use emojis for visual clarity."""
 
-            for summary_model in ['gemini-flash-latest', 'gemini-pro-latest', 'gemma-4-26b-a4b-it', 'gemini-3.6-flash']:
+            for summary_model in ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']:
                 try:
                     response = client.models.generate_content(model=summary_model, contents=prompt)
                     if response and response.text:
