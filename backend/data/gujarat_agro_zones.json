@@ -574,6 +574,134 @@
         }
       ],
       "apmc_insight": "Junagadh and Keshod APMC yards dominate Kesar Mango exports and Groundnut trading."
+    },
+    {
+      "district_name": "Sabarkantha",
+      "aliases": ["sabarkantha", "himatnagar", "idar", "khedbrahma", "talod", "prantij", "vijaynagar"],
+      "agro_climatic_zone_name": "North-East Hilly & North Gujarat Zone",
+      "soil_type": "Red Sandy Loam to Shallow Black Soil (Lal-Kaali Soil)",
+      "soil_key": "red loamy",
+      "avg_annual_rainfall_mm": 820,
+      "typical_npk": {
+        "N": 110.0,
+        "P": 35.0,
+        "K": 190.0,
+        "pH": 7.3,
+        "EC": 0.5,
+        "OC": 0.52
+      },
+      "suitable_crops": [
+        {
+          "crop_name": "Maize (Corn)",
+          "recommended_variety": "Pioneer 30V92 / HQPM-1 / Gujarat Maize-6",
+          "suitability_score": 96,
+          "suitability_reason": "Sabarkantha's well-drained red loamy soils and undulating terrain are ideal for high-yielding kharif maize cultivation.",
+          "expected_yield_per_acre": "22-30 Quintal/Acre",
+          "season_duration": "90-100 Days",
+          "water_requirement": "Medium"
+        },
+        {
+          "crop_name": "Groundnut",
+          "recommended_variety": "GG-20 / GJG-31",
+          "suitability_score": 93,
+          "suitability_reason": "Red sandy loam soil enables clean pod formation and high oil percentage.",
+          "expected_yield_per_acre": "11-15 Quintal/Acre",
+          "season_duration": "110-120 Days",
+          "water_requirement": "Medium"
+        },
+        {
+          "crop_name": "Cotton",
+          "recommended_variety": "G.Cot-20 / BG-II Bt Cotton",
+          "suitability_score": 90,
+          "suitability_reason": "Major commercial cash crop grown extensively across Himatnagar, Idar, and Talod plains.",
+          "expected_yield_per_acre": "13-17 Quintal/Acre",
+          "season_duration": "150-165 Days",
+          "water_requirement": "Medium"
+        },
+        {
+          "crop_name": "Wheat",
+          "recommended_variety": "GW-322 / Lok-1",
+          "suitability_score": 87,
+          "suitability_reason": "Dominant rabi cereal crop grown under well irrigation in Sabarkantha.",
+          "expected_yield_per_acre": "18-24 Quintal/Acre",
+          "season_duration": "115-125 Days",
+          "water_requirement": "Medium"
+        },
+        {
+          "crop_name": "Pigeonpea (Tur)",
+          "recommended_variety": "BSMR-853 / BDN-2",
+          "suitability_score": 84,
+          "suitability_reason": "Legume crop intercropped with maize or cotton to improve soil nitrogen.",
+          "expected_yield_per_acre": "7-10 Quintal/Acre",
+          "season_duration": "160-180 Days",
+          "water_requirement": "Low"
+        }
+      ],
+      "apmc_insight": "Himatnagar and Idar APMCs command high trade volume for Groundnut, Maize, and Cotton."
+    },
+    {
+      "district_name": "Navsari",
+      "aliases": ["navsari", "chikhli", "gandevi", "jalalpore", "vansda"],
+      "agro_climatic_zone_name": "South Gujarat Heavy Rainfall Zone",
+      "soil_type": "Heavy Black Alluvial Soil / Coastal Clayey Soil",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 1500,
+      "typical_npk": {
+        "N": 145.0,
+        "P": 44.0,
+        "K": 250.0,
+        "pH": 7.5,
+        "EC": 0.6,
+        "OC": 0.70
+      },
+      "suitable_crops": [
+        {
+          "crop_name": "Chiku (Sapota)",
+          "recommended_variety": "Kalipatti / Cricket Ball (GI Tagged Navsari Chiku)",
+          "suitability_score": 98,
+          "suitability_reason": "Navsari (Gandevi/Chikhli region) is India's premier Chiku capital; heavy fertile alluvial soil and 1500mm high rainfall produce year-round sweet fruit.",
+          "expected_yield_per_acre": "40-60 Quintal/Acre",
+          "season_duration": "Perennial",
+          "water_requirement": "Medium"
+        },
+        {
+          "crop_name": "Alphonso / Kesar Mango",
+          "recommended_variety": "Valsadi Alphonso / Kesar",
+          "suitability_score": 95,
+          "suitability_reason": "Coastal humid climate and rich clay loam soils produce world-famous export-quality mangoes.",
+          "expected_yield_per_acre": "35-50 Quintal/Acre",
+          "season_duration": "Perennial",
+          "water_requirement": "Medium"
+        },
+        {
+          "crop_name": "Sugarcane",
+          "recommended_variety": "Co 86032 / Co 0238",
+          "suitability_score": 92,
+          "suitability_reason": "High rainfall and canal irrigation support excellent sugarcane tonnage per acre.",
+          "expected_yield_per_acre": "42-55 Tonnes/Acre",
+          "season_duration": "11-12 Months",
+          "water_requirement": "High"
+        },
+        {
+          "crop_name": "Paddy (Rice)",
+          "recommended_variety": "Gurjari / GAR-13 / GR-11",
+          "suitability_score": 89,
+          "suitability_reason": "Heavy water-retentive clay soils make paddy the dominant monsoon kharif crop.",
+          "expected_yield_per_acre": "22-28 Quintal/Acre",
+          "season_duration": "115-125 Days",
+          "water_requirement": "High"
+        },
+        {
+          "crop_name": "Banana",
+          "recommended_variety": "Grand Naine (G9)",
+          "suitability_score": 86,
+          "suitability_reason": "Thrives in warm, humid coastal plantations with drip irrigation.",
+          "expected_yield_per_acre": "30-40 Tonnes/Acre",
+          "season_duration": "11-13 Months",
+          "water_requirement": "High"
+        }
+      ],
+      "apmc_insight": "Gandevi and Chikhli APMCs are India's primary export hubs for Chiku and Mangoes."
     }
   ]
 }

@@ -24,27 +24,91 @@ WEATHER_CODES = {
 }
 
 def geocode_city(query: str) -> list:
-    """Search for cities using Open-Meteo Geocoding API (free, no API key needed)."""
+    """
+    Multi-stage location search supporting ALL cities, districts, talukas, and small villages in India/Gujarat.
+    Primary: OpenStreetMap Nominatim API (finds all villages & talukas)
+    Secondary Fallback: Open-Meteo Geocoding API
+    """
+    if not query or len(query.strip()) < 2:
+        return []
+
+    q = query.strip()
+    headers = {"User-Agent": "AgriSense-App/3.0 (agricultural crop recommendation, contact@agrisense.in)"}
+
+    # Stage 1: Nominatim OpenStreetMap Search (Finds all villages, talukas, and districts)
+    try:
+        nom_url = f"https://nominatim.openstreetmap.org/search?q={requests.utils.quote(q)}&format=json&addressdetails=1&limit=10&countrycodes=in"
+        resp = requests.get(nom_url, headers=headers, timeout=6)
+        if resp.status_code == 200:
+            data = resp.json()
+            results = []
+            seen_coords = set()
+            for r in data:
+                lat = float(r.get("lat", 0))
+                lon = float(r.get("lon", 0))
+                coord_key = (round(lat, 3), round(lon, 3))
+                if coord_key in seen_coords:
+                    continue
+                seen_coords.add(coord_key)
+
+                addr = r.get("address", {})
+                name = (
+                    addr.get("village") or
+                    addr.get("town") or
+                    addr.get("city") or
+                    addr.get("county") or
+                    addr.get("district") or
+                    r.get("name", q)
+                )
+                state = addr.get("state", "Gujarat")
+                country = addr.get("country", "India")
+                county = addr.get("county") or addr.get("district") or ""
+
+                display_parts = [name]
+                if county and county.lower() != name.lower():
+                    display_parts.append(county)
+                if state and state.lower() != name.lower():
+                    display_parts.append(state)
+                display_parts.append(country)
+
+                display_str = ", ".join(display_parts)
+
+                results.append({
+                    "name": name,
+                    "country": country,
+                    "admin1": state,
+                    "latitude": lat,
+                    "longitude": lon,
+                    "display": display_str
+                })
+
+            if results:
+                return results[:8]
+    except Exception as e:
+        print(f"Nominatim geocoding error for '{q}': {e}")
+
+    # Stage 2: Fallback to Open-Meteo Geocoding API
     url = "https://geocoding-api.open-meteo.com/v1/search"
-    params = {"name": query, "count": 8, "language": "en", "format": "json"}
+    params = {"name": q, "count": 8, "language": "en", "format": "json"}
     try:
         response = requests.get(url, params=params, timeout=5)
-        response.raise_for_status()
-        data = response.json()
-        results = []
-        for r in data.get("results", []):
-            results.append({
-                "name": r.get("name", ""),
-                "country": r.get("country", ""),
-                "admin1": r.get("admin1", ""),  # State/Province
-                "latitude": r.get("latitude", 0),
-                "longitude": r.get("longitude", 0),
-                "display": f"{r.get('name', '')}, {r.get('admin1', '')}, {r.get('country', '')}"
-            })
-        return results
+        if response.status_code == 200:
+            data = response.json()
+            results = []
+            for r in data.get("results", []):
+                results.append({
+                    "name": r.get("name", ""),
+                    "country": r.get("country", ""),
+                    "admin1": r.get("admin1", ""),
+                    "latitude": r.get("latitude", 0),
+                    "longitude": r.get("longitude", 0),
+                    "display": f"{r.get('name', '')}, {r.get('admin1', '')}, {r.get('country', '')}"
+                })
+            return results
     except Exception as e:
-        print(f"Geocoding error: {e}")
-        return []
+        print(f"Open-Meteo geocoding error: {e}")
+
+    return []
 
 import time
 
