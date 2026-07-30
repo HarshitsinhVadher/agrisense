@@ -79,27 +79,95 @@ def scan_and_interpret_label(image_bytes: Optional[bytes] = None, text_input: Op
     return _fuzzy_match_product(raw_text, products, lang)
 
 
+def _clean_and_parse_json(text: str) -> Optional[Dict[str, Any]]:
+    """Robustly strips code fences (```json), extra text commentary, and parses JSON."""
+    if not text or not text.strip():
+        return None
+
+    cleaned = text.strip()
+
+    # Strip markdown code blocks (e.g. ```json ... ``` or ``` ...)
+    if "```" in cleaned:
+        import re
+        fence_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', cleaned, re.IGNORECASE)
+        if fence_match:
+            cleaned = fence_match.group(1).strip()
+        else:
+            lines = [line for line in cleaned.split("\n") if not line.strip().startswith("```")]
+            cleaned = "\n".join(lines).strip()
+
+    # Direct JSON parse
+    try:
+        return json.loads(cleaned)
+    except Exception:
+        pass
+
+    # Extract JSON object using regex substring search
+    import re
+    json_match = re.search(r'\{[\s\S]*\}', cleaned)
+    if json_match:
+        try:
+            return json.loads(json_match.group())
+        except Exception:
+            pass
+
+    return None
+
+
+def _get_first_present_val(data: dict, keys: list, default=None):
+    """Helper to return first non-empty value matching any key variation."""
+    for k in keys:
+        if k in data and data[k] is not None and str(data[k]).strip() and str(data[k]).lower() != "null":
+            return data[k]
+    return default
+
+
+def _normalize_ai_fields(data: dict) -> dict:
+    """Normalization mapping layer resolving all Gemini key variations (e.g. active, activeIngredient, brand, company)."""
+    if not isinstance(data, dict):
+        return {}
+
+    norm = {}
+    norm["product_name"] = _get_first_present_val(data, ["product_name", "productName", "name", "title", "product_title", "trade_name", "product"])
+    norm["manufacturer"] = _get_first_present_val(data, ["manufacturer", "brand", "company", "manufacturer_name", "brand_name", "company_name"])
+    norm["active_ingredient"] = _get_first_present_val(data, ["active_ingredient", "activeIngredient", "active_ingredients", "active", "chemical_name", "active_chemical", "ingredients", "key_ingredient"])
+    norm["formulation_type"] = _get_first_present_val(data, ["formulation_type", "formulationType", "formulation", "type_code"])
+    norm["dosage_per_acre"] = _get_first_present_val(data, ["dosage_per_acre", "dosagePerAcre", "acre_dosage", "dose_per_acre"])
+    norm["dosage_per_liter_water"] = _get_first_present_val(data, ["dosage_per_liter_water", "dosagePerLiterWater", "dosage_per_liter", "liter_dosage", "mixing_ratio", "dilution_rate"])
+    norm["dosage"] = _get_first_present_val(data, ["dosage", "dose", "rate", "application_rate", "usage_directions", "directions"])
+
+    targets = _get_first_present_val(data, ["target_pests_or_crops", "targetPestsOrCrops", "target_pests", "targetPests", "suitable_crops", "suitableCrops", "crops", "pests", "target_diseases"])
+    if isinstance(targets, str):
+        targets = [t.strip() for t in targets.split(",") if t.strip()]
+    norm["target_pests_or_crops"] = targets or []
+
+    conf = _get_first_present_val(data, ["confidence_score", "confidenceScore", "confidence", "score", "match_confidence"], default=75)
+    try:
+        norm["confidence_score"] = float(conf)
+    except Exception:
+        norm["confidence_score"] = 75.0
+
+    norm["unreadable_reason"] = _get_first_present_val(data, ["unreadable_reason", "unreadableReason", "error_reason", "reason"])
+    norm["identification_notes"] = _get_first_present_val(data, ["identification_notes", "identificationNotes", "notes", "visual_notes"], default="")
+
+    return norm
+
+
 def _analyze_with_gemini_vision(api_key: str, image_bytes: bytes, products: list, lang: str) -> Dict[str, Any]:
     """
-    Send image to Gemini Vision API with:
-    1. Google Search Grounding for live brand & web product matching (Option 1)
-    2. High-resolution PIL preprocessing + EXIF orientation correction (Option 2)
+    Send image to Gemini Vision API with high-resolution PIL preprocessing and structured JSON extraction.
     """
     client = genai.Client(api_key=api_key)
 
-    # ─── OPTION 2: Image Quality & Preprocessing ───
     mime_type = "image/jpeg"
     processed_bytes = image_bytes
     if HAS_PIL:
         try:
             img = Image.open(io.BytesIO(image_bytes))
-            # Correct orientation from camera EXIF tags
             img = ImageOps.exif_transpose(img)
-            # Ensure RGB color mode for JPEG export
             if img.mode in ("RGBA", "P"):
                 img = img.convert("RGB")
             
-            # Maintain high resolution for OCR (max dimension 2048px)
             max_dim = 2048
             if max(img.width, img.height) > max_dim:
                 img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
@@ -112,9 +180,6 @@ def _analyze_with_gemini_vision(api_key: str, image_bytes: bytes, products: list
             print(f"Image preprocessing note: {img_err}")
             processed_bytes = image_bytes
 
-    b64_image = base64.b64encode(processed_bytes).decode('utf-8')
-
-    # Build product names list for local cross-reference
     product_names = [p.get('name', '') for p in products] if products else []
     product_list_str = ", ".join(product_names[:30]) if product_names else "No local database available"
 
@@ -172,26 +237,17 @@ INSTRUCTIONS:
     if not response or not response.text:
         return None
 
-    # Parse JSON from response (handle markdown code blocks)
-    response_text = response.text.strip()
-    if response_text.startswith("```"):
-        lines = response_text.split("\n")
-        json_lines = [l for l in lines if not l.startswith("```")]
-        response_text = "\n".join(json_lines)
+    # Parse JSON cleanly with code fence stripping
+    raw_parsed = _clean_and_parse_json(response.text)
+    if not raw_parsed:
+        return None
 
-    try:
-        ai_result = json.loads(response_text)
-    except json.JSONDecodeError:
-        import re
-        json_match = re.search(r'\{[\s\S]*\}', response_text)
-        if json_match:
-            ai_result = json.loads(json_match.group())
-        else:
-            return None
+    # Apply field normalization layer
+    ai_result = _normalize_ai_fields(raw_parsed)
 
     # Handle unreadable image response fallback from model
     unreadable_reason = ai_result.get("unreadable_reason")
-    confidence = ai_result.get("confidence_score") if ai_result.get("confidence_score") is not None else ai_result.get("confidence", 75)
+    confidence = ai_result.get("confidence_score", 75)
 
     if unreadable_reason or (not ai_result.get("product_name") and confidence < 20):
         reason_msg = unreadable_reason or "Label photo is blurry, obscured by glare, or taken from an unreadable angle."
@@ -232,12 +288,12 @@ INSTRUCTIONS:
     # Build matched_product from AI result
     matched_product = {
         "name": prod_name or "Unknown Product",
-        "brand": ai_result.get("manufacturer") or ai_result.get("brand") or "Unknown Brand",
+        "brand": ai_result.get("manufacturer") or "Unknown Brand",
         "active_ingredient": act_ing,
         "formulation_type": form_type or "Standard",
         "type": ai_result.get("type", "agricultural product"),
-        "target_pests": ai_result.get("target_pests_or_crops") or ai_result.get("target_pests", []),
-        "suitable_crops": ai_result.get("suitable_crops") or ai_result.get("target_pests_or_crops", []),
+        "target_pests": ai_result.get("target_pests_or_crops", []),
+        "suitable_crops": ai_result.get("target_pests_or_crops", []),
         "dosage": dosage_str,
         "dosage_per_acre": ai_result.get("dosage_per_acre"),
         "dosage_per_liter_water": ai_result.get("dosage_per_liter_water"),
