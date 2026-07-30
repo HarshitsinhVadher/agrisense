@@ -95,9 +95,19 @@ def _get_user_id(request: Request) -> Optional[int]:
 def startup_event():
     init_sql_db()
 
-# ─── Health Check ───
+# ─── Health Check & Root Routes (Required for Render Health Checks) ───
+
+@app.get("/")
+@app.head("/")
+def read_root():
+    frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend')
+    index_file = os.path.join(frontend_dir, "index.html") if os.path.exists(frontend_dir) else None
+    if index_file and os.path.exists(index_file):
+        return FileResponse(index_file)
+    return {"message": "AgriSense v3.0 API Server Active.", "status": "online"}
 
 @app.get("/api/health")
+@app.head("/api/health")
 def health_check():
     return {
         "status": "online",
@@ -317,13 +327,6 @@ def read_history(request: Request, farmer_id: int = 1):
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend')
 if os.path.exists(frontend_dir):
     app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
-
-    @app.get("/")
-    def read_root():
-        index_file = os.path.join(frontend_dir, "index.html")
-        if os.path.exists(index_file):
-            return FileResponse(index_file)
-        return {"message": "AgriSense v3.0 API Server Active."}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
