@@ -16,7 +16,8 @@ export default function CameraScanner({ onPhotoCaptured, onClose, modeTitle = "S
       setLoading(true);
       const result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
-        quality: 0.8,
+        aspect: [4, 3],
+        quality: 0.85,
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
@@ -36,7 +37,8 @@ export default function CameraScanner({ onPhotoCaptured, onClose, modeTitle = "S
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        quality: 0.8,
+        aspect: [4, 3],
+        quality: 0.85,
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {

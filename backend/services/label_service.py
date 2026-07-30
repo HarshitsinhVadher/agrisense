@@ -163,18 +163,43 @@ def _analyze_with_gemini_vision(api_key: str, image_bytes: bytes, products: list
     processed_bytes = image_bytes
     if HAS_PIL:
         try:
+            from PIL import ImageEnhance
             img = Image.open(io.BytesIO(image_bytes))
+            # 1. Correct camera EXIF rotation
             img = ImageOps.exif_transpose(img)
+            
+            # 2. Ensure RGB color space
             if img.mode in ("RGBA", "P"):
                 img = img.convert("RGB")
             
+            # 3. Reduce glare & shadows via auto-contrast normalization
+            try:
+                img = ImageOps.autocontrast(img, cutoff=0.5)
+            except Exception:
+                pass
+
+            # 4. Enhance contrast (+20%) for text readability
+            img = ImageEnhance.Contrast(img).enhance(1.20)
+
+            # 5. Boost sharpness (+30%) for fine chemical ingredient print
+            img = ImageEnhance.Sharpness(img).enhance(1.30)
+            
+            # 6. Bound maximum dimension to 2048px while maintaining aspect ratio
             max_dim = 2048
             if max(img.width, img.height) > max_dim:
                 img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
             
             output_io = io.BytesIO()
-            img.save(output_io, format="JPEG", quality=92, optimize=True)
+            img.save(output_io, format="JPEG", quality=90, optimize=True)
             processed_bytes = output_io.getvalue()
+
+            # Ensure file size stays strictly under 4MB
+            if len(processed_bytes) > 4 * 1024 * 1024:
+                output_io = io.BytesIO()
+                img.thumbnail((1600, 1600), Image.Resampling.LANCZOS)
+                img.save(output_io, format="JPEG", quality=82, optimize=True)
+                processed_bytes = output_io.getvalue()
+
             mime_type = "image/jpeg"
         except Exception as img_err:
             print(f"Image preprocessing note: {img_err}")
