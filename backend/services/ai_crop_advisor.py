@@ -206,8 +206,8 @@ VERIFIED GROUNDED CROPS FOR THIS ZONE ({zone_name}):
 
     # Language instruction
     lang_instructions = {
-        "gu": "Respond entirely in clear, farmer-friendly Gujarati (ગુજરાતી). Use Gujarati crop names and local units.",
-        "hi": "Respond entirely in clear, farmer-friendly Hindi (हिंदी). Use Hindi crop names.",
+        "gu": "CRITICAL LANGUAGE REQUIREMENT: You MUST respond ENTIRELY in GUJARATI (ગુજરાતી). Write ALL crop names (e.g. મગફળી, કપાસ, ડાંગર, બાજરી, ઘઉં, તલ), varieties, suitability reasons, fertilizer schedule steps, and intercropping tips in fluent, natural Gujarati. DO NOT use English for crop names or reasons.",
+        "hi": "CRITICAL LANGUAGE REQUIREMENT: You MUST respond ENTIRELY in HINDI (हिंदी). Write ALL crop names (e.g. मूंगफली, कपास, धान, बाजरा, गेहूं), varieties, suitability reasons, and fertilizer schedules in fluent, natural Hindi. DO NOT use English.",
         "en": "Respond in English using practical Indian agricultural terminology."
     }.get(lang, "Respond in English.")
 
