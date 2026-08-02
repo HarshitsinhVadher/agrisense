@@ -17,19 +17,30 @@ from services.regional_crop_lookup import lookup_district_crops, load_agro_zones
 # Region Isolation Validation Rules
 # ─────────────────────────────────────────────────────────────────────────────
 REGION_FORBIDDEN_KEYWORDS: Dict[str, List[str]] = {
-    "surat": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj", "isabgol", "kharek"],
-    "south gujarat": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj", "isabgol"],
-    "navsari": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj"],
-    "valsad": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj"],
-    "bharuch": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil"],
-    "kutch": ["surat", "south gujarat", "heavy rainfall zone", "vertisol", "ukai canal", "bardoli"],
-    "kachchh": ["surat", "south gujarat", "heavy rainfall zone", "vertisol", "ukai canal", "bardoli"],
-    "bhuj": ["surat", "south gujarat", "heavy rainfall zone", "vertisol", "ukai canal", "bardoli"],
-    "rajkot": ["surat", "south gujarat heavy rainfall zone", "deesa potato hub", "ukai canal"],
-    "saurashtra": ["surat", "south gujarat heavy rainfall zone", "deesa potato hub"],
-    "anand": ["kutch arid", "saurashtra dry zone", "surat heavy rainfall zone"],
-    "vadodara": ["kutch arid", "saurashtra dry zone", "surat heavy rainfall zone"],
-    "ahmedabad": ["kutch arid", "south gujarat heavy rainfall zone"]
+    "surat": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj", "isabgol", "kharek", "porbandar", "rajkot", "jamnagar"],
+    "south gujarat": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj", "isabgol", "porbandar"],
+    "navsari": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj", "porbandar", "rajkot"],
+    "valsad": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "deesa", "bhuj", "porbandar"],
+    "bharuch": ["kutch", "kachchh", "saurashtra", "north gujarat", "arid soil", "desert soil", "porbandar", "rajkot"],
+    "kutch": ["surat", "south gujarat", "heavy rainfall zone", "vertisol", "ukai canal", "bardoli", "navsari", "porbandar"],
+    "kachchh": ["surat", "south gujarat", "heavy rainfall zone", "vertisol", "ukai canal", "bardoli", "navsari"],
+    "bhuj": ["surat", "south gujarat", "heavy rainfall zone", "vertisol", "ukai canal", "bardoli", "navsari"],
+    "rajkot": ["surat", "south gujarat heavy rainfall zone", "deesa potato hub", "ukai canal", "navsari", "banaskantha"],
+    "saurashtra": ["surat", "south gujarat heavy rainfall zone", "deesa potato hub", "navsari", "banaskantha"],
+    "anand": ["kutch arid", "saurashtra dry zone", "surat heavy rainfall zone", "porbandar", "deesa potato hub"],
+    "vadodara": ["kutch arid", "saurashtra dry zone", "surat heavy rainfall zone", "porbandar"],
+    "ahmedabad": ["kutch arid", "south gujarat heavy rainfall zone", "porbandar", "deesa potato hub"],
+    "porbandar": ["deesa", "banaskantha", "north gujarat", "kutch desert", "surat heavy rainfall", "navsari", "ukai canal", "south gujarat heavy rainfall", "isabgol"],
+    "bhavnagar": ["deesa", "banaskantha", "north gujarat arid", "kutch desert", "surat heavy rainfall", "navsari", "isabgol"],
+    "amreli": ["deesa", "banaskantha", "north gujarat arid", "kutch desert", "surat heavy rainfall", "navsari", "isabgol"],
+    "surendranagar": ["deesa potato hub", "surat heavy rainfall", "navsari", "south gujarat"],
+    "jamnagar": ["deesa potato hub", "surat heavy rainfall", "navsari", "banaskantha", "south gujarat"],
+    "morbi": ["deesa potato hub", "surat heavy rainfall", "navsari", "south gujarat"],
+    "mehsana": ["surat heavy rainfall", "navsari", "saurashtra", "porbandar", "kutch desert"],
+    "gandhinagar": ["kutch arid", "saurashtra dry", "porbandar", "south gujarat heavy rainfall"],
+    "dahod": ["kutch", "saurashtra", "porbandar", "south gujarat coastal", "navsari"],
+    "narmada": ["kutch", "saurashtra", "porbandar", "north gujarat arid", "deesa"],
+    "tapi": ["kutch", "saurashtra", "porbandar", "north gujarat arid", "deesa"]
 }
 
 def validate_region_isolation(advice: Dict[str, Any], target_location: str) -> tuple[bool, str, str]:
@@ -138,25 +149,43 @@ def generate_geographical_crop_advice(
         if db_data:
             regional_crops = db_data
 
+    # Determine if Auto-Detect mode is active
+    is_auto_detect = (not soil_type or soil_type == "Auto-Detect")
+
     # Use dataset soil if Auto-Detect
-    if not soil_type or soil_type == "Auto-Detect":
+    if is_auto_detect:
         if regional_crops and regional_crops.get("soil_type_regional"):
             soil_type = regional_crops["soil_type_regional"]
         else:
             soil_type = detect_default_soil_type(location_name)
 
-    # Use dataset NPK baseline if user input NPK is not provided / 0
+    # Use dataset NPK baseline:
+    # In Auto-Detect mode: ALWAYS override with zone-accurate values (not stale mobile defaults)
+    # In manual mode: only override if user input is 0 or negative
     typical_npk = {}
     if regional_crops:
         typical_npk = regional_crops.get("typical_npk", {})
-        if N <= 0 and typical_npk.get("N"):
-            N = typical_npk["N"]
-        if P <= 0 and typical_npk.get("P"):
-            P = typical_npk["P"]
-        if K <= 0 and typical_npk.get("K"):
-            K = typical_npk["K"]
-        if ph <= 0 and typical_npk.get("pH"):
-            ph = typical_npk["pH"]
+        if is_auto_detect:
+            # Auto-Detect: always use zone-accurate NPK (user didn't manually enter soil-test data)
+            if typical_npk.get("N"):
+                N = typical_npk["N"]
+            if typical_npk.get("P"):
+                P = typical_npk["P"]
+            if typical_npk.get("K"):
+                K = typical_npk["K"]
+            if typical_npk.get("pH"):
+                ph = typical_npk["pH"]
+            print(f"[AUTO-DETECT NPK] Overriding with zone baseline: N={N}, P={P}, K={K}, pH={ph}")
+        else:
+            # Manual soil selection: only fill if user left values empty/zero
+            if N <= 0 and typical_npk.get("N"):
+                N = typical_npk["N"]
+            if P <= 0 and typical_npk.get("P"):
+                P = typical_npk["P"]
+            if K <= 0 and typical_npk.get("K"):
+                K = typical_npk["K"]
+            if ph <= 0 and typical_npk.get("pH"):
+                ph = typical_npk["pH"]
 
     zone_name = regional_crops.get("agro_climatic_zone_name", "Local Agro-Climatic Zone") if regional_crops else "Local Agro-Climatic Zone"
     avg_rainfall = regional_crops.get("avg_annual_rainfall_mm", 800) if regional_crops else 800

@@ -149,6 +149,26 @@ def geocode(query: str = Query(..., description="City name to search")):
     results = geocode_city(query)
     return {"results": results}
 
+# ─── Location Soil Data (for mobile NPK auto-fill) ───
+
+@app.get("/api/location-soil-data")
+def get_location_soil_data(
+    location_name: str = Query("", description="Location name"),
+    lat: float = Query(22.57, description="Latitude"),
+    lon: float = Query(72.93, description="Longitude")
+):
+    """Returns zone-specific soil type, NPK baseline, and agro-climatic zone for mobile auto-fill."""
+    regional = fetch_real_crops_for_location(lat=lat, lon=lon, location_name=location_name)
+    return {
+        "soil_type": regional.get("soil_type_regional", ""),
+        "zone": regional.get("agro_climatic_zone_name", ""),
+        "typical_npk": regional.get("typical_npk", {}),
+        "district": regional.get("district", ""),
+        "avg_rainfall_mm": regional.get("avg_annual_rainfall_mm", 800),
+        "geo_distance_km": regional.get("geo_distance_km"),
+        "source": regional.get("source", "none")
+    }
+
 # ─── Weather ───
 
 @app.get("/api/weather")

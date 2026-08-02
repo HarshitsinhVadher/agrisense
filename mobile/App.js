@@ -79,10 +79,10 @@ export default function App() {
   const [gpsLoading, setGpsLoading] = useState(false);
 
   // ─── Crop Recommendation State ───
-  const [nVal, setNVal] = useState('80');
-  const [pVal, setPVal] = useState('45');
-  const [kVal, setKVal] = useState('50');
-  const [phVal, setPhVal] = useState('6.5');
+  const [nVal, setNVal] = useState('');
+  const [pVal, setPVal] = useState('');
+  const [kVal, setKVal] = useState('');
+  const [phVal, setPhVal] = useState('');
   const [tempVal, setTempVal] = useState('26');
   const [humVal, setHumVal] = useState('75');
   const [rainVal, setRainVal] = useState('110');
@@ -90,6 +90,7 @@ export default function App() {
   const [recommendations, setRecommendations] = useState(null);
   const [aiPlanResult, setAiPlanResult] = useState(null);
   const [recLoading, setRecLoading] = useState(false);
+  const [zoneInfo, setZoneInfo] = useState(null); // { district, zone, soil_type, source, geo_distance_km }
 
   // ─── Soil Health OCR State ───
   const [soilParsed, setSoilParsed] = useState(null);
@@ -147,6 +148,7 @@ export default function App() {
     if (isLoggedIn && authToken) {
       fetchWeather(weatherLat, weatherLon, weatherLocation);
       fetchProfile();
+      fetchLocationSoilData(weatherLat, weatherLon, weatherLocation);
       Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }).start();
     }
   }, [isLoggedIn, authToken]);
@@ -255,6 +257,7 @@ export default function App() {
       setWeatherLon(lon);
       setWeatherLocation(locName);
       fetchWeather(lat, lon, locName);
+      fetchLocationSoilData(lat, lon, locName);
     } catch (e) {
       Alert.alert('GPS Error', 'Could not get your location. Please try city search instead.');
     } finally {
@@ -284,6 +287,7 @@ export default function App() {
     setCityResults([]);
     setCityQuery('');
     fetchWeather(city.latitude, city.longitude, city.display);
+    fetchLocationSoilData(city.latitude, city.longitude, city.display);
   };
 
   // ─── Profile ───
@@ -316,6 +320,33 @@ export default function App() {
       Alert.alert('Error', 'Could not save profile.');
     } finally {
       setProfileSaving(false);
+    }
+  };
+
+  // ─── Location Soil Data Auto-Fill (NPK/pH from zone database) ───
+  const fetchLocationSoilData = async (lat, lon, locName) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/location-soil-data?lat=${lat}&lon=${lon}&location_name=${encodeURIComponent(locName || '')}`);
+      const data = await res.json();
+      if (data && data.typical_npk) {
+        const npk = data.typical_npk;
+        if (selectedSoilType === 'Auto-Detect') {
+          if (npk.N) setNVal(String(npk.N));
+          if (npk.P) setPVal(String(npk.P));
+          if (npk.K) setKVal(String(npk.K));
+          if (npk.pH) setPhVal(String(npk.pH));
+        }
+        setZoneInfo({
+          district: data.district || '',
+          zone: data.zone || '',
+          soil_type: data.soil_type || '',
+          source: data.source || '',
+          geo_distance_km: data.geo_distance_km,
+          avg_rainfall_mm: data.avg_rainfall_mm
+        });
+      }
+    } catch (e) {
+      console.log('Location soil data fetch error:', e);
     }
   };
 
@@ -635,13 +666,22 @@ export default function App() {
             </ScrollView>
 
             <Text style={styles.label}>Nitrogen (N) kg/ha</Text>
-            <TextInput style={styles.input} value={nVal} onChangeText={setNVal} keyboardType="numeric" />
+            <TextInput style={styles.input} value={nVal} onChangeText={setNVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
             <Text style={styles.label}>Phosphorus (P) kg/ha</Text>
-            <TextInput style={styles.input} value={pVal} onChangeText={setPVal} keyboardType="numeric" />
+            <TextInput style={styles.input} value={pVal} onChangeText={setPVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
             <Text style={styles.label}>Potassium (K) kg/ha</Text>
-            <TextInput style={styles.input} value={kVal} onChangeText={setKVal} keyboardType="numeric" />
+            <TextInput style={styles.input} value={kVal} onChangeText={setKVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
             <Text style={styles.label}>Soil pH Level</Text>
-            <TextInput style={styles.input} value={phVal} onChangeText={setPhVal} keyboardType="numeric" />
+            <TextInput style={styles.input} value={phVal} onChangeText={setPhVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
+
+            {/* Zone Info Badge */}
+            {zoneInfo && zoneInfo.district ? (
+              <View style={{ backgroundColor: '#ecfdf5', borderWidth: 1, borderColor: '#6ee7b7', padding: 10, borderRadius: 8, marginBottom: 12 }}>
+                <Text style={{ fontSize: 11, color: '#065f46', fontWeight: 'bold' }}>📍 Auto-filled from {zoneInfo.district} District zone data</Text>
+                <Text style={{ fontSize: 10, color: '#047857', marginTop: 2 }}>Zone: {zoneInfo.zone} | Soil: {zoneInfo.soil_type}{zoneInfo.geo_distance_km ? ` | ~${zoneInfo.geo_distance_km}km to center` : ''}</Text>
+                <Text style={{ fontSize: 9, color: '#6b7280', marginTop: 2 }}>ℹ️ NPK & pH values are zone baselines — override with your soil test report if available</Text>
+              </View>
+            ) : null}
 
             <TouchableOpacity style={styles.btnPrimary} onPress={handleRecommend}>
               {recLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('predict_btn', lang)}</Text>}

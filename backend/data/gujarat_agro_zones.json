@@ -2,706 +2,497 @@
   "districts": [
     {
       "district_name": "Surat",
-      "aliases": ["surat", "majura", "chorasi", "olpad", "kamrej", "bardoli", "mandvi_surat", "palsana", "mahuva"],
+      "aliases": ["surat", "majura", "chorasi", "olpad", "kamrej", "bardoli", "mandvi_surat", "palsana", "mahuva_surat"],
+      "center_lat": 21.1702,
+      "center_lon": 72.8311,
       "agro_climatic_zone_name": "South Gujarat Heavy Rainfall Zone",
       "soil_type": "Deep Black Clayey Soil (Vertisols) / Heavy Alluvial Soil",
       "soil_key": "black cotton",
       "avg_annual_rainfall_mm": 1350,
-      "typical_npk": {
-        "N": 140.0,
-        "P": 45.0,
-        "K": 240.0,
-        "pH": 7.6,
-        "EC": 0.6,
-        "OC": 0.65
-      },
+      "typical_npk": { "N": 140.0, "P": 45.0, "K": 240.0, "pH": 7.6, "EC": 0.6, "OC": 0.65 },
       "suitable_crops": [
-        {
-          "crop_name": "Sugarcane",
-          "recommended_variety": "Co 86032 / Co 0238 / CoM 0265",
-          "suitability_score": 96,
-          "suitability_reason": "Surat's deep black clayey soils, perennial Ukai canal network, and sub-humid climate (1350mm rainfall) make sugarcane the most profitable major cash crop.",
-          "expected_yield_per_acre": "40-55 Tonnes/Acre",
-          "season_duration": "11-12 Months",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Paddy (Rice)",
-          "recommended_variety": "Gurjari / GR-11 / GAR-13 / Gujarat Anand Paddy-1",
-          "suitability_score": 94,
-          "suitability_reason": "High kharif rainfall and water-retentive vertisol clay soils provide ideal conditions for puddle paddy cultivation in South Gujarat.",
-          "expected_yield_per_acre": "22-28 Quintal/Acre",
-          "season_duration": "115-125 Days",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Cotton",
-          "recommended_variety": "G.Cot-20 / RCH-2 Bt / BG-II",
-          "suitability_score": 91,
-          "suitability_reason": "Deep fertile black soils support vigorous taproot development and long-staple cotton growth in irrigated South Gujarat fields.",
-          "expected_yield_per_acre": "14-18 Quintal/Acre",
-          "season_duration": "150-165 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Banana",
-          "recommended_variety": "Grand Naine (G9) / Robusta",
-          "suitability_score": 89,
-          "suitability_reason": "Surat's warm humid climate and nutrient-rich vertisol soil enable high-density tissue culture banana farming with drip irrigation.",
-          "expected_yield_per_acre": "30-40 Tonnes/Acre",
-          "season_duration": "11-13 Months",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Pigeonpea (Tur / Arhar)",
-          "recommended_variety": "Vaishali / BDN-2 / GJP-1",
-          "suitability_score": 85,
-          "suitability_reason": "Deep-rooted legume intercropped with sugarcane or cotton fixes atmospheric nitrogen and enriches heavy clay soils.",
-          "expected_yield_per_acre": "7-10 Quintal/Acre",
-          "season_duration": "160-180 Days",
-          "water_requirement": "Low"
-        }
+        { "crop_name": "Sugarcane", "recommended_variety": "Co 86032 / Co 0238 / CoM 0265", "suitability_score": 96, "suitability_reason": "Surat's deep black clayey soils, perennial Ukai canal network, and sub-humid climate (1350mm rainfall) make sugarcane the most profitable major cash crop.", "expected_yield_per_acre": "40-55 Tonnes/Acre", "season_duration": "11-12 Months", "water_requirement": "High" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GR-11 / GAR-13 / Gujarat Anand Paddy-1", "suitability_score": 94, "suitability_reason": "High kharif rainfall and water-retentive vertisol clay soils provide ideal conditions for puddle paddy cultivation in South Gujarat.", "expected_yield_per_acre": "22-28 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "High" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / RCH-2 Bt / BG-II", "suitability_score": 91, "suitability_reason": "Deep fertile black soils support vigorous taproot development and long-staple cotton growth in irrigated South Gujarat fields.", "expected_yield_per_acre": "14-18 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Banana", "recommended_variety": "Grand Naine (G9) / Robusta", "suitability_score": 89, "suitability_reason": "Surat's warm humid climate and nutrient-rich vertisol soil enable high-density tissue culture banana farming with drip irrigation.", "expected_yield_per_acre": "30-40 Tonnes/Acre", "season_duration": "11-13 Months", "water_requirement": "High" },
+        { "crop_name": "Pigeonpea (Tur / Arhar)", "recommended_variety": "Vaishali / BDN-2 / GJP-1", "suitability_score": 85, "suitability_reason": "Deep-rooted legume intercropped with sugarcane or cotton fixes atmospheric nitrogen and enriches heavy clay soils.", "expected_yield_per_acre": "7-10 Quintal/Acre", "season_duration": "160-180 Days", "water_requirement": "Low" }
       ],
       "apmc_insight": "Surat APMC and sugar cooperatives (Bardoli/Sayan) provide high price security for Sugarcane, Paddy, and Banana."
     },
     {
       "district_name": "Kutch",
       "aliases": ["kutch", "kachchh", "bhuj", "anjar", "mandvi_kutch", "gandhidham", "mundra", "nakhatrana", "abhasa", "lakhpat", "rapar"],
+      "center_lat": 23.7337,
+      "center_lon": 69.8597,
       "agro_climatic_zone_name": "North-West Arid Zone (Kutch)",
       "soil_type": "Sandy Arid Soil (Aridisols / Saline Sandy Soil)",
       "soil_key": "sandy arid",
       "avg_annual_rainfall_mm": 380,
-      "typical_npk": {
-        "N": 75.0,
-        "P": 25.0,
-        "K": 180.0,
-        "pH": 8.3,
-        "EC": 1.2,
-        "OC": 0.28
-      },
+      "typical_npk": { "N": 75.0, "P": 25.0, "K": 180.0, "pH": 8.3, "EC": 1.2, "OC": 0.28 },
       "suitable_crops": [
-        {
-          "crop_name": "Bajra (Pearl Millet)",
-          "recommended_variety": "GHB-558 / HHB-67 / GHB-732",
-          "suitability_score": 97,
-          "suitability_reason": "Extremely drought-tolerant cereal that thrives in Kutch's light sandy arid soil with low rainfall (<400mm) and high summer temperatures.",
-          "expected_yield_per_acre": "10-15 Quintal/Acre",
-          "season_duration": "70-85 Days",
-          "water_requirement": "Very Low"
-        },
-        {
-          "crop_name": "Castor (Erandi)",
-          "recommended_variety": "GCH-7 / GAUCH-1 / DCH-177",
-          "suitability_score": 94,
-          "suitability_reason": "Deep taproot extracts subsoil moisture in porous sandy soil; Kutch is India's leading castor producing district.",
-          "expected_yield_per_acre": "10-16 Quintal/Acre",
-          "season_duration": "180-210 Days",
-          "water_requirement": "Very Low"
-        },
-        {
-          "crop_name": "Isabgol (Psyllium Husk)",
-          "recommended_variety": "GI-2 / HI-5 / Niharika",
-          "suitability_score": 92,
-          "suitability_reason": "Thrives in dry rabi climate and light sandy soil of Kutch; high export commodity with prices exceeding Rs 1,00,000/quintal.",
-          "expected_yield_per_acre": "4-6 Quintal/Acre",
-          "season_duration": "100-110 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Cumin (Jeera)",
-          "recommended_variety": "Gujarat Cumin-1 / GC-4 / RZ-19",
-          "suitability_score": 89,
-          "suitability_reason": "Well-suited to well-drained sandy arid soils in dry winter months; sensitive to humidity so thrives in low-humidity Kutch climate.",
-          "expected_yield_per_acre": "3-5 Quintal/Acre",
-          "season_duration": "90-100 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Date Palm (Khajoor)",
-          "recommended_variety": "Barhee / Medjool / Halawy",
-          "suitability_score": 86,
-          "suitability_reason": "Perennial arid fruit crop uniquely adapted to hot sandy saline soils of Kutch; high commercial returns for fresh 'Kutchi Kharek'.",
-          "expected_yield_per_acre": "20-30 Quintal/Acre",
-          "season_duration": "Perennial (3-4 Years)",
-          "water_requirement": "Low"
-        }
+        { "crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67 / GHB-732", "suitability_score": 97, "suitability_reason": "Extremely drought-tolerant cereal that thrives in Kutch's light sandy arid soil with low rainfall (<400mm) and high summer temperatures.", "expected_yield_per_acre": "10-15 Quintal/Acre", "season_duration": "70-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Castor (Erandi)", "recommended_variety": "GCH-7 / GAUCH-1 / DCH-177", "suitability_score": 94, "suitability_reason": "Deep taproot extracts subsoil moisture in porous sandy soil; Kutch is India's leading castor producing district.", "expected_yield_per_acre": "10-16 Quintal/Acre", "season_duration": "180-210 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Isabgol (Psyllium Husk)", "recommended_variety": "GI-2 / HI-5 / Niharika", "suitability_score": 92, "suitability_reason": "Thrives in dry rabi climate and light sandy soil of Kutch; high export commodity.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "100-110 Days", "water_requirement": "Low" },
+        { "crop_name": "Cumin (Jeera)", "recommended_variety": "Gujarat Cumin-1 / GC-4 / RZ-19", "suitability_score": 89, "suitability_reason": "Well-suited to well-drained sandy arid soils in dry winter months; sensitive to humidity so thrives in low-humidity Kutch climate.", "expected_yield_per_acre": "3-5 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" },
+        { "crop_name": "Date Palm (Khajoor)", "recommended_variety": "Barhee / Medjool / Halawy", "suitability_score": 86, "suitability_reason": "Perennial arid fruit crop uniquely adapted to hot sandy saline soils of Kutch; high commercial returns for fresh 'Kutchi Kharek'.", "expected_yield_per_acre": "20-30 Quintal/Acre", "season_duration": "Perennial (3-4 Years)", "water_requirement": "Low" }
       ],
       "apmc_insight": "Bhuj and Anjar APMC markets command top national export prices for Kutchi Kharek (Date Palm), Isabgol, Castor, and Cumin."
     },
     {
       "district_name": "Banaskantha",
       "aliases": ["banaskantha", "palanpur", "deesa", "dantiwada", "dhanera", "tharad", "vav", "kankrej", "vadgam"],
+      "center_lat": 24.1744,
+      "center_lon": 72.4378,
       "agro_climatic_zone_name": "North Gujarat Arid / Semi-Arid Zone",
       "soil_type": "Sandy Loam to Light Alluvial Soil",
       "soil_key": "sandy loam",
       "avg_annual_rainfall_mm": 550,
-      "typical_npk": {
-        "N": 95.0,
-        "P": 32.0,
-        "K": 190.0,
-        "pH": 7.9,
-        "EC": 0.8,
-        "OC": 0.35
-      },
+      "typical_npk": { "N": 95.0, "P": 32.0, "K": 190.0, "pH": 7.9, "EC": 0.8, "OC": 0.35 },
       "suitable_crops": [
-        {
-          "crop_name": "Potato",
-          "recommended_variety": "Kufri Pukhraj / Kufri Jyoti / Chipsona-3",
-          "suitability_score": 96,
-          "suitability_reason": "Banaskantha (Deesa region) is India's premier potato hub; loose sandy loam soil enables unhindered tuber expansion.",
-          "expected_yield_per_acre": "90-130 Quintal/Acre",
-          "season_duration": "85-100 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Bajra (Pearl Millet)",
-          "recommended_variety": "GHB-558 / HHB-67",
-          "suitability_score": 93,
-          "suitability_reason": "Primary kharif staple for North Gujarat's sandy loams; drought-tolerant with low water demand.",
-          "expected_yield_per_acre": "12-16 Quintal/Acre",
-          "season_duration": "75-85 Days",
-          "water_requirement": "Very Low"
-        },
-        {
-          "crop_name": "Mustard (Sarson)",
-          "recommended_variety": "Pusa Bold / RH-749 / Gujarat Mustard-3",
-          "suitability_score": 90,
-          "suitability_reason": "Major rabi oilseed suited to sandy loam soils under tube-well irrigation; stable market demand.",
-          "expected_yield_per_acre": "8-12 Quintal/Acre",
-          "season_duration": "105-115 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Castor",
-          "recommended_variety": "GCH-7 / GCH-9",
-          "suitability_score": 88,
-          "suitability_reason": "Deep root system thrives in light alluvial soils; major cash crop in North Gujarat.",
-          "expected_yield_per_acre": "11-15 Quintal/Acre",
-          "season_duration": "170-190 Days", "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Groundnut",
-          "recommended_variety": "GG-20 / TG-37A",
-          "suitability_score": 84,
-          "suitability_reason": "Friable sandy loam soil texture allows easy peg penetration and clean pod harvesting.",
-          "expected_yield_per_acre": "9-12 Quintal/Acre",
-          "season_duration": "105-115 Days",
-          "water_requirement": "Medium"
-        }
+        { "crop_name": "Potato", "recommended_variety": "Kufri Pukhraj / Kufri Jyoti / Chipsona-3", "suitability_score": 96, "suitability_reason": "Banaskantha (Deesa region) is India's premier potato hub; loose sandy loam soil enables unhindered tuber expansion.", "expected_yield_per_acre": "90-130 Quintal/Acre", "season_duration": "85-100 Days", "water_requirement": "Medium" },
+        { "crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67", "suitability_score": 93, "suitability_reason": "Primary kharif staple for North Gujarat's sandy loams; drought-tolerant with low water demand.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "75-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Mustard (Sarson)", "recommended_variety": "Pusa Bold / RH-749 / Gujarat Mustard-3", "suitability_score": 90, "suitability_reason": "Major rabi oilseed suited to sandy loam soils under tube-well irrigation; stable market demand.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "105-115 Days", "water_requirement": "Low" },
+        { "crop_name": "Castor", "recommended_variety": "GCH-7 / GCH-9", "suitability_score": 88, "suitability_reason": "Deep root system thrives in light alluvial soils; major cash crop in North Gujarat.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "170-190 Days", "water_requirement": "Low" },
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / TG-37A", "suitability_score": 84, "suitability_reason": "Friable sandy loam soil texture allows easy peg penetration and clean pod harvesting.", "expected_yield_per_acre": "9-12 Quintal/Acre", "season_duration": "105-115 Days", "water_requirement": "Medium" }
       ],
       "apmc_insight": "Deesa APMC is Asia's major potato trading center; Palanpur market sees high volume of Mustard and Castor."
     },
     {
       "district_name": "Patan",
       "aliases": ["patan", "sidhpur", "chanasma", "radhanpur", "sami", "harij"],
+      "center_lat": 23.8493,
+      "center_lon": 72.1266,
       "agro_climatic_zone_name": "North Gujarat Dry Zone",
       "soil_type": "Sandy Loam to Saline Alluvial Soil",
       "soil_key": "sandy loam",
       "avg_annual_rainfall_mm": 500,
-      "typical_npk": {
-        "N": 85.0,
-        "P": 28.0,
-        "K": 175.0,
-        "pH": 8.1,
-        "EC": 1.0,
-        "OC": 0.30
-      },
+      "typical_npk": { "N": 85.0, "P": 28.0, "K": 175.0, "pH": 8.1, "EC": 1.0, "OC": 0.30 },
       "suitable_crops": [
-        {
-          "crop_name": "Isabgol (Psyllium)",
-          "recommended_variety": "GI-2 / Gujarat Isabgol-1",
-          "suitability_score": 95,
-          "suitability_reason": "Sidhpur/Patan is global processing hub for Isabgol; light sandy soils and dry winter climate yield high quality seed husk.",
-          "expected_yield_per_acre": "4-6 Quintal/Acre",
-          "season_duration": "100-110 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Cumin (Jeera)",
-          "recommended_variety": "GC-4 / Gujarat Cumin-3",
-          "suitability_score": 92,
-          "suitability_reason": "High-value rabi spice crop thriving in dry, low-humidity winter season in sandy loam soils.",
-          "expected_yield_per_acre": "3-5 Quintal/Acre",
-          "season_duration": "90-100 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Castor",
-          "recommended_variety": "GCH-7 / GAUCH-1",
-          "suitability_score": 89,
-          "suitability_reason": "Thrives in well-drained sandy alluvial soil with limited irrigation.",
-          "expected_yield_per_acre": "10-14 Quintal/Acre",
-          "season_duration": "180-200 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Bajra",
-          "recommended_variety": "GHB-558 / HHB-67",
-          "suitability_score": 86,
-          "suitability_reason": "Drought-resilient Kharif cereal suited to sandy loams and low rain conditions.",
-          "expected_yield_per_acre": "10-14 Quintal/Acre",
-          "season_duration": "75-85 Days",
-          "water_requirement": "Very Low"
-        },
-        {
-          "crop_name": "Mustard",
-          "recommended_variety": "Pusa Bold / Kranti",
-          "suitability_score": 83,
-          "suitability_reason": "Reliable rabi oilseed requiring low irrigation in light sandy soils.",
-          "expected_yield_per_acre": "7-11 Quintal/Acre",
-          "season_duration": "105-115 Days",
-          "water_requirement": "Low"
-        }
+        { "crop_name": "Isabgol (Psyllium)", "recommended_variety": "GI-2 / Gujarat Isabgol-1", "suitability_score": 95, "suitability_reason": "Sidhpur/Patan is global processing hub for Isabgol; light sandy soils and dry winter climate yield high quality seed husk.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "100-110 Days", "water_requirement": "Low" },
+        { "crop_name": "Cumin (Jeera)", "recommended_variety": "GC-4 / Gujarat Cumin-3", "suitability_score": 92, "suitability_reason": "High-value rabi spice crop thriving in dry, low-humidity winter season in sandy loam soils.", "expected_yield_per_acre": "3-5 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" },
+        { "crop_name": "Castor", "recommended_variety": "GCH-7 / GAUCH-1", "suitability_score": 89, "suitability_reason": "Thrives in well-drained sandy alluvial soil with limited irrigation.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "180-200 Days", "water_requirement": "Low" },
+        { "crop_name": "Bajra", "recommended_variety": "GHB-558 / HHB-67", "suitability_score": 86, "suitability_reason": "Drought-resilient Kharif cereal suited to sandy loams and low rain conditions.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "75-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Mustard", "recommended_variety": "Pusa Bold / Kranti", "suitability_score": 83, "suitability_reason": "Reliable rabi oilseed requiring low irrigation in light sandy soils.", "expected_yield_per_acre": "7-11 Quintal/Acre", "season_duration": "105-115 Days", "water_requirement": "Low" }
       ],
       "apmc_insight": "Patan and Sidhpur APMCs are world leaders in Isabgol husk export and Cumin trade."
     },
     {
       "district_name": "Rajkot",
       "aliases": ["rajkot", "gondal", "jetpur", "dhoraji", "kotda sangani", "jasdan", "paddhari", "lodhika"],
+      "center_lat": 22.3039,
+      "center_lon": 70.8022,
       "agro_climatic_zone_name": "North Saurashtra Dry Zone",
       "soil_type": "Medium Black Cotton Soil to Sandy Loam (Medium Black / Goradu)",
       "soil_key": "black cotton",
       "avg_annual_rainfall_mm": 680,
-      "typical_npk": {
-        "N": 110.0,
-        "P": 38.0,
-        "K": 210.0,
-        "pH": 7.8,
-        "EC": 0.7,
-        "OC": 0.48
-      },
+      "typical_npk": { "N": 110.0, "P": 38.0, "K": 210.0, "pH": 7.8, "EC": 0.7, "OC": 0.48 },
       "suitable_crops": [
-        {
-          "crop_name": "Groundnut",
-          "recommended_variety": "GG-20 / GJG-31 / TAG-24",
-          "suitability_score": 97,
-          "suitability_reason": "Rajkot (Gondal belt) is Saurashtra's groundnut heartland; medium black friable soils provide ideal pod development environment.",
-          "expected_yield_per_acre": "11-15 Quintal/Acre",
-          "season_duration": "110-120 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Cotton",
-          "recommended_variety": "G.Cot-20 / Hybrid-6 / RCH-134",
-          "suitability_score": 94,
-          "suitability_reason": "Medium black soils retain sufficient moisture for rainfed and semi-irrigated Bt cotton cultivation.",
-          "expected_yield_per_acre": "12-16 Quintal/Acre",
-          "season_duration": "150-170 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Wheat",
-          "recommended_variety": "GW-322 / Lok-1 / GW-496",
-          "suitability_score": 90,
-          "suitability_reason": "Premier rabi cereal in Saurashtra's medium black soils under tube-well/check-dam irrigation.",
-          "expected_yield_per_acre": "18-24 Quintal/Acre",
-          "season_duration": "115-125 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Cumin (Jeera)",
-          "recommended_variety": "Gujarat Cumin-4 / GC-1",
-          "suitability_score": 87,
-          "suitability_reason": "High-profit rabi cash crop extensively grown in Rajkot/Gondal region for domestic and export markets.",
-          "expected_yield_per_acre": "4-6 Quintal/Acre",
-          "season_duration": "90-100 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Chickpea (Chana)",
-          "recommended_variety": "GG-2 / JG-11 / Gujarat Chana-3",
-          "suitability_score": 84,
-          "suitability_reason": "Excellent rabi pulse crop requiring minimal residual soil moisture in medium black soils.",
-          "expected_yield_per_acre": "8-12 Quintal/Acre",
-          "season_duration": "95-105 Days",
-          "water_requirement": "Low"
-        }
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31 / TAG-24", "suitability_score": 97, "suitability_reason": "Rajkot (Gondal belt) is Saurashtra's groundnut heartland; medium black friable soils provide ideal pod development environment.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / Hybrid-6 / RCH-134", "suitability_score": 94, "suitability_reason": "Medium black soils retain sufficient moisture for rainfed and semi-irrigated Bt cotton cultivation.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-170 Days", "water_requirement": "Medium" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1 / GW-496", "suitability_score": 90, "suitability_reason": "Premier rabi cereal in Saurashtra's medium black soils under tube-well/check-dam irrigation.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cumin (Jeera)", "recommended_variety": "Gujarat Cumin-4 / GC-1", "suitability_score": 87, "suitability_reason": "High-profit rabi cash crop extensively grown in Rajkot/Gondal region for domestic and export markets.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" },
+        { "crop_name": "Chickpea (Chana)", "recommended_variety": "GG-2 / JG-11 / Gujarat Chana-3", "suitability_score": 84, "suitability_reason": "Excellent rabi pulse crop requiring minimal residual soil moisture in medium black soils.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "95-105 Days", "water_requirement": "Low" }
       ],
       "apmc_insight": "Gondal and Rajkot APMCs are India's largest trading yards for Groundnut, Cumin, and Cotton."
     },
     {
       "district_name": "Anand",
       "aliases": ["anand", "anand rural", "borsad", "petlad", "khambhat", "umreth", "sojitra", "tarapur"],
+      "center_lat": 22.5645,
+      "center_lon": 72.9289,
       "agro_climatic_zone_name": "Middle Gujarat Zone",
       "soil_type": "Alluvial Sandy Loam Soil (Goradu Soil)",
       "soil_key": "alluvial",
       "avg_annual_rainfall_mm": 850,
-      "typical_npk": {
-        "N": 150.0,
-        "P": 42.0,
-        "K": 200.0,
-        "pH": 7.4,
-        "EC": 0.5,
-        "OC": 0.58
-      },
+      "typical_npk": { "N": 150.0, "P": 42.0, "K": 200.0, "pH": 7.4, "EC": 0.5, "OC": 0.58 },
       "suitable_crops": [
-        {
-          "crop_name": "Paddy (Rice)",
-          "recommended_variety": "Gujarat Anand Paddy-1 / Gurjari / GAR-13",
-          "suitability_score": 96,
-          "suitability_reason": "Anand's fertile alluvial soil, Mahi canal irrigation network, and 850mm rainfall make it Charotar's top paddy zone.",
-          "expected_yield_per_acre": "22-28 Quintal/Acre",
-          "season_duration": "120-130 Days",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Tobacco",
-          "recommended_variety": "Abirami / GT-7 / GABT-11",
-          "suitability_score": 93,
-          "suitability_reason": "Anand (Charotar region) is India's famous bidi tobacco belt; loose alluvial goradu soil produces high quality leaf.",
-          "expected_yield_per_acre": "8-12 Quintal/Acre",
-          "season_duration": "130-150 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Wheat",
-          "recommended_variety": "GW-496 / GW-322 / Lok-1",
-          "suitability_score": 91,
-          "suitability_reason": "Dominant rabi cereal crop grown after kharif paddy; highly productive in rich alluvial loams.",
-          "expected_yield_per_acre": "20-26 Quintal/Acre",
-          "season_duration": "115-125 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Banana",
-          "recommended_variety": "Grand Naine (G9)",
-          "suitability_score": 88,
-          "suitability_reason": "High-value horticulture crop thriving under canal irrigation in fertile alluvial soils.",
-          "expected_yield_per_acre": "30-38 Tonnes/Acre",
-          "season_duration": "11-13 Months",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Potato",
-          "recommended_variety": "Kufri Jyoti / Chipsona-1",
-          "suitability_score": 85,
-          "suitability_reason": "Friable goradu soil texture allows uniform tuber growth during winter rabi season.",
-          "expected_yield_per_acre": "80-110 Quintal/Acre",
-          "season_duration": "85-95 Days",
-          "water_requirement": "Medium"
-        }
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gujarat Anand Paddy-1 / Gurjari / GAR-13", "suitability_score": 96, "suitability_reason": "Anand's fertile alluvial soil, Mahi canal irrigation network, and 850mm rainfall make it Charotar's top paddy zone.", "expected_yield_per_acre": "22-28 Quintal/Acre", "season_duration": "120-130 Days", "water_requirement": "High" },
+        { "crop_name": "Tobacco", "recommended_variety": "Abirami / GT-7 / GABT-11", "suitability_score": 93, "suitability_reason": "Anand (Charotar region) is India's famous bidi tobacco belt; loose alluvial goradu soil produces high quality leaf.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "130-150 Days", "water_requirement": "Medium" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-496 / GW-322 / Lok-1", "suitability_score": 91, "suitability_reason": "Dominant rabi cereal crop grown after kharif paddy; highly productive in rich alluvial loams.", "expected_yield_per_acre": "20-26 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Banana", "recommended_variety": "Grand Naine (G9)", "suitability_score": 88, "suitability_reason": "High-value horticulture crop thriving under canal irrigation in fertile alluvial soils.", "expected_yield_per_acre": "30-38 Tonnes/Acre", "season_duration": "11-13 Months", "water_requirement": "High" },
+        { "crop_name": "Potato", "recommended_variety": "Kufri Jyoti / Chipsona-1", "suitability_score": 85, "suitability_reason": "Friable goradu soil texture allows uniform tuber growth during winter rabi season.", "expected_yield_per_acre": "80-110 Quintal/Acre", "season_duration": "85-95 Days", "water_requirement": "Medium" }
       ],
       "apmc_insight": "Anand and Petlad markets are hubs for Tobacco, Paddy, and Dairy fodder crops."
     },
     {
       "district_name": "Vadodara",
-      "aliases": ["vadodara", "padra", "karjan", "dabhoi", "waghodia", "savli", "sinor"],
+      "aliases": ["vadodara", "baroda", "padra", "karjan", "dabhoi", "waghodia", "savli", "sinor"],
+      "center_lat": 22.3072,
+      "center_lon": 73.1812,
       "agro_climatic_zone_name": "Middle Gujarat Zone",
       "soil_type": "Medium Black Cotton to Alluvial Clay Loam Soil",
       "soil_key": "black cotton",
       "avg_annual_rainfall_mm": 920,
-      "typical_npk": {
-        "N": 135.0,
-        "P": 40.0,
-        "K": 220.0,
-        "pH": 7.5,
-        "EC": 0.55,
-        "OC": 0.60
-      },
+      "typical_npk": { "N": 135.0, "P": 40.0, "K": 220.0, "pH": 7.5, "EC": 0.55, "OC": 0.60 },
       "suitable_crops": [
-        {
-          "crop_name": "Cotton",
-          "recommended_variety": "G.Cot-20 / BG-II Bt Cotton",
-          "suitability_score": 95,
-          "suitability_reason": "Vadodara (Karjan/Padra belt) is prime cotton territory; fertile black alluvial soil retains moisture effectively.",
-          "expected_yield_per_acre": "13-17 Quintal/Acre",
-          "season_duration": "150-165 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Paddy (Rice)",
-          "recommended_variety": "Gurjari / GAR-13",
-          "suitability_score": 92,
-          "suitability_reason": "Good annual rainfall (920mm) and Narmada canal connectivity support high-yielding paddy fields.",
-          "expected_yield_per_acre": "20-26 Quintal/Acre",
-          "season_duration": "120-130 Days",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Wheat",
-          "recommended_variety": "GW-322 / Lok-1",
-          "suitability_score": 89,
-          "suitability_reason": "Major rabi crop in clay loam soils following kharif paddy or cotton.",
-          "expected_yield_per_acre": "19-25 Quintal/Acre",
-          "season_duration": "115-125 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Banana",
-          "recommended_variety": "Grand Naine (G9)",
-          "suitability_score": 86,
-          "suitability_reason": "Extensively cultivated in Karjan and Sinor talukas near Narmada river basin.",
-          "expected_yield_per_acre": "28-36 Tonnes/Acre",
-          "season_duration": "11-13 Months",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Turmeric / Ginger",
-          "recommended_variety": "Sugandham / Suvarna",
-          "suitability_score": 82,
-          "suitability_reason": "High-value spice crops emerging in fertile black loams of Padra and Dabhoi.",
-          "expected_yield_per_acre": "80-120 Quintal/Acre",
-          "season_duration": "8-9 Months",
-          "water_requirement": "Medium"
-        }
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 95, "suitability_reason": "Vadodara (Karjan/Padra belt) is prime cotton territory; fertile black alluvial soil retains moisture effectively.", "expected_yield_per_acre": "13-17 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GAR-13", "suitability_score": 92, "suitability_reason": "Good annual rainfall (920mm) and Narmada canal connectivity support high-yielding paddy fields.", "expected_yield_per_acre": "20-26 Quintal/Acre", "season_duration": "120-130 Days", "water_requirement": "High" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 89, "suitability_reason": "Major rabi crop in clay loam soils following kharif paddy or cotton.", "expected_yield_per_acre": "19-25 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Banana", "recommended_variety": "Grand Naine (G9)", "suitability_score": 86, "suitability_reason": "Extensively cultivated in Karjan and Sinor talukas near Narmada river basin.", "expected_yield_per_acre": "28-36 Tonnes/Acre", "season_duration": "11-13 Months", "water_requirement": "High" },
+        { "crop_name": "Turmeric / Ginger", "recommended_variety": "Sugandham / Suvarna", "suitability_score": 82, "suitability_reason": "High-value spice crops emerging in fertile black loams of Padra and Dabhoi.", "expected_yield_per_acre": "80-120 Quintal/Acre", "season_duration": "8-9 Months", "water_requirement": "Medium" }
       ],
       "apmc_insight": "Vadodara APMC has strong trading volume for Cotton, Paddy, and Vegetables."
     },
     {
       "district_name": "Ahmedabad",
-      "aliases": ["ahmedabad", "daskroi", "dholka", "dhandhuka", "sanand", "bavla", "viramgam", "mandal", "detroj"],
+      "aliases": ["ahmedabad", "amdavad", "daskroi", "dholka", "dhandhuka", "sanand", "bavla", "viramgam", "mandal", "detroj"],
+      "center_lat": 23.0225,
+      "center_lon": 72.5714,
       "agro_climatic_zone_name": "North Central Gujarat Zone (Bhal Region)",
       "soil_type": "Medium Black to Saline Alluvial Soil (Bhal Medium Black)",
       "soil_key": "black cotton",
       "avg_annual_rainfall_mm": 720,
-      "typical_npk": {
-        "N": 120.0,
-        "P": 36.0,
-        "K": 210.0,
-        "pH": 7.7,
-        "EC": 0.75,
-        "OC": 0.50
-      },
+      "typical_npk": { "N": 120.0, "P": 36.0, "K": 210.0, "pH": 7.7, "EC": 0.75, "OC": 0.50 },
       "suitable_crops": [
-        {
-          "crop_name": "Bhalia Wheat (Rainfed Wheat)",
-          "recommended_variety": "A-206 / Arnej-206 / GW-1",
-          "suitability_score": 96,
-          "suitability_reason": "Famous GI-tagged Bhalia durum wheat grown on conserved residual soil moisture in deep black Bhal clay soils without irrigation.",
-          "expected_yield_per_acre": "8-12 Quintal/Acre",
-          "season_duration": "105-115 Days",
-          "water_requirement": "Very Low"
-        },
-        {
-          "crop_name": "Cotton",
-          "recommended_variety": "G.Cot-20 / Hybrid-6",
-          "suitability_score": 93,
-          "suitability_reason": "Major kharif cash crop grown extensively in Sanand, Bavla, and Dholka talukas.",
-          "expected_yield_per_acre": "12-16 Quintal/Acre",
-          "season_duration": "150-165 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Paddy (Rice)",
-          "recommended_variety": "Gurjari / GAR-13",
-          "suitability_score": 89,
-          "suitability_reason": "Bavla and Dholka are known as the rice bowl of Ahmedabad district under Narmada canal network.",
-          "expected_yield_per_acre": "20-25 Quintal/Acre",
-          "season_duration": "120-130 Days",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Chickpea (Chana)",
-          "recommended_variety": "GG-2 / Dahod Yellow",
-          "suitability_score": 86,
-          "suitability_reason": "Excellent rabi pulse crop utilizing residual moisture in Bhal black soils.",
-          "expected_yield_per_acre": "7-11 Quintal/Acre",
-          "season_duration": "95-105 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Castor",
-          "recommended_variety": "GCH-7",
-          "suitability_score": 83,
-          "suitability_reason": "Suited to semi-arid northern talukas (Viramgam/Mandal) with moderate water requirement.",
-          "expected_yield_per_acre": "10-14 Quintal/Acre",
-          "season_duration": "170-190 Days",
-          "water_requirement": "Low"
-        }
+        { "crop_name": "Bhalia Wheat (Rainfed Wheat)", "recommended_variety": "A-206 / Arnej-206 / GW-1", "suitability_score": 96, "suitability_reason": "Famous GI-tagged Bhalia durum wheat grown on conserved residual soil moisture in deep black Bhal clay soils without irrigation.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "105-115 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / Hybrid-6", "suitability_score": 93, "suitability_reason": "Major kharif cash crop grown extensively in Sanand, Bavla, and Dholka talukas.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GAR-13", "suitability_score": 89, "suitability_reason": "Bavla and Dholka are known as the rice bowl of Ahmedabad district under Narmada canal network.", "expected_yield_per_acre": "20-25 Quintal/Acre", "season_duration": "120-130 Days", "water_requirement": "High" },
+        { "crop_name": "Chickpea (Chana)", "recommended_variety": "GG-2 / Dahod Yellow", "suitability_score": 86, "suitability_reason": "Excellent rabi pulse crop utilizing residual moisture in Bhal black soils.", "expected_yield_per_acre": "7-11 Quintal/Acre", "season_duration": "95-105 Days", "water_requirement": "Low" },
+        { "crop_name": "Castor", "recommended_variety": "GCH-7", "suitability_score": 83, "suitability_reason": "Suited to semi-arid northern talukas (Viramgam/Mandal) with moderate water requirement.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "170-190 Days", "water_requirement": "Low" }
       ],
       "apmc_insight": "Ahmedabad and Bavla APMCs command premium prices for GI Bhalia Wheat and Paddy."
     },
     {
       "district_name": "Junagadh",
       "aliases": ["junagadh", "gir", "visavadar", "mendarda", "manavadar", "vanthali", "keshod", "bhesan"],
+      "center_lat": 21.5222,
+      "center_lon": 70.4579,
       "agro_climatic_zone_name": "South Saurashtra Zone",
       "soil_type": "Sandy Loam to Medium Black / Laterite Soil",
       "soil_key": "sandy loam",
       "avg_annual_rainfall_mm": 900,
-      "typical_npk": {
-        "N": 115.0,
-        "P": 40.0,
-        "K": 200.0,
-        "pH": 7.6,
-        "EC": 0.6,
-        "OC": 0.55
-      },
+      "typical_npk": { "N": 115.0, "P": 40.0, "K": 200.0, "pH": 7.6, "EC": 0.6, "OC": 0.55 },
       "suitable_crops": [
-        {
-          "crop_name": "Kesar Mango",
-          "recommended_variety": "Gir Kesar (GI Tagged)",
-          "suitability_score": 98,
-          "suitability_reason": "Gir Junagadh region is the world-famous birthplace of GI-tagged Kesar Mango; foothill microclimate and loamy soils create unbeatable flavor and aroma.",
-          "expected_yield_per_acre": "40-60 Quintal/Acre",
-          "season_duration": "Perennial",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Groundnut",
-          "recommended_variety": "GG-20 / GJG-31",
-          "suitability_score": 95,
-          "suitability_reason": "Primary kharif oilseed in Junagadh's friable loamy soil with high oil recovery percentage.",
-          "expected_yield_per_acre": "12-16 Quintal/Acre",
-          "season_duration": "110-120 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Wheat",
-          "recommended_variety": "GW-322 / Lok-1",
-          "suitability_score": 90,
-          "suitability_reason": "Top rabi crop grown under well irrigation in South Saurashtra.",
-          "expected_yield_per_acre": "18-24 Quintal/Acre",
-          "season_duration": "115-125 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Cumin",
-          "recommended_variety": "Gujarat Cumin-4",
-          "suitability_score": 87,
-          "suitability_reason": "High-profit winter spice crop suited to dry post-monsoon winter conditions.",
-          "expected_yield_per_acre": "4-6 Quintal/Acre",
-          "season_duration": "90-100 Days",
-          "water_requirement": "Low"
-        },
-        {
-          "crop_name": "Chiku (Sapota)",
-          "recommended_variety": "Kalipatti / Cricket Ball",
-          "suitability_score": 84,
-          "suitability_reason": "Thrives in warm coastal-facing orchards of South Saurashtra.",
-          "expected_yield_per_acre": "35-50 Quintal/Acre",
-          "season_duration": "Perennial",
-          "water_requirement": "Medium"
-        }
+        { "crop_name": "Kesar Mango", "recommended_variety": "Gir Kesar (GI Tagged)", "suitability_score": 98, "suitability_reason": "Gir Junagadh region is the world-famous birthplace of GI-tagged Kesar Mango; foothill microclimate and loamy soils create unbeatable flavor and aroma.", "expected_yield_per_acre": "40-60 Quintal/Acre", "season_duration": "Perennial", "water_requirement": "Medium" },
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31", "suitability_score": 95, "suitability_reason": "Primary kharif oilseed in Junagadh's friable loamy soil with high oil recovery percentage.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 90, "suitability_reason": "Top rabi crop grown under well irrigation in South Saurashtra.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cumin", "recommended_variety": "Gujarat Cumin-4", "suitability_score": 87, "suitability_reason": "High-profit winter spice crop suited to dry post-monsoon winter conditions.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" },
+        { "crop_name": "Chiku (Sapota)", "recommended_variety": "Kalipatti / Cricket Ball", "suitability_score": 84, "suitability_reason": "Thrives in warm coastal-facing orchards of South Saurashtra.", "expected_yield_per_acre": "35-50 Quintal/Acre", "season_duration": "Perennial", "water_requirement": "Medium" }
       ],
       "apmc_insight": "Junagadh and Keshod APMC yards dominate Kesar Mango exports and Groundnut trading."
     },
     {
       "district_name": "Sabarkantha",
       "aliases": ["sabarkantha", "himatnagar", "idar", "khedbrahma", "talod", "prantij", "vijaynagar"],
+      "center_lat": 23.6255,
+      "center_lon": 73.0042,
       "agro_climatic_zone_name": "North-East Hilly & North Gujarat Zone",
       "soil_type": "Red Sandy Loam to Shallow Black Soil (Lal-Kaali Soil)",
       "soil_key": "red loamy",
       "avg_annual_rainfall_mm": 820,
-      "typical_npk": {
-        "N": 110.0,
-        "P": 35.0,
-        "K": 190.0,
-        "pH": 7.3,
-        "EC": 0.5,
-        "OC": 0.52
-      },
+      "typical_npk": { "N": 110.0, "P": 35.0, "K": 190.0, "pH": 7.3, "EC": 0.5, "OC": 0.52 },
       "suitable_crops": [
-        {
-          "crop_name": "Maize (Corn)",
-          "recommended_variety": "Pioneer 30V92 / HQPM-1 / Gujarat Maize-6",
-          "suitability_score": 96,
-          "suitability_reason": "Sabarkantha's well-drained red loamy soils and undulating terrain are ideal for high-yielding kharif maize cultivation.",
-          "expected_yield_per_acre": "22-30 Quintal/Acre",
-          "season_duration": "90-100 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Groundnut",
-          "recommended_variety": "GG-20 / GJG-31",
-          "suitability_score": 93,
-          "suitability_reason": "Red sandy loam soil enables clean pod formation and high oil percentage.",
-          "expected_yield_per_acre": "11-15 Quintal/Acre",
-          "season_duration": "110-120 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Cotton",
-          "recommended_variety": "G.Cot-20 / BG-II Bt Cotton",
-          "suitability_score": 90,
-          "suitability_reason": "Major commercial cash crop grown extensively across Himatnagar, Idar, and Talod plains.",
-          "expected_yield_per_acre": "13-17 Quintal/Acre",
-          "season_duration": "150-165 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Wheat",
-          "recommended_variety": "GW-322 / Lok-1",
-          "suitability_score": 87,
-          "suitability_reason": "Dominant rabi cereal crop grown under well irrigation in Sabarkantha.",
-          "expected_yield_per_acre": "18-24 Quintal/Acre",
-          "season_duration": "115-125 Days",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Pigeonpea (Tur)",
-          "recommended_variety": "BSMR-853 / BDN-2",
-          "suitability_score": 84,
-          "suitability_reason": "Legume crop intercropped with maize or cotton to improve soil nitrogen.",
-          "expected_yield_per_acre": "7-10 Quintal/Acre",
-          "season_duration": "160-180 Days",
-          "water_requirement": "Low"
-        }
+        { "crop_name": "Maize (Corn)", "recommended_variety": "Pioneer 30V92 / HQPM-1 / Gujarat Maize-6", "suitability_score": 96, "suitability_reason": "Sabarkantha's well-drained red loamy soils and undulating terrain are ideal for high-yielding kharif maize cultivation.", "expected_yield_per_acre": "22-30 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Medium" },
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31", "suitability_score": 93, "suitability_reason": "Red sandy loam soil enables clean pod formation and high oil percentage.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 90, "suitability_reason": "Major commercial cash crop grown extensively across Himatnagar, Idar, and Talod plains.", "expected_yield_per_acre": "13-17 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 87, "suitability_reason": "Dominant rabi cereal crop grown under well irrigation in Sabarkantha.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Pigeonpea (Tur)", "recommended_variety": "BSMR-853 / BDN-2", "suitability_score": 84, "suitability_reason": "Legume crop intercropped with maize or cotton to improve soil nitrogen.", "expected_yield_per_acre": "7-10 Quintal/Acre", "season_duration": "160-180 Days", "water_requirement": "Low" }
       ],
       "apmc_insight": "Himatnagar and Idar APMCs command high trade volume for Groundnut, Maize, and Cotton."
     },
     {
       "district_name": "Navsari",
-      "aliases": ["navsari", "chikhli", "gandevi", "jalalpore", "vansda"],
+      "aliases": ["navsari", "chikhli", "gandevi", "jalalpore", "vansda", "bilimora"],
+      "center_lat": 20.9467,
+      "center_lon": 72.9520,
       "agro_climatic_zone_name": "South Gujarat Heavy Rainfall Zone",
       "soil_type": "Heavy Black Alluvial Soil / Coastal Clayey Soil",
       "soil_key": "black cotton",
       "avg_annual_rainfall_mm": 1500,
-      "typical_npk": {
-        "N": 145.0,
-        "P": 44.0,
-        "K": 250.0,
-        "pH": 7.5,
-        "EC": 0.6,
-        "OC": 0.70
-      },
+      "typical_npk": { "N": 145.0, "P": 44.0, "K": 250.0, "pH": 7.5, "EC": 0.6, "OC": 0.70 },
       "suitable_crops": [
-        {
-          "crop_name": "Chiku (Sapota)",
-          "recommended_variety": "Kalipatti / Cricket Ball (GI Tagged Navsari Chiku)",
-          "suitability_score": 98,
-          "suitability_reason": "Navsari (Gandevi/Chikhli region) is India's premier Chiku capital; heavy fertile alluvial soil and 1500mm high rainfall produce year-round sweet fruit.",
-          "expected_yield_per_acre": "40-60 Quintal/Acre",
-          "season_duration": "Perennial",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Alphonso / Kesar Mango",
-          "recommended_variety": "Valsadi Alphonso / Kesar",
-          "suitability_score": 95,
-          "suitability_reason": "Coastal humid climate and rich clay loam soils produce world-famous export-quality mangoes.",
-          "expected_yield_per_acre": "35-50 Quintal/Acre",
-          "season_duration": "Perennial",
-          "water_requirement": "Medium"
-        },
-        {
-          "crop_name": "Sugarcane",
-          "recommended_variety": "Co 86032 / Co 0238",
-          "suitability_score": 92,
-          "suitability_reason": "High rainfall and canal irrigation support excellent sugarcane tonnage per acre.",
-          "expected_yield_per_acre": "42-55 Tonnes/Acre",
-          "season_duration": "11-12 Months",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Paddy (Rice)",
-          "recommended_variety": "Gurjari / GAR-13 / GR-11",
-          "suitability_score": 89,
-          "suitability_reason": "Heavy water-retentive clay soils make paddy the dominant monsoon kharif crop.",
-          "expected_yield_per_acre": "22-28 Quintal/Acre",
-          "season_duration": "115-125 Days",
-          "water_requirement": "High"
-        },
-        {
-          "crop_name": "Banana",
-          "recommended_variety": "Grand Naine (G9)",
-          "suitability_score": 86,
-          "suitability_reason": "Thrives in warm, humid coastal plantations with drip irrigation.",
-          "expected_yield_per_acre": "30-40 Tonnes/Acre",
-          "season_duration": "11-13 Months",
-          "water_requirement": "High"
-        }
+        { "crop_name": "Chiku (Sapota)", "recommended_variety": "Kalipatti / Cricket Ball (GI Tagged Navsari Chiku)", "suitability_score": 98, "suitability_reason": "Navsari (Gandevi/Chikhli region) is India's premier Chiku capital; heavy fertile alluvial soil and 1500mm high rainfall produce year-round sweet fruit.", "expected_yield_per_acre": "40-60 Quintal/Acre", "season_duration": "Perennial", "water_requirement": "Medium" },
+        { "crop_name": "Alphonso / Kesar Mango", "recommended_variety": "Valsadi Alphonso / Kesar", "suitability_score": 95, "suitability_reason": "Coastal humid climate and rich clay loam soils produce world-famous export-quality mangoes.", "expected_yield_per_acre": "35-50 Quintal/Acre", "season_duration": "Perennial", "water_requirement": "Medium" },
+        { "crop_name": "Sugarcane", "recommended_variety": "Co 86032 / Co 0238", "suitability_score": 92, "suitability_reason": "High rainfall and canal irrigation support excellent sugarcane tonnage per acre.", "expected_yield_per_acre": "42-55 Tonnes/Acre", "season_duration": "11-12 Months", "water_requirement": "High" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GAR-13 / GR-11", "suitability_score": 89, "suitability_reason": "Heavy water-retentive clay soils make paddy the dominant monsoon kharif crop.", "expected_yield_per_acre": "22-28 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "High" },
+        { "crop_name": "Banana", "recommended_variety": "Grand Naine (G9)", "suitability_score": 86, "suitability_reason": "Thrives in warm, humid coastal plantations with drip irrigation.", "expected_yield_per_acre": "30-40 Tonnes/Acre", "season_duration": "11-13 Months", "water_requirement": "High" }
       ],
       "apmc_insight": "Gandevi and Chikhli APMCs are India's primary export hubs for Chiku and Mangoes."
+    },
+    {
+      "district_name": "Porbandar",
+      "aliases": ["porbandar", "kutiyana", "ranavav"],
+      "center_lat": 21.6417,
+      "center_lon": 69.6293,
+      "agro_climatic_zone_name": "South Saurashtra Coastal Zone",
+      "soil_type": "Medium Black Calcareous to Coastal Sandy Loam Soil",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 600,
+      "typical_npk": { "N": 100.0, "P": 30.0, "K": 195.0, "pH": 8.0, "EC": 0.85, "OC": 0.40 },
+      "suitable_crops": [
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31 / TAG-24", "suitability_score": 96, "suitability_reason": "Porbandar's medium black calcareous soils and semi-arid climate make groundnut the district's top kharif oilseed with excellent pod quality.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 93, "suitability_reason": "Medium black moisture-retentive soils support rainfed cotton in Kutiyana and Ranavav talukas of Porbandar.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "150-170 Days", "water_requirement": "Medium" },
+        { "crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67", "suitability_score": 90, "suitability_reason": "Drought-tolerant kharif cereal ideal for Porbandar's semi-arid coastal belt with limited rainfall (600mm).", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "75-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 87, "suitability_reason": "Dominant rabi cereal grown under tube-well irrigation in Porbandar's black calcareous soils.", "expected_yield_per_acre": "16-22 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Sesame (Til)", "recommended_variety": "Gujarat Til-4 / GT-10", "suitability_score": 84, "suitability_reason": "Warm coastal climate and well-drained calcareous loams of Porbandar suit sesame's short-duration summer/kharif cycle.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "80-90 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Porbandar APMC is an important coastal trading center for Groundnut, Cotton, and Sesame in South Saurashtra."
+    },
+    {
+      "district_name": "Bhavnagar",
+      "aliases": ["bhavnagar", "palitana", "mahuva", "sihor", "talaja", "ghogha", "gariadhar", "umrala", "vallabhipur"],
+      "center_lat": 21.7645,
+      "center_lon": 72.1519,
+      "agro_climatic_zone_name": "South-East Saurashtra Zone",
+      "soil_type": "Medium Black Cotton to Alluvial Coastal Soil",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 650,
+      "typical_npk": { "N": 105.0, "P": 34.0, "K": 200.0, "pH": 7.9, "EC": 0.80, "OC": 0.42 },
+      "suitable_crops": [
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton / RCH-2", "suitability_score": 96, "suitability_reason": "Bhavnagar's medium black cotton soils are ideally suited for rainfed and irrigated Bt cotton with excellent lint quality.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-170 Days", "water_requirement": "Medium" },
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31", "suitability_score": 94, "suitability_reason": "Major kharif oilseed across Bhavnagar's medium black soils; high oil recovery in semi-arid climate.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Onion", "recommended_variety": "GAWO-1 / Agrifound Dark Red", "suitability_score": 90, "suitability_reason": "Mahuva taluka of Bhavnagar is Gujarat's premier onion export hub; well-drained black soils produce high-quality bulbs.", "expected_yield_per_acre": "100-150 Quintal/Acre", "season_duration": "120-140 Days", "water_requirement": "Medium" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 87, "suitability_reason": "Reliable rabi cereal in irrigated fields of Bhavnagar's alluvial plains.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Sesame (Til)", "recommended_variety": "Gujarat Til-4 / GT-10", "suitability_score": 83, "suitability_reason": "Short-duration summer oilseed suited to warm coastal climate of Bhavnagar.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "80-90 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Mahuva APMC is Gujarat's largest onion export yard; Bhavnagar APMC handles high Cotton and Groundnut volumes."
+    },
+    {
+      "district_name": "Amreli",
+      "aliases": ["amreli", "babra", "lilia", "savarkundla", "kunkavav", "jafrabad", "rajula", "dhari"],
+      "center_lat": 21.6032,
+      "center_lon": 71.2163,
+      "agro_climatic_zone_name": "South Saurashtra Zone",
+      "soil_type": "Medium Black Cotton Soil (Calcareous Black)",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 700,
+      "typical_npk": { "N": 108.0, "P": 35.0, "K": 205.0, "pH": 7.8, "EC": 0.70, "OC": 0.45 },
+      "suitable_crops": [
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31 / TAG-24", "suitability_score": 96, "suitability_reason": "Amreli is Saurashtra's top groundnut district; medium black calcareous soils and 700mm rainfall provide ideal kharif oilseed conditions.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 93, "suitability_reason": "Second major kharif cash crop across Amreli's black soils with drip and check-dam irrigation.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-170 Days", "water_requirement": "Medium" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 89, "suitability_reason": "Reliable rabi cereal under tube-well and Shetrunji dam canal irrigation in Amreli.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cumin (Jeera)", "recommended_variety": "Gujarat Cumin-4", "suitability_score": 86, "suitability_reason": "High-value rabi spice crop suited to dry winter season in Amreli's well-drained black soils.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" },
+        { "crop_name": "Chickpea (Chana)", "recommended_variety": "GG-2 / JG-11", "suitability_score": 83, "suitability_reason": "Important rabi pulse crop utilizing residual soil moisture in medium black soils.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "95-105 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Amreli APMC is a major Groundnut and Cotton trading hub in South Saurashtra."
+    },
+    {
+      "district_name": "Surendranagar",
+      "aliases": ["surendranagar", "wadhwan", "halvad", "dhrangadhra", "chotila", "thangadh", "lakhtar", "limbdi", "muli", "sayla"],
+      "center_lat": 22.7283,
+      "center_lon": 71.6480,
+      "agro_climatic_zone_name": "Central Saurashtra Dry Zone",
+      "soil_type": "Medium Black to Saline Sandy Loam Soil",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 550,
+      "typical_npk": { "N": 90.0, "P": 28.0, "K": 185.0, "pH": 8.0, "EC": 0.90, "OC": 0.35 },
+      "suitable_crops": [
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 95, "suitability_reason": "Surendranagar's medium black soils in Wadhwan/Chotila belt support high-quality rainfed Bt cotton cultivation.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "150-170 Days", "water_requirement": "Medium" },
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / TAG-24", "suitability_score": 92, "suitability_reason": "Major kharif oilseed crop across the district's black to sandy loam soils.", "expected_yield_per_acre": "9-13 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67", "suitability_score": 88, "suitability_reason": "Drought-hardy kharif cereal suited to Surendranagar's low-rainfall (550mm) semi-arid conditions.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "75-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Cumin (Jeera)", "recommended_variety": "Gujarat Cumin-4 / GC-1", "suitability_score": 85, "suitability_reason": "High-value rabi spice crop in the dry winter belt of Dhrangadhra-Halvad region.", "expected_yield_per_acre": "3-5 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" },
+        { "crop_name": "Castor", "recommended_variety": "GCH-7", "suitability_score": 82, "suitability_reason": "Deep-rooted oilseed crop suited to semi-arid sandy loam soils with limited irrigation.", "expected_yield_per_acre": "9-13 Quintal/Acre", "season_duration": "170-190 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Wadhwan and Halvad APMCs handle significant Cotton, Groundnut, and Cumin trading volumes."
+    },
+    {
+      "district_name": "Mehsana",
+      "aliases": ["mehsana", "mahesana", "visnagar", "unjha", "kadi", "becharaji", "vadnagar", "kheralu"],
+      "center_lat": 23.5880,
+      "center_lon": 72.3693,
+      "agro_climatic_zone_name": "North Gujarat Semi-Arid Zone",
+      "soil_type": "Sandy Loam to Alluvial Soil",
+      "soil_key": "sandy loam",
+      "avg_annual_rainfall_mm": 600,
+      "typical_npk": { "N": 100.0, "P": 33.0, "K": 195.0, "pH": 7.8, "EC": 0.7, "OC": 0.40 },
+      "suitable_crops": [
+        { "crop_name": "Potato", "recommended_variety": "Kufri Pukhraj / Kufri Jyoti", "suitability_score": 95, "suitability_reason": "Mehsana's sandy loam soils and cool rabi season enable large-scale irrigated potato cultivation similar to neighboring Banaskantha.", "expected_yield_per_acre": "85-120 Quintal/Acre", "season_duration": "85-100 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cumin (Jeera)", "recommended_variety": "Gujarat Cumin-4 / GC-1", "suitability_score": 93, "suitability_reason": "Unjha APMC in Mehsana is Asia's largest cumin trading center; ideal dry winter and sandy loam conditions.", "expected_yield_per_acre": "4-6 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" },
+        { "crop_name": "Castor", "recommended_variety": "GCH-7 / GCH-9", "suitability_score": 90, "suitability_reason": "Major kharif oilseed with deep root system thriving in North Gujarat's sandy loam soils.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "170-190 Days", "water_requirement": "Low" },
+        { "crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67", "suitability_score": 87, "suitability_reason": "Drought-tolerant staple kharif cereal across Mehsana's sandy loam belt.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "75-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Mustard (Sarson)", "recommended_variety": "Pusa Bold / Gujarat Mustard-3", "suitability_score": 84, "suitability_reason": "Reliable rabi oilseed crop grown under tube-well irrigation in sandy loam soils.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "105-115 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Unjha APMC (Mehsana) is Asia's largest Cumin and Fennel Seed market; Visnagar APMC trades high volumes of Potato and Castor."
+    },
+    {
+      "district_name": "Morbi",
+      "aliases": ["morbi", "wankaner", "tankara", "halvad_morbi", "maliya"],
+      "center_lat": 22.8173,
+      "center_lon": 70.8370,
+      "agro_climatic_zone_name": "North Saurashtra Dry Zone",
+      "soil_type": "Medium Black Cotton Soil to Sandy Loam",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 500,
+      "typical_npk": { "N": 95.0, "P": 30.0, "K": 190.0, "pH": 8.0, "EC": 0.85, "OC": 0.38 },
+      "suitable_crops": [
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 95, "suitability_reason": "Morbi's medium black soils support extensive rainfed cotton cultivation in the semi-arid North Saurashtra belt.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "150-170 Days", "water_requirement": "Medium" },
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / TAG-24", "suitability_score": 91, "suitability_reason": "Major kharif oilseed crop in Morbi's friable black and sandy loam soils.", "expected_yield_per_acre": "9-13 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67", "suitability_score": 88, "suitability_reason": "Drought-tolerant staple suited to Morbi's semi-arid climate with 500mm rainfall.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "75-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 85, "suitability_reason": "Rabi cereal grown under Narmada canal and tube-well irrigation in Morbi.", "expected_yield_per_acre": "16-22 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Castor", "recommended_variety": "GCH-7", "suitability_score": 82, "suitability_reason": "Deep-rooted oilseed suited to semi-arid conditions with limited water.", "expected_yield_per_acre": "9-13 Quintal/Acre", "season_duration": "170-190 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Morbi and Wankaner APMCs trade Cotton, Groundnut, and industrial-use Castor oil seed."
+    },
+    {
+      "district_name": "Gandhinagar",
+      "aliases": ["gandhinagar", "kalol", "dahegam", "mansa"],
+      "center_lat": 23.2156,
+      "center_lon": 72.6369,
+      "agro_climatic_zone_name": "Central Gujarat Zone",
+      "soil_type": "Sandy Loam to Alluvial Soil",
+      "soil_key": "alluvial",
+      "avg_annual_rainfall_mm": 750,
+      "typical_npk": { "N": 125.0, "P": 38.0, "K": 205.0, "pH": 7.5, "EC": 0.55, "OC": 0.50 },
+      "suitable_crops": [
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GAR-13", "suitability_score": 94, "suitability_reason": "Gandhinagar's alluvial soils and Narmada canal network support high-yielding paddy in Dahegam and Kalol talukas.", "expected_yield_per_acre": "20-26 Quintal/Acre", "season_duration": "120-130 Days", "water_requirement": "High" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 91, "suitability_reason": "Major kharif cash crop in Gandhinagar's sandy loam to alluvial soils.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / GW-496", "suitability_score": 89, "suitability_reason": "Dominant rabi cereal following kharif paddy in irrigated alluvial fields.", "expected_yield_per_acre": "19-25 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Castor", "recommended_variety": "GCH-7", "suitability_score": 85, "suitability_reason": "Suited to northern sandy loam talukas of Gandhinagar with moderate irrigation.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "170-190 Days", "water_requirement": "Low" },
+        { "crop_name": "Vegetables (Potato/Brinjal)", "recommended_variety": "Kufri Pukhraj / Gujarat Brinjal-1", "suitability_score": 82, "suitability_reason": "Peri-urban vegetable farming in Gandhinagar supplies Ahmedabad metro market demand.", "expected_yield_per_acre": "80-120 Quintal/Acre", "season_duration": "85-110 Days", "water_requirement": "Medium" }
+      ],
+      "apmc_insight": "Kalol APMC trades Paddy, Cotton, and Vegetables with proximity to Ahmedabad's massive consumer market."
+    },
+    {
+      "district_name": "Valsad",
+      "aliases": ["valsad", "vapi", "dharampur", "kaprada", "pardi", "umbergaon"],
+      "center_lat": 20.5992,
+      "center_lon": 72.9342,
+      "agro_climatic_zone_name": "South Gujarat Coastal Heavy Rainfall Zone",
+      "soil_type": "Laterite to Coastal Clayey Soil",
+      "soil_key": "laterite",
+      "avg_annual_rainfall_mm": 1800,
+      "typical_npk": { "N": 130.0, "P": 40.0, "K": 230.0, "pH": 6.8, "EC": 0.5, "OC": 0.72 },
+      "suitable_crops": [
+        { "crop_name": "Alphonso Mango", "recommended_variety": "Valsadi Alphonso (GI Tagged)", "suitability_score": 98, "suitability_reason": "Valsad's laterite soil, high rainfall (1800mm), and coastal microclimate produce India's finest GI-tagged Alphonso Mangoes.", "expected_yield_per_acre": "30-50 Quintal/Acre", "season_duration": "Perennial", "water_requirement": "Medium" },
+        { "crop_name": "Chiku (Sapota)", "recommended_variety": "Kalipatti / Cricket Ball", "suitability_score": 95, "suitability_reason": "Thrives in warm humid laterite and coastal soils with year-round fruit bearing.", "expected_yield_per_acre": "40-60 Quintal/Acre", "season_duration": "Perennial", "water_requirement": "Medium" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GR-11", "suitability_score": 91, "suitability_reason": "Extremely high rainfall makes Valsad ideal for rainfed paddy in heavy clay and laterite soils.", "expected_yield_per_acre": "20-26 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "High" },
+        { "crop_name": "Sugarcane", "recommended_variety": "Co 86032 / Co 0238", "suitability_score": 88, "suitability_reason": "High rainfall and perennial river water support sugarcane cultivation in Pardi-Vapi belt.", "expected_yield_per_acre": "40-52 Tonnes/Acre", "season_duration": "11-12 Months", "water_requirement": "High" },
+        { "crop_name": "Cashew", "recommended_variety": "Vengurla-4 / BPP-8", "suitability_score": 84, "suitability_reason": "Laterite hill slopes of Dharampur and Kaprada are suited to cashew plantation with export potential.", "expected_yield_per_acre": "6-10 Quintal/Acre", "season_duration": "Perennial", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Valsad APMC is the premier hub for Valsadi Alphonso Mango exports and tropical fruit trade."
+    },
+    {
+      "district_name": "Bharuch",
+      "aliases": ["bharuch", "broach", "ankleshwar", "amod", "hansot", "jhagadia", "jambusar", "vagra"],
+      "center_lat": 21.7051,
+      "center_lon": 72.9959,
+      "agro_climatic_zone_name": "South Gujarat Zone",
+      "soil_type": "Deep Black Alluvial Soil (Narmada Alluvium)",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 900,
+      "typical_npk": { "N": 138.0, "P": 43.0, "K": 235.0, "pH": 7.6, "EC": 0.58, "OC": 0.62 },
+      "suitable_crops": [
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 95, "suitability_reason": "Bharuch's deep black Narmada alluvium soils support top-quality long-staple cotton with canal irrigation.", "expected_yield_per_acre": "14-18 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Sugarcane", "recommended_variety": "Co 86032 / Co 0238", "suitability_score": 93, "suitability_reason": "Narmada river basin fertility and canal network support high sugarcane tonnage in Ankleshwar/Jhagadia belt.", "expected_yield_per_acre": "42-55 Tonnes/Acre", "season_duration": "11-12 Months", "water_requirement": "High" },
+        { "crop_name": "Banana", "recommended_variety": "Grand Naine (G9)", "suitability_score": 90, "suitability_reason": "Rich Narmada alluvial plains of Bharuch produce high-quality tissue culture banana.", "expected_yield_per_acre": "30-40 Tonnes/Acre", "season_duration": "11-13 Months", "water_requirement": "High" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GAR-13", "suitability_score": 87, "suitability_reason": "Good rainfall (900mm) and water-retentive alluvial soils support kharif paddy.", "expected_yield_per_acre": "20-26 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "High" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 84, "suitability_reason": "Reliable rabi cereal in irrigated deep black alluvial fields of Bharuch.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" }
+      ],
+      "apmc_insight": "Bharuch APMC is a key Narmada belt trading center for Cotton, Sugarcane, and Banana."
+    },
+    {
+      "district_name": "Narmada",
+      "aliases": ["narmada", "rajpipla", "dediapada", "sagbara", "tilakwada", "nandod"],
+      "center_lat": 21.8787,
+      "center_lon": 73.4934,
+      "agro_climatic_zone_name": "South Gujarat Tribal Hilly Zone",
+      "soil_type": "Deep Black Alluvial to Red Laterite Soil",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 1400,
+      "typical_npk": { "N": 120.0, "P": 38.0, "K": 210.0, "pH": 7.2, "EC": 0.5, "OC": 0.60 },
+      "suitable_crops": [
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GR-11 / Gujarat Hybrid Rice-1", "suitability_score": 95, "suitability_reason": "Narmada's high rainfall (1400mm) and deep alluvial soils in river valley provide excellent conditions for paddy.", "expected_yield_per_acre": "22-28 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "High" },
+        { "crop_name": "Sugarcane", "recommended_variety": "Co 86032 / Co 0238", "suitability_score": 92, "suitability_reason": "Sardar Sarovar canal network and fertile soils make Narmada a growing sugarcane zone.", "expected_yield_per_acre": "40-52 Tonnes/Acre", "season_duration": "11-12 Months", "water_requirement": "High" },
+        { "crop_name": "Maize (Corn)", "recommended_variety": "Gujarat Maize-6 / HQPM-1", "suitability_score": 89, "suitability_reason": "Tribal hilly areas of Dediapada and Sagbara grow maize as primary kharif food crop in red laterite soils.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt", "suitability_score": 86, "suitability_reason": "Grown in plains of Tilakwada and Nandod talukas on deep black alluvial soils.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Pigeonpea (Tur)", "recommended_variety": "BDN-2 / GJP-1", "suitability_score": 83, "suitability_reason": "Important tribal-area pulse crop for food security and soil nitrogen fixation.", "expected_yield_per_acre": "7-10 Quintal/Acre", "season_duration": "160-180 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Rajpipla APMC handles Paddy, Cotton, and emerging Sugarcane trade in the Narmada basin."
+    },
+    {
+      "district_name": "Tapi",
+      "aliases": ["tapi", "vyara", "songadh", "uchchhal", "nizar", "valod", "dolvan"],
+      "center_lat": 21.1151,
+      "center_lon": 73.3950,
+      "agro_climatic_zone_name": "South Gujarat Heavy Rainfall Zone",
+      "soil_type": "Deep Black to Red Laterite Soil",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 1200,
+      "typical_npk": { "N": 130.0, "P": 42.0, "K": 225.0, "pH": 7.3, "EC": 0.55, "OC": 0.65 },
+      "suitable_crops": [
+        { "crop_name": "Sugarcane", "recommended_variety": "Co 86032 / Co 0238", "suitability_score": 96, "suitability_reason": "Tapi's deep black soils and 1200mm rainfall in Vyara-Valod belt make it South Gujarat's emerging sugarcane stronghold.", "expected_yield_per_acre": "42-55 Tonnes/Acre", "season_duration": "11-12 Months", "water_requirement": "High" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GR-11", "suitability_score": 93, "suitability_reason": "Dominant kharif crop in Tapi's water-retentive black and laterite soils.", "expected_yield_per_acre": "22-28 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "High" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 89, "suitability_reason": "Grown in deeper-drained plains of Tapi district on medium black soils.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Banana", "recommended_variety": "Grand Naine (G9)", "suitability_score": 86, "suitability_reason": "Warm humid climate and fertile soils support high-density banana plantation.", "expected_yield_per_acre": "28-38 Tonnes/Acre", "season_duration": "11-13 Months", "water_requirement": "High" },
+        { "crop_name": "Maize (Corn)", "recommended_variety": "Gujarat Maize-6 / Pioneer 30V92", "suitability_score": 83, "suitability_reason": "Tribal hilly areas (Songadh/Uchchhal) grow maize as primary kharif cereal on red laterite soil.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Medium" }
+      ],
+      "apmc_insight": "Vyara APMC handles significant Sugarcane, Paddy, and Cotton trade in Tapi district."
+    },
+    {
+      "district_name": "Dahod",
+      "aliases": ["dahod", "dohad", "limkheda", "jhalod", "devgadh baria", "fatehpura", "garbada", "sanjeli"],
+      "center_lat": 22.8350,
+      "center_lon": 74.2530,
+      "agro_climatic_zone_name": "Eastern Gujarat Tribal Hilly Zone",
+      "soil_type": "Red Laterite Loam to Shallow Black Soil",
+      "soil_key": "red loamy",
+      "avg_annual_rainfall_mm": 850,
+      "typical_npk": { "N": 100.0, "P": 30.0, "K": 185.0, "pH": 7.0, "EC": 0.45, "OC": 0.48 },
+      "suitable_crops": [
+        { "crop_name": "Maize (Corn)", "recommended_variety": "Gujarat Maize-6 / HQPM-1 / Pioneer 30V92", "suitability_score": 96, "suitability_reason": "Dahod is Gujarat's top maize district; undulating red laterite terrain and 850mm rainfall provide ideal kharif conditions.", "expected_yield_per_acre": "20-28 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Medium" },
+        { "crop_name": "Soybean", "recommended_variety": "JS-335 / Gujarat Soybean-1", "suitability_score": 92, "suitability_reason": "Major kharif oilseed-pulse crop in Dahod's red laterite soils with good drainage.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "95-110 Days", "water_requirement": "Medium" },
+        { "crop_name": "Pigeonpea (Tur)", "recommended_variety": "BDN-2 / BSMR-853", "suitability_score": 89, "suitability_reason": "Important pulse crop for food security in tribal areas; fixes atmospheric nitrogen in red soils.", "expected_yield_per_acre": "7-10 Quintal/Acre", "season_duration": "160-180 Days", "water_requirement": "Low" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 86, "suitability_reason": "Reliable rabi cereal in Dahod's irrigated alluvial valley pockets.", "expected_yield_per_acre": "16-22 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 83, "suitability_reason": "Grown in deeper-soiled plains of Jhalod and Fatehpura talukas.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" }
+      ],
+      "apmc_insight": "Dahod APMC is Gujarat's primary Maize trading hub; Jhalod market handles Soybean and Tur volumes."
+    },
+    {
+      "district_name": "Jamnagar",
+      "aliases": ["jamnagar", "halar", "lalpur", "jodia", "dhrol", "kalavad", "jodiya", "jamjodhpur"],
+      "center_lat": 22.4707,
+      "center_lon": 70.0577,
+      "agro_climatic_zone_name": "North Saurashtra Zone",
+      "soil_type": "Medium Black Cotton to Coastal Sandy Soil",
+      "soil_key": "black cotton",
+      "avg_annual_rainfall_mm": 550,
+      "typical_npk": { "N": 98.0, "P": 32.0, "K": 195.0, "pH": 8.0, "EC": 0.80, "OC": 0.40 },
+      "suitable_crops": [
+        { "crop_name": "Groundnut", "recommended_variety": "GG-20 / GJG-31", "suitability_score": 95, "suitability_reason": "Jamnagar's medium black soils support large-scale groundnut cultivation across Halar and Lalpur talukas.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "110-120 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 92, "suitability_reason": "Major kharif cash crop in Jamnagar's medium black to sandy loam soils.", "expected_yield_per_acre": "11-15 Quintal/Acre", "season_duration": "150-170 Days", "water_requirement": "Medium" },
+        { "crop_name": "Bajra (Pearl Millet)", "recommended_variety": "GHB-558 / HHB-67", "suitability_score": 88, "suitability_reason": "Drought-tolerant cereal for Jamnagar's semi-arid coastal belt.", "expected_yield_per_acre": "10-14 Quintal/Acre", "season_duration": "75-85 Days", "water_requirement": "Very Low" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 85, "suitability_reason": "Rabi cereal under tube-well irrigation in medium black soils.", "expected_yield_per_acre": "16-22 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cumin (Jeera)", "recommended_variety": "Gujarat Cumin-4", "suitability_score": 82, "suitability_reason": "High-value rabi spice crop in dry winter season of coastal Saurashtra.", "expected_yield_per_acre": "3-5 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Low" }
+      ],
+      "apmc_insight": "Jamnagar APMC trades significant Groundnut, Cotton, and Cumin volumes."
+    },
+    {
+      "district_name": "Kheda",
+      "aliases": ["kheda", "nadiad", "kapadvanj", "thasra", "mahudha", "kathlal", "matar", "galteshwar"],
+      "center_lat": 22.7507,
+      "center_lon": 72.6847,
+      "agro_climatic_zone_name": "Middle Gujarat Zone",
+      "soil_type": "Alluvial Sandy Loam to Black Cotton Soil (Goradu-Kaali Mix)",
+      "soil_key": "alluvial",
+      "avg_annual_rainfall_mm": 800,
+      "typical_npk": { "N": 140.0, "P": 40.0, "K": 210.0, "pH": 7.4, "EC": 0.55, "OC": 0.55 },
+      "suitable_crops": [
+        { "crop_name": "Tobacco", "recommended_variety": "GT-7 / GABT-11 / Abirami", "suitability_score": 95, "suitability_reason": "Kheda (Nadiad/Kapadvanj belt) is Gujarat's premier bidi tobacco zone; goradu alluvial soil produces finest leaf quality.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "130-150 Days", "water_requirement": "Medium" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GAR-13", "suitability_score": 93, "suitability_reason": "Kheda's Mahi canal irrigation and fertile alluvial soils support high-yielding paddy cultivation.", "expected_yield_per_acre": "22-28 Quintal/Acre", "season_duration": "120-130 Days", "water_requirement": "High" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / GW-496 / Lok-1", "suitability_score": 90, "suitability_reason": "Major rabi cereal in irrigated alluvial fields following kharif paddy.", "expected_yield_per_acre": "20-26 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Banana", "recommended_variety": "Grand Naine (G9)", "suitability_score": 87, "suitability_reason": "High-value horticulture crop under drip irrigation in fertile alluvial plains.", "expected_yield_per_acre": "28-38 Tonnes/Acre", "season_duration": "11-13 Months", "water_requirement": "High" },
+        { "crop_name": "Potato", "recommended_variety": "Kufri Pukhraj / Kufri Jyoti", "suitability_score": 84, "suitability_reason": "Friable goradu loam soil supports winter rabi potato cultivation.", "expected_yield_per_acre": "80-110 Quintal/Acre", "season_duration": "85-95 Days", "water_requirement": "Medium" }
+      ],
+      "apmc_insight": "Nadiad APMC is Gujarat's leading Tobacco trading market; Kapadvanj APMC handles Paddy and Wheat."
+    },
+    {
+      "district_name": "Panchmahal",
+      "aliases": ["panchmahal", "godhra", "halol", "kalol_panchmahal", "shahera", "morva_hadaf", "lunawada"],
+      "center_lat": 22.7506,
+      "center_lon": 73.6166,
+      "agro_climatic_zone_name": "Eastern Gujarat Zone",
+      "soil_type": "Red Loam to Medium Black Soil",
+      "soil_key": "red loamy",
+      "avg_annual_rainfall_mm": 880,
+      "typical_npk": { "N": 105.0, "P": 32.0, "K": 190.0, "pH": 7.2, "EC": 0.48, "OC": 0.50 },
+      "suitable_crops": [
+        { "crop_name": "Maize (Corn)", "recommended_variety": "Gujarat Maize-6 / HQPM-1", "suitability_score": 95, "suitability_reason": "Panchmahal's red loam soils and undulating terrain are well-suited for high-yielding kharif maize.", "expected_yield_per_acre": "20-28 Quintal/Acre", "season_duration": "90-100 Days", "water_requirement": "Medium" },
+        { "crop_name": "Cotton", "recommended_variety": "G.Cot-20 / BG-II Bt Cotton", "suitability_score": 91, "suitability_reason": "Grown in medium black soiled plains of Godhra and Halol talukas.", "expected_yield_per_acre": "12-16 Quintal/Acre", "season_duration": "150-165 Days", "water_requirement": "Medium" },
+        { "crop_name": "Paddy (Rice)", "recommended_variety": "Gurjari / GAR-13", "suitability_score": 88, "suitability_reason": "Grown in lowland fields with canal and well irrigation in eastern Panchmahal.", "expected_yield_per_acre": "18-24 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "High" },
+        { "crop_name": "Wheat", "recommended_variety": "GW-322 / Lok-1", "suitability_score": 85, "suitability_reason": "Important rabi cereal in irrigated valley fields.", "expected_yield_per_acre": "17-23 Quintal/Acre", "season_duration": "115-125 Days", "water_requirement": "Medium" },
+        { "crop_name": "Soybean", "recommended_variety": "JS-335 / Gujarat Soybean-1", "suitability_score": 82, "suitability_reason": "Emerging kharif oilseed-pulse crop in Panchmahal's red loam soils.", "expected_yield_per_acre": "8-12 Quintal/Acre", "season_duration": "95-110 Days", "water_requirement": "Medium" }
+      ],
+      "apmc_insight": "Godhra APMC trades Maize, Cotton, and Paddy; Halol market handles industrial and agricultural commodity mix."
     }
   ]
 }
