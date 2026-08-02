@@ -17,7 +17,13 @@ const TRANSLATIONS = {
     scanner_title: "🏷️ AI Label Scanner", scanner_sub: "Powered by Gemini Vision AI — Take a photo of any pesticide, fertilizer, or seed package",
     take_photo: "📷 Take Photo of Product", capture_sub: "Capture the label, bag, or bottle", type_product: "Or type product name (e.g. Urea, Chlorpyrifos, Ferterra)",
     analyze_btn: "🔍 Analyze Product", confidence: "Confidence", brand: "Manufacturer / Brand", active: "Active Ingredient", dosage: "Dosage / Directions",
-    crop_title: "🌱 AI Crop Recommender", crop_sub: "Random Forest ML model trained on 2,200 soil-climate profiles", predict_btn: "🌱 Predict Suitable Crops",
+    crop_title: "🌱 AI Crop Recommender", crop_sub: "4-Layer Context Fusion: Location + Soil Type + NPK Deficits + 3-Month Weather", predict_btn: "🌱 Predict Suitable Crops",
+    target_region: "📍 Target Region:", soil_type_label: "Soil Type & Texture:",
+    nitrogen: "Nitrogen (N) kg/ha", phosphorus: "Phosphorus (P) kg/ha", potassium: "Potassium (K) kg/ha", ph: "Soil pH Level",
+    npk_autofill_placeholder: "Auto-filled from zone data",
+    ai_plan_title: "🤖 Geographical AI Agronomic Action Plan",
+    rec_crops_title: "🌾 Recommended Crops & Varieties:",
+    variety_label: "🌱 Variety:", duration_label: "⏱️ Duration:", yield_label: "📈 Expected Yield:", match_label: "Match",
     water_req: "Water Requirement", season: "Optimal Season", tips: "Agricultural Tip", profile_title: "👨‍🌾 Farmer Profile & Settings", save_profile: "💾 Save Profile",
     auth_welcome: "Farmer Login", auth_create: "Create Farmer Account",
     auth_phone: "Mobile Number (10 Digits)", auth_phone_confirm: "Re-type Mobile Number", auth_pass: "Password",
@@ -33,7 +39,13 @@ const TRANSLATIONS = {
     scanner_title: "🏷️ એઆઈ દવા અને ખાતર સ્કેનર", scanner_sub: "જેમિનાઈ વિઝન એઆઈ — જંતુનાશક દવા, ખાતર કે બિયારણનો ફોટો પાડી વિગતો મેળવો",
     take_photo: "📷 દવા કે ખાતરના થેલાનો ફોટો લો", capture_sub: "બોટલ, થેલી કે લેબલનો ફોટો પાડો", type_product: "અથવા દવાનું નામ લખો (દા.ત. ફેર્ટેરા, યુરિયા, કોરાજન)",
     analyze_btn: "🔍 દવા વિશ્લેષણ કરો", confidence: "ચોકસાઈ", brand: "ઉત્પાદક / બ્રાન્ડ", active: "સક્રિય રાસાયણિક ઘટક", dosage: "છંટકાવ / વાવણીનો સાચો ડોઝ",
-    crop_title: "🌱 એઆઈ જમીન-હવામાન પાક ભલામણ", crop_sub: "ગુજરાતના ૨૬ જિલ્લાઓ અને જમીન ડેટા આધારિત ભલામણ", predict_btn: "🌱 ખેતર માટે યોગ્ય પાક જુઓ",
+    crop_title: "🌱 એઆઈ જમીન-હવામાન પાક ભલામણ", crop_sub: "જિલ્લા અને જમીનના આધારિત ચોક્કસ પાક ભલામણ મોડેલ", predict_btn: "🌱 ખેતર માટે યોગ્ય પાક જુઓ",
+    target_region: "📍 લક્ષ્ય વિસ્તાર / જિલ્લો:", soil_type_label: "જમીનનો પ્રકાર અને બંધારણ:",
+    nitrogen: "નાઇટ્રોજન (N) કિલો/હેક્ટર", phosphorus: "ફોસ્ફરસ (P) કિલો/હેક્ટર", potassium: "પોટાશ (K) કિલો/હેક્ટર", ph: "જમીન પી.એચ. (pH) સ્તર",
+    npk_autofill_placeholder: "ઝોન ડેટા પરથી સ્વચાલિત મેળવેલ",
+    ai_plan_title: "🤖 એઆઈ જમીન-હવામાન પાક યોજના અને માર્ગદર્શન",
+    rec_crops_title: "🌾 ભલામણ કરેલ પાક અને બિયારણ જાતો:",
+    variety_label: "🌱 જાત / બિયારણ:", duration_label: "⏱️ પાકનો સમયગાળો:", yield_label: "📈 અંદાજિત ઉત્પાદન:", match_label: "મેળ",
     water_req: "પાણીની જરૂરિયાત", season: "વાવણીની ઋતુ", tips: "ખેતી સલાહ", profile_title: "👨‍🌾 ખેડૂત પ્રોફાઇલ અને માહિતી", save_profile: "💾 વિગતો સાચવો",
     auth_welcome: "ખેડૂત લોગિન", auth_create: "નવું ખેડૂત ખાતું બનાવો",
     auth_phone: "૧૦-અંકનો મોબાઈલ નંબર", auth_phone_confirm: "મોબાઈલ નંબર ફરીથી લખો", auth_pass: "ગુપ્ત પાસવર્ડ",
@@ -50,6 +62,12 @@ const TRANSLATIONS = {
     take_photo: "📷 उत्पाद लेबल का फोटो लें", capture_sub: "बोतल, पैकेट या बैग का फोटो लें", type_product: "या उत्पाद का नाम लिखें (जैसे यूरिया, फेरटेरा, कोराजन)",
     analyze_btn: "🔍 विश्लेषण करें", confidence: "सटीकता", brand: "निर्माता / ब्रांड", active: "सक्रिय रासायनिक घटक", dosage: "छिड़काव / खुराक का प्रमाण",
     crop_title: "🌱 एआई फसल सिफारिश", crop_sub: "मृदा और जलवायु डेटा पर आधारित सटीक सिफारिश", predict_btn: "🌱 उपयुक्त फसलों की सिफारिश देखें",
+    target_region: "📍 लक्ष्य क्षेत्र / जिला:", soil_type_label: "मृदा प्रकार एवं बनावट:",
+    nitrogen: "नाइट्रोजन (N) किग्रा/हेक्टेयर", phosphorus: "फास्फोरस (P) किग्रा/हेक्टेयर", potassium: "पोटेशियम (K) किग्रा/हेक्टेयर", ph: "मृदा पीएच (pH) स्तर",
+    npk_autofill_placeholder: "ज़ोन डेटा से ऑटो-फिल",
+    ai_plan_title: "🤖 भौगोलिक एआई कृषि कार्य योजना",
+    rec_crops_title: "🌾 अनुशंसित फसलें एवं किस्म:",
+    variety_label: "🌱 किस्म / बीज:", duration_label: "⏱️ फसल की अवधि:", yield_label: "📈 अनुमानित उपज:", match_label: "सटीकता",
     water_req: "पानी की आवश्यकता", season: "बुआई का मौसम", tips: "कृषि सलाह", profile_title: "👨‍🌾 किसान प्रोफ़ाइल", save_profile: "💾 विवरण सहेजें",
     auth_welcome: "किसान लॉगिन", auth_create: "नया किसान खाता बनाएं",
     auth_phone: "10-अंकों का मोबाइल नंबर", auth_phone_confirm: "मोबाइल नंबर पुनः दर्ज करें", auth_pass: "पासवर्ड",
@@ -665,22 +683,22 @@ export default function App() {
         {activeTab === 'recommend' && (
           <View style={styles.card}>
             <Text style={styles.cardTitle}>{t('crop_title', lang)}</Text>
-            <Text style={styles.cardSub}>4-Layer Context Fusion: Location + Soil Type + NPK Deficits + 3-Month Weather</Text>
+            <Text style={styles.cardSub}>{t('crop_sub', lang)}</Text>
 
             {/* Target Region Badge */}
             <View style={{ backgroundColor: '#eef7f2', padding: 8, borderRadius: 6, marginBottom: 12, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 12, color: '#1b4332', fontWeight: 'bold' }}>📍 Target Region: {weatherLocation}</Text>
+              <Text style={{ fontSize: 12, color: '#1b4332', fontWeight: 'bold' }}>{t('target_region', lang)} {weatherLocation}</Text>
             </View>
 
             {/* Soil Type Pills */}
-            <Text style={styles.label}>Soil Type & Texture:</Text>
+            <Text style={styles.label}>{t('soil_type_label', lang)}</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginVertical: 6 }}>
               {[
-                { id: 'Auto-Detect', label: '✨ Auto-Detect' },
-                { id: 'Black Cotton Soil (કાળી જમીન)', label: '⚫ Black Cotton' },
-                { id: 'Sandy Loam Soil (રેતાળ જમીન)', label: '🏖️ Sandy Loam' },
-                { id: 'Alluvial Soil (કાંપ જમીન)', label: '🏞️ Alluvial' },
-                { id: 'Red Clay Soil (લાલ જમીન)', label: '🔴 Red Clay' }
+                { id: 'Auto-Detect', label: lang === 'gu' ? '✨ સ્વચાલિત ઓળખ' : lang === 'hi' ? '✨ ऑटो-डिटेक्ट' : '✨ Auto-Detect' },
+                { id: 'Black Cotton Soil (કાળી જમીન)', label: lang === 'gu' ? '⚫ કાળી જમીન' : lang === 'hi' ? '⚫ काली मिट्टी' : '⚫ Black Cotton' },
+                { id: 'Sandy Loam Soil (રેતાળ જમીન)', label: lang === 'gu' ? '🏖️ રેતાળ ગોરાડુ' : lang === 'hi' ? '🏖️ रेतीली दोमट' : '🏖️ Sandy Loam' },
+                { id: 'Alluvial Soil (કાંપ જમીન)', label: lang === 'gu' ? '🏞️ કાંપવાળી જમીન' : lang === 'hi' ? '🏞️ जलोढ़ मिट्टी' : '🏞️ Alluvial' },
+                { id: 'Red Clay Soil (લાલ જમીન)', label: lang === 'gu' ? '🔴 લાલ ચીકણી જમીન' : lang === 'hi' ? '🔴 लाल मिट्टी' : '🔴 Red Clay' }
               ].map((st) => (
                 <TouchableOpacity key={st.id}
                   style={[styles.methodBadge, { marginRight: 6, backgroundColor: selectedSoilType === st.id ? '#1b4332' : '#e5e7eb' }]}
@@ -692,21 +710,27 @@ export default function App() {
               ))}
             </ScrollView>
 
-            <Text style={styles.label}>Nitrogen (N) kg/ha</Text>
-            <TextInput style={styles.input} value={nVal} onChangeText={setNVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
-            <Text style={styles.label}>Phosphorus (P) kg/ha</Text>
-            <TextInput style={styles.input} value={pVal} onChangeText={setPVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
-            <Text style={styles.label}>Potassium (K) kg/ha</Text>
-            <TextInput style={styles.input} value={kVal} onChangeText={setKVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
-            <Text style={styles.label}>Soil pH Level</Text>
-            <TextInput style={styles.input} value={phVal} onChangeText={setPhVal} keyboardType="numeric" placeholder="Auto-filled from zone" />
+            <Text style={styles.label}>{t('nitrogen', lang)}</Text>
+            <TextInput style={styles.input} value={nVal} onChangeText={setNVal} keyboardType="numeric" placeholder={t('npk_autofill_placeholder', lang)} />
+            <Text style={styles.label}>{t('phosphorus', lang)}</Text>
+            <TextInput style={styles.input} value={pVal} onChangeText={setPVal} keyboardType="numeric" placeholder={t('npk_autofill_placeholder', lang)} />
+            <Text style={styles.label}>{t('potassium', lang)}</Text>
+            <TextInput style={styles.input} value={kVal} onChangeText={setKVal} keyboardType="numeric" placeholder={t('npk_autofill_placeholder', lang)} />
+            <Text style={styles.label}>{t('ph', lang)}</Text>
+            <TextInput style={styles.input} value={phVal} onChangeText={setPhVal} keyboardType="numeric" placeholder={t('npk_autofill_placeholder', lang)} />
 
             {/* Zone Info Badge */}
             {zoneInfo && zoneInfo.district ? (
               <View style={{ backgroundColor: '#ecfdf5', borderWidth: 1, borderColor: '#6ee7b7', padding: 10, borderRadius: 8, marginBottom: 12 }}>
-                <Text style={{ fontSize: 11, color: '#065f46', fontWeight: 'bold' }}>📍 Auto-filled from {zoneInfo.district} District zone data</Text>
-                <Text style={{ fontSize: 10, color: '#047857', marginTop: 2 }}>Zone: {zoneInfo.zone} | Soil: {zoneInfo.soil_type}{zoneInfo.geo_distance_km ? ` | ~${zoneInfo.geo_distance_km}km to center` : ''}</Text>
-                <Text style={{ fontSize: 9, color: '#6b7280', marginTop: 2 }}>ℹ️ NPK & pH values are zone baselines — override with your soil test report if available</Text>
+                <Text style={{ fontSize: 11, color: '#065f46', fontWeight: 'bold' }}>
+                  {lang === 'gu' ? `📍 ${zoneInfo.district} જિલ્લાના ઝોન ડેટા પરથી સ્વચાલિત મેળવેલ` : lang === 'hi' ? `📍 ${zoneInfo.district} जिले के ज़ोन डेटा से ऑटो-फिल` : `📍 Auto-filled from ${zoneInfo.district} District zone data`}
+                </Text>
+                <Text style={{ fontSize: 10, color: '#047857', marginTop: 2 }}>
+                  {lang === 'gu' ? `ઝોન: ${zoneInfo.zone} | જમીન: ${zoneInfo.soil_type}` : `Zone: ${zoneInfo.zone} | Soil: ${zoneInfo.soil_type}`}
+                </Text>
+                <Text style={{ fontSize: 9, color: '#6b7280', marginTop: 2 }}>
+                  {lang === 'gu' ? 'ℹ️ આ જમીન ક્ષેત્રના સ્ટાન્ડર્ડ મૂલ્યો છે — તમારી પાસે સોઇલ રિપોર્ટ હોય તો બદલી શકો છો' : 'ℹ️ NPK & pH values are zone baselines — override with your soil test report if available'}
+                </Text>
               </View>
             ) : null}
 
@@ -719,32 +743,32 @@ export default function App() {
               <View style={{ marginTop: 16 }}>
                 <View style={{ backgroundColor: '#7c3aed', padding: 10, borderRadius: 8, marginBottom: 12 }}>
                   <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>
-                    🤖 Geographical AI Agronomic Action Plan
+                    {t('ai_plan_title', lang)}
                   </Text>
                   <Text style={{ color: '#e9d5ff', fontSize: 11, marginTop: 2 }}>
-                    Zone: {aiPlanResult.agro_climatic_zone || 'Middle Gujarat Zone'} | Soil: {aiPlanResult.detected_soil_type}
+                    {lang === 'gu' ? `ઝોન: ${aiPlanResult.agro_climatic_zone || 'મધ્ય ગુજરાત ઝોન'} | જમીન: ${aiPlanResult.detected_soil_type}` : `Zone: ${aiPlanResult.agro_climatic_zone || 'Middle Gujarat Zone'} | Soil: ${aiPlanResult.detected_soil_type}`}
                   </Text>
                 </View>
 
                 {/* Recommended Crops */}
-                <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#1b4332', marginBottom: 8 }}>🌾 Recommended Crops & Varieties:</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#1b4332', marginBottom: 8 }}>{t('rec_crops_title', lang)}</Text>
                 {aiPlanResult.recommended_crops?.map((crop, idx) => (
                   <View key={idx} style={styles.recBox}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Text style={styles.recName}>{idx + 1}. {crop.crop_name}</Text>
                       <View style={[styles.methodBadge, { backgroundColor: '#1b4332' }]}>
-                        <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold' }}>{crop.suitability_score}% Match</Text>
+                        <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold' }}>{crop.suitability_score}% {t('match_label', lang)}</Text>
                       </View>
                     </View>
                     {crop.recommended_variety && (
                       <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#2563eb', marginTop: 2 }}>
-                        🌱 Variety: {crop.recommended_variety}
+                        {t('variety_label', lang)} {crop.recommended_variety}
                       </Text>
                     )}
                     <Text style={styles.recTips}>💡 {crop.suitability_reason}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 }}>
-                      <Text style={{ fontSize: 11, color: '#4b5563' }}>⏱️ Duration: {crop.season_duration}</Text>
-                      <Text style={{ fontSize: 11, color: '#059669', fontWeight: 'bold' }}>📈 Yield: {crop.expected_yield_per_acre}</Text>
+                      <Text style={{ fontSize: 11, color: '#4b5563' }}>{t('duration_label', lang)} {crop.season_duration}</Text>
+                      <Text style={{ fontSize: 11, color: '#059669', fontWeight: 'bold' }}>{t('yield_label', lang)} {crop.expected_yield_per_acre}</Text>
                     </View>
                   </View>
                 ))}

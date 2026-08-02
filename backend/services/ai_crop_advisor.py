@@ -272,6 +272,7 @@ Output ONLY a JSON object with this exact structure:
 
 CRITICAL: Return ONLY raw JSON. recommended_crops MUST contain exactly 5 crops."""
 
+    result = None
     if api_key and HAS_GEMINI:
         try:
             client = genai.Client(api_key=api_key)
@@ -301,18 +302,20 @@ CRITICAL: Return ONLY raw JSON. recommended_crops MUST contain exactly 5 crops."
                             # Validate Region Isolation Guard
                             is_valid, bad_kw, bad_field = validate_region_isolation(parsed, location_name)
                             if is_valid or attempt == 1:
-                                return parsed
-                            else:
-                                print(f"[VALIDATION GUARD] Retrying LLM generation (Attempt {attempt+1}) due to '{bad_kw}' in '{bad_field}'...")
-                                break  # Break model loop to retry attempt 1
+                                result = parsed
+                                break
                     except Exception as e:
                         print(f"Gemini generation error ({model_name}): {e}")
                         continue
         except Exception as global_err:
             print(f"Global Gemini advisor error: {global_err}")
 
-    # Fallback to rule-based system if Gemini unavailable
-    return _build_smart_fallback(location_name, soil_type, N, P, K, ph, temperature, rainfall, lang, regional_crops)
+    # Fallback to rule-based system if Gemini unavailable or failed
+    if not result:
+        result = _build_smart_fallback(location_name, soil_type, N, P, K, ph, temperature, rainfall, lang, regional_crops)
+
+    # Post-process translate crop names and durations into Gujarati / Hindi
+    return translate_advice_to_lang(result, lang)
 
 
 def _build_smart_fallback(
