@@ -52,73 +52,88 @@ def verify_token(token: str) -> Optional[Dict[str, Any]]:
     except Exception:
         return None
 
+import re
+
 def register_user(username: str, password: str) -> Dict[str, Any]:
-    """Register a new user. Returns user info + auth token."""
-    if not username or len(username) < 3:
-        return {"error": "Username must be at least 3 characters"}
+    """Register a new user using a 10-digit Indian Mobile Number. Returns user info + auth token."""
+    # Clean phone input (remove spaces, hyphens, +91 prefix)
+    phone_clean = re.sub(r'\D', '', username or '')
+    if phone_clean.startswith('91') and len(phone_clean) == 12:
+        phone_clean = phone_clean[2:]
+
+    if not phone_clean or len(phone_clean) != 10 or not re.match(r'^[6-9]\d{9}$', phone_clean):
+        return {"error": "Please enter a valid 10-digit Indian mobile number (e.g. 9876543210)"}
     if not password or len(password) < 4:
         return {"error": "Password must be at least 4 characters"}
 
     conn = sqlite3.connect(get_db_path())
     cursor = conn.cursor()
 
-    # Check if username already exists
-    cursor.execute('SELECT id FROM users WHERE username = ?', (username.lower().strip(),))
+    # Check if phone number already exists
+    cursor.execute('SELECT id FROM users WHERE username = ?', (phone_clean,))
     if cursor.fetchone():
         conn.close()
-        return {"error": "Username already taken"}
+        return {"error": "An account with this mobile number already exists. Please login."}
 
     pw_hash, salt = _hash_password(password)
     cursor.execute(
         'INSERT INTO users (username, password_hash, password_salt) VALUES (?, ?, ?)',
-        (username.lower().strip(), pw_hash, salt)
+        (phone_clean, pw_hash, salt)
     )
     user_id = cursor.lastrowid
 
     # Auto-create a farmer profile for this user
     cursor.execute('''
         INSERT INTO farmers (user_id, name, phone, location, latitude, longitude, soil_type, N, P, K, pH, EC, OC, preferred_language)
-        VALUES (?, ?, '', '', 22.57, 72.93, 'Loamy Soil', 180.0, 42.0, 160.0, 7.2, 0.65, 0.52, 'en')
-    ''', (user_id, username.strip()))
+        VALUES (?, ?, ?, '', 22.57, 72.93, 'Loamy Soil', 180.0, 42.0, 160.0, 7.2, 0.65, 0.52, 'gu')
+    ''', (user_id, f"Farmer ({phone_clean[-4:]})", phone_clean))
 
     conn.commit()
     conn.close()
 
-    token = _generate_token(user_id, username.lower().strip())
+    token = _generate_token(user_id, phone_clean)
     return {
         "success": True,
         "user_id": user_id,
-        "username": username.lower().strip(),
+        "username": phone_clean,
+        "phone": phone_clean,
         "token": token,
         "message": "Account created successfully!"
     }
 
 def login_user(username: str, password: str) -> Dict[str, Any]:
-    """Authenticate a user. Returns user info + auth token."""
-    if not username or not password:
-        return {"error": "Username and password are required"}
+    """Authenticate a user using Mobile Number & Password."""
+    phone_clean = re.sub(r'\D', '', username or '')
+    if phone_clean.startswith('91') and len(phone_clean) == 12:
+        phone_clean = phone_clean[2:]
+
+    if not phone_clean or len(phone_clean) != 10:
+        return {"error": "Please enter your 10-digit registered mobile number"}
+    if not password:
+        return {"error": "Password is required"}
 
     conn = sqlite3.connect(get_db_path())
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE username = ?', (username.lower().strip(),))
+    cursor.execute('SELECT * FROM users WHERE username = ?', (phone_clean,))
     row = cursor.fetchone()
     conn.close()
 
     if not row:
-        return {"error": "Invalid username or password"}
+        return {"error": "No account found with this mobile number. Please register first."}
 
     user = dict(row)
     pw_hash, _ = _hash_password(password, user['password_salt'])
 
     if pw_hash != user['password_hash']:
-        return {"error": "Invalid username or password"}
+        return {"error": "Incorrect password. Please try again."}
 
     token = _generate_token(user['id'], user['username'])
     return {
         "success": True,
         "user_id": user['id'],
         "username": user['username'],
+        "phone": user['username'],
         "token": token,
         "message": "Login successful!"
     }

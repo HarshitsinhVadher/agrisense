@@ -208,30 +208,32 @@ def _analyze_with_gemini_vision(api_key: str, image_bytes: bytes, products: list
     product_names = [p.get('name', '') for p in products] if products else []
     product_list_str = ", ".join(product_names[:30]) if product_names else "No local database available"
 
-    prompt = f"""You are AgriSense AI, an expert agricultural inputs, pesticide, fertilizer, seed, and chemical label identification system.
+    prompt = f"""You are AgriSense AI, a world-class agricultural input expert and visual product identification system.
 
-Analyze the provided label photo carefully and extract structured information into a single JSON object with these EXACT fields:
+Analyze the provided photo of an agricultural input product (pesticide, insecticide, fungicide, herbicide, fertilizer, or seed package) and extract structured information into a single JSON object.
 
+CRITICAL VISION & DOMAIN KNOWLEDGE INSTRUCTIONS:
+1. FRONT PACKAGING & BRAND RECOGNITION:
+   - If the photo shows a FRONT PRODUCT BAG, BOTTLE, PACKET, OR CANISTER (e.g., displaying brand logos like FMC, Bayer, Syngenta, UPL, IFFCO, Tata Rallis, Crystal, Dhanuka, or product names like 'Ferterra', 'Coragen', 'Virtako', 'Nativo', 'Saaf', 'Urea', 'DAP'), USE YOUR AGRICULTURAL DOMAIN KNOWLEDGE to identify the exact commercial product.
+   - Even if the fine-print chemical breakdown table on the back label is not visible in the photo, DO NOT return null if the product brand name or logo (e.g. FMC Ferterra, Rynaxypyr, FMC Coragen) is visible. Provide the known active chemical (e.g., Chlorantraniliprole 0.4% GR for Ferterra, Chlorantraniliprole 18.5% SC for Coragen), formulation type (e.g., GR, SC, EC, WP), standard dosage per acre (e.g., 4 kg/acre for Ferterra), and key target crops/pests based on your agricultural knowledge base.
+
+2. STRUCTURED OUTPUT FIELDS:
+Return a single JSON object with these EXACT keys:
 {{
-    "product_name": "Full trade / brand product name as written on label or null if unreadable",
-    "manufacturer": "Company / Manufacturer / Brand Name (e.g. Bayer, Syngenta, IFFCO, Tata Rallis) or null",
-    "active_ingredient": "Active ingredient chemical name WITH percentage concentration (e.g. Chlorpyrifos 20% EC, Imidacloprid 17.8% SL, NPK 19:19:19) or null",
-    "formulation_type": "Formulation type code (e.g. SC, EC, WP, WDG, SL, GR, SP, DP, Liquid, Powder, Granules) or null",
-    "dosage_per_acre": "Recommended application dosage per acre (e.g. 250 ml/acre, 50 kg/acre) or null",
-    "dosage_per_liter_water": "Recommended dilution ratio per liter of water (e.g. 2 ml/L water, 1.5 g/L) or null",
-    "target_pests_or_crops": ["List of target crops, insects, weeds, fungi, or diseases listed on label"],
-    "confidence_score": 88,
+    "product_name": "Full trade / product brand name (e.g. FMC Ferterra Insecticide)",
+    "manufacturer": "Company / Manufacturer / Brand (e.g. FMC India / FMC Corporation)",
+    "active_ingredient": "Active chemical ingredient WITH percentage concentration (e.g. Chlorantraniliprole 0.4% GR / Rynaxypyr active)",
+    "formulation_type": "Formulation type code (e.g. GR, SC, EC, WP, WDG, SL, Granules, Liquid, Powder)",
+    "dosage_per_acre": "Recommended application dosage per acre (e.g. 4 kg/acre for Ferterra in Paddy)",
+    "dosage_per_liter_water": "Recommended dilution ratio per liter of water if applicable or null for soil granules",
+    "target_pests_or_crops": ["Paddy (Rice)", "Sugarcane", "Stem Borer", "Leaf Folder", "Early Shoot Borer"],
+    "confidence_score": 92,
     "unreadable_reason": null,
-    "identification_notes": "Step-by-step visual notes explaining how you identified this product (logos, text, bottle shape, label colors)"
+    "identification_notes": "Identified FMC Ferterra 4kg bag with Rynaxypyr active badge. Inferred Chlorantraniliprole 0.4% GR formulation."
 }}
 
-Known products in our local database for cross-reference: {product_list_str}
-
-INSTRUCTIONS:
-1. ACCURACY & PARTIAL LABELS: If the label image is unclear or partially cut off, extract whatever text is legible and mark confidence_score accordingly (e.g., 40-70%) instead of returning empty fields.
-2. UNREADABLE IMAGES FALLBACK: If no readable text is found at all, return a JSON with all text fields set to null, confidence_score set to 0, and unreadable_reason explaining why (e.g. "Image too blurry", "Excessive glare on plastic bottle", "Angle obscures text", "Low resolution photo"), instead of returning a generic error.
-3. CONCENTRATION & FORMULATION: Always capture percentage concentration in active_ingredient (e.g., 5% SC, 50% WP) and specify formulation_type if present.
-4. Output ONLY the raw JSON object. No markdown formatting, no extra explanation."""
+3. OUTPUT FORMAT:
+Output ONLY the raw JSON object. No markdown code blocks (unless inside JSON string), no commentary."""
 
     models_to_try = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
     response = None

@@ -11,39 +11,51 @@ const API_BASE_URL = 'https://agrisense-00qs.onrender.com';
 const TRANSLATIONS = {
   en: {
     app_title: "AgriSense", subtitle: "AI-Powered Farming Assistant",
-    tab_weather: "Weather", tab_recommend: "Crop AI", tab_soil: "Soil Card", tab_scan: "Label Scanner", tab_profile: "Profile",
+    tab_weather: "Weather", tab_recommend: "Crop AI", tab_scan: "Label Scanner", tab_profile: "Profile",
     weather_title: "Weather & 3-Month Forecast", set_location: "📍 Set Location", use_gps: "📍 Use My GPS Location", search_city: "Or search a city:",
     advisories_title: "📢 Agricultural Advisories", seasonal_title: "🗓️ 3-Month Seasonal Forecast", forecast_7day: "📅 7-Day Weather Forecast",
-    soil_title: "📄 Soil Health Card Reader", capture_soil: "📸 Capture Soil Health Card", extracted_params: "Extracted Soil Parameters",
     scanner_title: "🏷️ AI Label Scanner", scanner_sub: "Powered by Gemini Vision AI — Take a photo of any pesticide, fertilizer, or seed package",
-    take_photo: "📷 Take Photo of Product", capture_sub: "Capture the label, bag, or bottle", type_product: "Or type product name (e.g. Urea, Chlorpyrifos)",
+    take_photo: "📷 Take Photo of Product", capture_sub: "Capture the label, bag, or bottle", type_product: "Or type product name (e.g. Urea, Chlorpyrifos, Ferterra)",
     analyze_btn: "🔍 Analyze Product", confidence: "Confidence", brand: "Manufacturer / Brand", active: "Active Ingredient", dosage: "Dosage / Directions",
     crop_title: "🌱 AI Crop Recommender", crop_sub: "Random Forest ML model trained on 2,200 soil-climate profiles", predict_btn: "🌱 Predict Suitable Crops",
-    water_req: "Water Requirement", season: "Optimal Season", tips: "Agricultural Tip", profile_title: "👨‍🌾 Farmer Profile & Settings", save_profile: "💾 Save Profile"
+    water_req: "Water Requirement", season: "Optimal Season", tips: "Agricultural Tip", profile_title: "👨‍🌾 Farmer Profile & Settings", save_profile: "💾 Save Profile",
+    auth_welcome: "Farmer Login", auth_create: "Create Farmer Account",
+    auth_phone: "Mobile Number (10 Digits)", auth_phone_confirm: "Re-type Mobile Number", auth_pass: "Password",
+    phone_placeholder: "Enter 10-digit mobile number", confirm_placeholder: "Re-enter 10-digit mobile number",
+    btn_login: "🔓 Login", btn_register: "📝 Register Account",
+    switch_to_reg: "Don't have an account? Register here", switch_to_login: "Already have an account? Login here"
   },
   gu: {
-    app_title: "એગ્રીસેન્સ", subtitle: "એઆઈ આધારિત ખેતી સહાયક",
-    tab_weather: "હવામાન", tab_recommend: "પાક ભલામણ", tab_soil: "જમીન કાર્ડ", tab_scan: "લેબલ સ્કેનર", tab_profile: "પ્રોફાઇલ",
-    weather_title: "હવામાન અને ૩-મહિનાનું અનુમાન", set_location: "📍 સ્થળ પસંદ કરો", use_gps: "📍 મારૂં જીપીએસ સ્થળ વાપરો", search_city: "અથવા શહેર શોધો:",
-    advisories_title: "📢 ખેતીવાડી સલાહ", seasonal_title: "🗓️ ૩-મહિનાનું મોસમી અનુમાન", forecast_7day: "📅 ૭-દિવસનું હવામાન અનુમાન",
-    soil_title: "📄 સોઇલ હેલ્થ કાર્ડ રીડર", capture_soil: "📸 સોઇલ કાર્ડનો ફોટો પાડો", extracted_params: "મેળવેલ જમીન ઘટકો",
-    scanner_title: "🏷️ એઆઈ લેબલ સ્કેનર", scanner_sub: "જેમિનાઈ એઆઈ વિઝન દ્વારા — દવા, ખાતર કે બિયારણનો ફોટો પાડો",
-    take_photo: "📷 દવા/ખાતરના લેબલનો ફોટો પાડો", capture_sub: "બેગ, બોટલ કે લેબલનો ફોટો લો", type_product: "અથવા દવાનું નામ લખો (દા.ત. યુરિયા, કપાસ)",
-    analyze_btn: "🔍 લેબલ વિશ્લેષણ કરો", confidence: "ચોકસાઈ", brand: "ઉત્પાદક / બ્રાન્ડ", active: "સક્રિય ઘટક", dosage: "છંટકાવ / વાવણી પ્રમાણ",
-    crop_title: "🌱 એઆઈ પાક પસંદગી ભલામણ", crop_sub: "૨,૨૦૦ જમીન-હવામાન ડેટા આધારિત મોડેલ", predict_btn: "🌱 યોગ્ય પાકની ભલામણ મેળવો",
-    water_req: "પાણીની જરૂરિયાત", season: "યોગ્ય ઋતુ", tips: "ખેતી સલાહ", profile_title: "👨‍🌾 ખેડૂત પ્રોફાઇલ અને સેટિંગ્સ", save_profile: "💾 પ્રોફાઇલ સાચવો"
+    app_title: "એગ્રીસેન્સ", subtitle: "એઆઈ આધારિત ડિજિટલ ખેડૂત સહાયક",
+    tab_weather: "હવામાન", tab_recommend: "પાક પસંદગી", tab_scan: "દવા સ્કેનર", tab_profile: "પ્રોફાઇલ",
+    weather_title: "હવામાન અને ૩-મહિનાનું મોસમી અનુમાન", set_location: "📍 ગામ / સ્થળ પસંદ કરો", use_gps: "📍 જીપીએસ દ્વારા મારું ખેતર શોધો", search_city: "અથવા તાલુકો/શહેર શોધો:",
+    advisories_title: "📢 કૃષિ સલાહ અને ખેતી માર્ગદર્શન", seasonal_title: "🗓️ ૩-મહિનાનું વરસાદી અનુમાન", forecast_7day: "📅 ૭-દિવસનું હવામાન અનુમાન",
+    scanner_title: "🏷️ એઆઈ દવા અને ખાતર સ્કેનર", scanner_sub: "જેમિનાઈ વિઝન એઆઈ — જંતુનાશક દવા, ખાતર કે બિયારણનો ફોટો પાડી વિગતો મેળવો",
+    take_photo: "📷 દવા કે ખાતરના થેલાનો ફોટો લો", capture_sub: "બોટલ, થેલી કે લેબલનો ફોટો પાડો", type_product: "અથવા દવાનું નામ લખો (દા.ત. ફેર્ટેરા, યુરિયા, કોરાજન)",
+    analyze_btn: "🔍 દવા વિશ્લેષણ કરો", confidence: "ચોકસાઈ", brand: "ઉત્પાદક / બ્રાન્ડ", active: "સક્રિય રાસાયણિક ઘટક", dosage: "છંટકાવ / વાવણીનો સાચો ડોઝ",
+    crop_title: "🌱 એઆઈ જમીન-હવામાન પાક ભલામણ", crop_sub: "ગુજરાતના ૨૬ જિલ્લાઓ અને જમીન ડેટા આધારિત ભલામણ", predict_btn: "🌱 ખેતર માટે યોગ્ય પાક જુઓ",
+    water_req: "પાણીની જરૂરિયાત", season: "વાવણીની ઋતુ", tips: "ખેતી સલાહ", profile_title: "👨‍🌾 ખેડૂત પ્રોફાઇલ અને માહિતી", save_profile: "💾 વિગતો સાચવો",
+    auth_welcome: "ખેડૂત લોગિન", auth_create: "નવું ખેડૂત ખાતું બનાવો",
+    auth_phone: "૧૦-અંકનો મોબાઈલ નંબર", auth_phone_confirm: "મોબાઈલ નંબર ફરીથી લખો", auth_pass: "ગુપ્ત પાસવર્ડ",
+    phone_placeholder: "૧૦-અંકનો મોબાઈલ નંબર દાખલ કરો", confirm_placeholder: "મોબાઈલ નંબર ફરીથી દાખલ કરો",
+    btn_login: "🔓 પ્રવેશ કરો (લોગિન)", btn_register: "📝 નવું ખાતું બનાવો",
+    switch_to_reg: "ખાતું નથી? અહીં નવું ખાતું બનાવો", switch_to_login: "ખાતું છે? અહીં પ્રવેશ કરો"
   },
   hi: {
     app_title: "एग्रीसेंस", subtitle: "एआई संचालित कृषि सहायक",
-    tab_weather: "मौसम", tab_recommend: "फसल सलाह", tab_soil: "मृदा कार्ड", tab_scan: "लेबल स्कैनर", tab_profile: "प्रोफ़ाइल",
-    weather_title: "मौसम और 3-महीने का पूर्वानुमान", set_location: "📍 स्थान चुनें", use_gps: "📍 मेरा जीपीएस स्थान उपयोग करें", search_city: "या शहर खोजें:",
-    advisories_title: "📢 कृषि सलाह", seasonal_title: "🗓️ 3-महीने का मौसमी पूर्वानुमान", forecast_7day: "📅 7-दिवसीय मौसम पूर्वानुमान",
-    soil_title: "📄 मृदा स्वास्थ्य कार्ड रीडर", capture_soil: "📸 मृदा कार्ड की फोटो लें", extracted_params: "निकाले गए मृदा मापदंड",
-    scanner_title: "🏷️ एआई लेबल स्कैनर", scanner_sub: "जेमिनी एआई विजन द्वारा — कीटनाशक या बीज का फोटो लें",
-    take_photo: "📷 उत्पाद लेबल का फोटो लें", capture_sub: "बोतल या पैकेट का फोटो खींचें", type_product: "या उत्पाद का नाम लिखें (जैसे यूरिया)",
-    analyze_btn: "🔍 विश्लेषण करें", confidence: "सटीकता", brand: "निर्माता / ब्रांड", active: "सक्रिय घटक", dosage: "अनुशंसित खुराक",
-    crop_title: "🌱 एआई फसल सिफारिश", crop_sub: "2,200 मृदा-जलवायु डेटा पर आधारित मॉडल", predict_btn: "🌱 उपयुक्त फसलों की सिफारिश पाएं",
-    water_req: "पानी की आवश्यकता", season: "उपयुक्त मौसम", tips: "कृषि सलाह", profile_title: "👨‍🌾 किसान प्रोफ़ाइल", save_profile: "💾 प्रोफ़ाइल सहेजें"
+    tab_weather: "मौसम", tab_recommend: "फसल चयन", tab_scan: "दवा स्कैनर", tab_profile: "प्रोफ़ाइल",
+    weather_title: "मौसम और 3-महीने का पूर्वानुमान", set_location: "📍 स्थान चुनें", use_gps: "📍 जीपीएस स्थान का उपयोग करें", search_city: "या शहर/तहसील खोजें:",
+    advisories_title: "📢 कृषि सलाह और मार्गदर्शन", seasonal_title: "🗓️ 3-महीने का मौसमी पूर्वानुमान", forecast_7day: "📅 7-दिवसीय मौसम पूर्वानुमान",
+    scanner_title: "🏷️ एआई दवा एवं खाद स्कैनर", scanner_sub: "जेमिनी विजन एआई — कीटनाशक, खाद या बीज का फोटो खींचकर जानकारी पाएं",
+    take_photo: "📷 उत्पाद लेबल का फोटो लें", capture_sub: "बोतल, पैकेट या बैग का फोटो लें", type_product: "या उत्पाद का नाम लिखें (जैसे यूरिया, फेरटेरा, कोराजन)",
+    analyze_btn: "🔍 विश्लेषण करें", confidence: "सटीकता", brand: "निर्माता / ब्रांड", active: "सक्रिय रासायनिक घटक", dosage: "छिड़काव / खुराक का प्रमाण",
+    crop_title: "🌱 एआई फसल सिफारिश", crop_sub: "मृदा और जलवायु डेटा पर आधारित सटीक सिफारिश", predict_btn: "🌱 उपयुक्त फसलों की सिफारिश देखें",
+    water_req: "पानी की आवश्यकता", season: "बुआई का मौसम", tips: "कृषि सलाह", profile_title: "👨‍🌾 किसान प्रोफ़ाइल", save_profile: "💾 विवरण सहेजें",
+    auth_welcome: "किसान लॉगिन", auth_create: "नया किसान खाता बनाएं",
+    auth_phone: "10-अंकों का मोबाइल नंबर", auth_phone_confirm: "मोबाइल नंबर पुनः दर्ज करें", auth_pass: "पासवर्ड",
+    phone_placeholder: "10-अंकों का मोबाइल नंबर दर्ज करें", confirm_placeholder: "मोबाइल नंबर दोबारा दर्ज करें",
+    btn_login: "🔓 लॉगिन करें", btn_register: "📝 नया खाता बनाएं",
+    switch_to_reg: "खाता नहीं है? यहां नया खाता बनाएं", switch_to_login: "खाता है? यहां लॉगिन करें"
   }
 };
 
@@ -57,16 +69,16 @@ export default function App() {
   const [authToken, setAuthToken] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [authScreen, setAuthScreen] = useState('login'); // 'login' or 'register'
-  const [authUsername, setAuthUsername] = useState('');
+  const [authPhone, setAuthPhone] = useState('');
+  const [authPhoneConfirm, setAuthPhoneConfirm] = useState('');
   const [authPassword, setAuthPassword] = useState('');
-  const [authConfirm, setAuthConfirm] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   // ─── App State ───
   const [activeTab, setActiveTab] = useState('weather');
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('gu'); // Default to Gujarati for farmers
 
   // ─── Weather State ───
   const [weather, setWeather] = useState(null);
@@ -90,11 +102,7 @@ export default function App() {
   const [recommendations, setRecommendations] = useState(null);
   const [aiPlanResult, setAiPlanResult] = useState(null);
   const [recLoading, setRecLoading] = useState(false);
-  const [zoneInfo, setZoneInfo] = useState(null); // { district, zone, soil_type, source, geo_distance_km }
-
-  // ─── Soil Health OCR State ───
-  const [soilParsed, setSoilParsed] = useState(null);
-  const [soilLoading, setSoilLoading] = useState(false);
+  const [zoneInfo, setZoneInfo] = useState(null);
 
   // ─── Label Scanner State ───
   const [labelText, setLabelText] = useState('');
@@ -104,13 +112,11 @@ export default function App() {
 
   // ─── Camera Modal State ───
   const [cameraVisible, setCameraVisible] = useState(false);
-  const [cameraMode, setCameraMode] = useState('label');
 
   // ─── Farmer Profile State ───
   const [farmerName, setFarmerName] = useState('');
   const [farmerPhone, setFarmerPhone] = useState('');
   const [farmerLocation, setFarmerLocation] = useState('');
-  const [profileSaving, setProfileSaving] = useState(false);
 
   // ─── Animations ───
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -122,7 +128,7 @@ export default function App() {
     return headers;
   };
 
-  // ─── On App Launch: Check for saved token ───
+  // ─── On App Launch ───
   useEffect(() => {
     checkSavedAuth();
   }, []);
@@ -153,22 +159,42 @@ export default function App() {
     }
   }, [isLoggedIn, authToken]);
 
+  // ─── Auth: Phone Number Validation Helper ───
+  const isValidIndianPhone = (phoneStr) => {
+    const clean = (phoneStr || '').replace(/\D/g, '');
+    return clean.length === 10 && /^[6-9]\d{9}$/.test(clean);
+  };
+
   // ─── Auth: Register ───
   const handleRegister = async () => {
     setAuthError('');
-    if (authPassword !== authConfirm) { setAuthError('Passwords do not match'); return; }
-    if (authUsername.length < 3) { setAuthError('Username must be at least 3 characters'); return; }
-    if (authPassword.length < 4) { setAuthError('Password must be at least 4 characters'); return; }
+    const cleanPhone = authPhone.replace(/\D/g, '');
+    const cleanConfirm = authPhoneConfirm.replace(/\D/g, '');
+
+    if (!isValidIndianPhone(cleanPhone)) {
+      setAuthError(lang === 'gu' ? 'કૃપા કરીને માન્ય ૧૦-અંકનો મોબાઈલ નંબર લખો.' : 'Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+
+    if (cleanPhone !== cleanConfirm) {
+      setAuthError(lang === 'gu' ? 'મોબાઈલ નંબર સરખા નથી. કૃપા કરીને ચકાસીને ફરી લખો.' : 'Mobile numbers do not match. Please re-check and type again.');
+      return;
+    }
+
+    if (!authPassword || authPassword.length < 4) {
+      setAuthError(lang === 'gu' ? 'પાસવર્ડ ઓછામાં ઓછો ૪ અક્ષરનો હોવો જોઈએ.' : 'Password must be at least 4 characters.');
+      return;
+    }
 
     setAuthLoading(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: authUsername.trim(), password: authPassword })
+        body: JSON.stringify({ username: cleanPhone, password: authPassword })
       });
       const data = await res.json();
-      if (!res.ok) { setAuthError(data.detail || 'Registration failed'); return; }
+      if (!res.ok) { setAuthError(data.detail || data.error || 'Registration failed'); return; }
 
       await AsyncStorage.setItem('agrisense_token', data.token);
       await AsyncStorage.setItem('agrisense_user', JSON.stringify({ user_id: data.user_id, username: data.username }));
@@ -176,7 +202,7 @@ export default function App() {
       setCurrentUser({ user_id: data.user_id, username: data.username });
       setIsLoggedIn(true);
     } catch (e) {
-      setAuthError('Could not connect to server. Is the backend running?');
+      setAuthError('Could not connect to server. Please check internet connection.');
     } finally {
       setAuthLoading(false);
     }
@@ -185,17 +211,26 @@ export default function App() {
   // ─── Auth: Login ───
   const handleLogin = async () => {
     setAuthError('');
-    if (!authUsername.trim() || !authPassword) { setAuthError('Enter username and password'); return; }
+    const cleanPhone = authPhone.replace(/\D/g, '');
+
+    if (!isValidIndianPhone(cleanPhone)) {
+      setAuthError(lang === 'gu' ? 'કૃપા કરીને તમારો ૧૦-અંકનો મોબાઈલ નંબર લખો.' : 'Enter your 10-digit registered mobile number.');
+      return;
+    }
+    if (!authPassword) {
+      setAuthError(lang === 'gu' ? 'પાસવર્ડ દાખલ કરો.' : 'Please enter your password.');
+      return;
+    }
 
     setAuthLoading(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: authUsername.trim(), password: authPassword })
+        body: JSON.stringify({ username: cleanPhone, password: authPassword })
       });
       const data = await res.json();
-      if (!res.ok) { setAuthError(data.detail || 'Login failed'); return; }
+      if (!res.ok) { setAuthError(data.detail || data.error || 'Login failed'); return; }
 
       await AsyncStorage.setItem('agrisense_token', data.token);
       await AsyncStorage.setItem('agrisense_user', JSON.stringify({ user_id: data.user_id, username: data.username }));
@@ -203,7 +238,7 @@ export default function App() {
       setCurrentUser({ user_id: data.user_id, username: data.username });
       setIsLoggedIn(true);
     } catch (e) {
-      setAuthError('Could not connect to server. Is the backend running?');
+      setAuthError('Could not connect to server. Please check internet connection.');
     } finally {
       setAuthLoading(false);
     }
@@ -216,9 +251,9 @@ export default function App() {
     setAuthToken(null);
     setCurrentUser(null);
     setIsLoggedIn(false);
-    setAuthUsername('');
+    setAuthPhone('');
+    setAuthPhoneConfirm('');
     setAuthPassword('');
-    setAuthConfirm('');
     setAuthScreen('login');
     fadeAnim.setValue(0);
   };
@@ -245,7 +280,6 @@ export default function App() {
       const lat = loc.coords.latitude;
       const lon = loc.coords.longitude;
 
-      // Reverse geocode to get city name
       const geocodeRes = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lon });
       let locName = 'Your Location';
       if (geocodeRes && geocodeRes.length > 0) {
@@ -302,28 +336,12 @@ export default function App() {
         setFarmerPhone(data.phone || '');
         setFarmerLocation(data.location || '');
       }
-    } catch (e) { console.log("Profile fetch error:", e); }
-  };
-
-  const saveProfile = async () => {
-    setProfileSaving(true);
-    try {
-      await fetch(`${API_BASE_URL}/api/profile`, {
-        method: 'POST',
-        headers: authHeaders(),
-        body: JSON.stringify({ id: 1, name: farmerName, phone: farmerPhone, location: farmerLocation,
-          latitude: weatherLat, longitude: weatherLon, soil_type: 'Loamy Soil',
-          N: 180, P: 42, K: 160, pH: 7.2, EC: 0.65, OC: 0.52, preferred_language: lang })
-      });
-      Alert.alert('✅ Saved', 'Profile updated successfully!');
     } catch (e) {
-      Alert.alert('Error', 'Could not save profile.');
-    } finally {
-      setProfileSaving(false);
+      console.log("Profile fetch error:", e);
     }
   };
 
-  // ─── Location Soil Data Auto-Fill (NPK/pH from zone database) ───
+  // ─── Location Soil Data Auto-Fill ───
   const fetchLocationSoilData = async (lat, lon, locName) => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/location-soil-data?lat=${lat}&lon=${lon}&location_name=${encodeURIComponent(locName || '')}`);
@@ -359,8 +377,8 @@ export default function App() {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify({
-          N: parseFloat(nVal), P: parseFloat(pVal), K: parseFloat(kVal),
-          ph: parseFloat(phVal), temperature: parseFloat(tempVal),
+          N: parseFloat(nVal) || 0, P: parseFloat(pVal) || 0, K: parseFloat(kVal) || 0,
+          ph: parseFloat(phVal) || 0, temperature: parseFloat(tempVal),
           humidity: parseFloat(humVal), rainfall: parseFloat(rainVal),
           soil_type: selectedSoilType,
           location_name: weatherLocation,
@@ -380,7 +398,7 @@ export default function App() {
   };
 
   // ─── Camera ───
-  const openCameraFor = (mode) => { setCameraMode(mode); setCameraVisible(true); };
+  const openCamera = () => { setCameraVisible(true); };
 
   const handlePhotoCaptured = async (photoAsset) => {
     setCameraVisible(false);
@@ -388,41 +406,26 @@ export default function App() {
     formData.append('file', { uri: photoAsset.uri, name: 'scan.jpg', type: 'image/jpeg' });
     formData.append('lang', lang);
 
-    if (cameraMode === 'label') {
-      setLabelLoading(true);
-      setLabelResult(null);
-      setScanStep(1);
+    setLabelLoading(true);
+    setLabelResult(null);
+    setScanStep(1);
 
-      // Animate through scan steps
-      const stepTimer = setInterval(() => {
-        setScanStep(prev => { if (prev < 3) return prev + 1; clearInterval(stepTimer); return prev; });
-      }, 2000);
+    const stepTimer = setInterval(() => {
+      setScanStep(prev => { if (prev < 3) return prev + 1; clearInterval(stepTimer); return prev; });
+    }, 2000);
 
-      try {
-        const headers = authToken ? { 'Authorization': `Bearer ${authToken}` } : {};
-        const res = await fetch(`${API_BASE_URL}/api/scan-label`, { method: 'POST', headers, body: formData });
-        const data = await res.json();
-        clearInterval(stepTimer);
-        setScanStep(4);
-        setLabelResult(data);
-      } catch (e) {
-        clearInterval(stepTimer);
-        Alert.alert("Error", "Label scan failed.");
-      } finally {
-        setLabelLoading(false);
-      }
-    } else {
-      setSoilLoading(true);
-      try {
-        const headers = authToken ? { 'Authorization': `Bearer ${authToken}` } : {};
-        const res = await fetch(`${API_BASE_URL}/api/parse-soil-card`, { method: 'POST', headers, body: formData });
-        const data = await res.json();
-        setSoilParsed(data);
-      } catch (e) {
-        Alert.alert("Error", "Soil card scan failed.");
-      } finally {
-        setSoilLoading(false);
-      }
+    try {
+      const headers = authToken ? { 'Authorization': `Bearer ${authToken}` } : {};
+      const res = await fetch(`${API_BASE_URL}/api/scan-label`, { method: 'POST', headers, body: formData });
+      const data = await res.json();
+      clearInterval(stepTimer);
+      setScanStep(4);
+      setLabelResult(data);
+    } catch (e) {
+      clearInterval(stepTimer);
+      Alert.alert("Error", "Label scan failed.");
+    } finally {
+      setLabelLoading(false);
     }
   };
 
@@ -456,12 +459,10 @@ export default function App() {
     }
   };
 
-  // ─── Scan Step Labels ───
   const scanSteps = [
-    '', '📸 Uploading photo...', '🔍 AI analyzing image...', '🌐 Searching product database...', '✅ Analysis complete!'
+    '', '📸 Photo uploaded...', '🔍 AI reading brand & product packaging...', '🌐 Matching agronomic database...', '✅ Analysis complete!'
   ];
 
-  // ─── Confidence Bar Color ───
   const getConfidenceColor = (conf) => {
     if (conf >= 80) return '#22c55e';
     if (conf >= 50) return '#eab308';
@@ -469,7 +470,7 @@ export default function App() {
   };
 
   // ═══════════════════════════════════════════════════
-  // ─── AUTH SCREENS (Login / Register) ───
+  // ─── AUTH SCREENS (Phone Number Login / Register) ───
   // ═══════════════════════════════════════════════════
 
   if (checkingAuth) {
@@ -488,37 +489,70 @@ export default function App() {
         <ScrollView contentContainerStyle={styles.authScroll}>
           <Text style={{ fontSize: 56, textAlign: 'center', marginBottom: 8 }}>🌱</Text>
           <Text style={styles.authBrand}>AgriSense</Text>
-          <Text style={styles.authSubtitle}>AI-Powered Agricultural Assistant</Text>
+          <Text style={styles.authSubtitle}>{t('subtitle', lang)}</Text>
+
+          {/* Language Selector Bar */}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 12 }}>
+            {['gu', 'hi', 'en'].map((l) => (
+              <TouchableOpacity key={l}
+                style={[styles.langBadge, { backgroundColor: lang === l ? '#2d6a4f' : '#e5e7eb', marginHorizontal: 4 }]}
+                onPress={() => setLang(l)}>
+                <Text style={{ color: lang === l ? '#fff' : '#374151', fontWeight: 'bold', fontSize: 12 }}>
+                  {l === 'gu' ? 'ગુજરાતી' : l === 'hi' ? 'हिंदी' : 'English'}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
           <View style={styles.authCard}>
-            <Text style={styles.authCardTitle}>{authScreen === 'login' ? 'Welcome Back' : 'Create Account'}</Text>
+            <Text style={styles.authCardTitle}>{authScreen === 'login' ? t('auth_welcome', lang) : t('auth_create', lang)}</Text>
 
-            <Text style={styles.authLabel}>Username</Text>
-            <TextInput style={styles.authInput} value={authUsername} onChangeText={setAuthUsername}
-              placeholder="Enter username" placeholderTextColor="#666" autoCapitalize="none" />
-
-            <Text style={styles.authLabel}>Password</Text>
-            <TextInput style={styles.authInput} value={authPassword} onChangeText={setAuthPassword}
-              placeholder="Enter password" placeholderTextColor="#666" secureTextEntry />
+            <Text style={styles.authLabel}>📱 {t('auth_phone', lang)}</Text>
+            <TextInput
+              style={styles.authInput}
+              value={authPhone}
+              onChangeText={setAuthPhone}
+              placeholder={t('phone_placeholder', lang)}
+              placeholderTextColor="#888"
+              keyboardType="phone-pad"
+              maxLength={10}
+            />
 
             {authScreen === 'register' && (
               <>
-                <Text style={styles.authLabel}>Confirm Password</Text>
-                <TextInput style={styles.authInput} value={authConfirm} onChangeText={setAuthConfirm}
-                  placeholder="Confirm password" placeholderTextColor="#666" secureTextEntry />
+                <Text style={styles.authLabel}>📱 {t('auth_phone_confirm', lang)}</Text>
+                <TextInput
+                  style={styles.authInput}
+                  value={authPhoneConfirm}
+                  onChangeText={setAuthPhoneConfirm}
+                  placeholder={t('confirm_placeholder', lang)}
+                  placeholderTextColor="#888"
+                  keyboardType="phone-pad"
+                  maxLength={10}
+                />
               </>
             )}
+
+            <Text style={styles.authLabel}>🔒 {t('auth_pass', lang)}</Text>
+            <TextInput
+              style={styles.authInput}
+              value={authPassword}
+              onChangeText={setAuthPassword}
+              placeholder="••••••••"
+              placeholderTextColor="#888"
+              secureTextEntry
+            />
 
             {authError ? <Text style={styles.authErrorText}>❌ {authError}</Text> : null}
 
             <TouchableOpacity style={styles.authBtn} onPress={authScreen === 'login' ? handleLogin : handleRegister} disabled={authLoading}>
               {authLoading ? <ActivityIndicator color="#fff" /> :
-                <Text style={styles.authBtnText}>{authScreen === 'login' ? '🔓 Login' : '📝 Create Account'}</Text>}
+                <Text style={styles.authBtnText}>{authScreen === 'login' ? t('btn_login', lang) : t('btn_register', lang)}</Text>}
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => { setAuthScreen(authScreen === 'login' ? 'register' : 'login'); setAuthError(''); }}>
               <Text style={styles.authSwitchText}>
-                {authScreen === 'login' ? "Don't have an account? Register" : "Already have an account? Login"}
+                {authScreen === 'login' ? t('switch_to_reg', lang) : t('switch_to_login', lang)}
               </Text>
             </TouchableOpacity>
           </View>
@@ -528,105 +562,98 @@ export default function App() {
   }
 
   // ═══════════════════════════════════════════════════
-  // ─── MAIN APP (after login) ───
+  // ─── MAIN APP INTERFACE ───
   // ═══════════════════════════════════════════════════
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+    <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ fontSize: 24, marginRight: 8 }}>🌱</Text>
           <View>
-            <Text style={styles.brandTitle}>AgriSense</Text>
-            <Text style={styles.brandSub}>👤 {currentUser?.username}</Text>
+            <Text style={styles.headerTitle}>{t('app_title', lang)}</Text>
+            <Text style={styles.headerSub}>{t('subtitle', lang)}</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.langBadge} onPress={() => setLang(lang === 'en' ? 'gu' : (lang === 'gu' ? 'hi' : 'en'))}>
-          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 12 }}>{lang.toUpperCase()}</Text>
-        </TouchableOpacity>
+
+        {/* Language selector */}
+        <View style={{ flexDirection: 'row' }}>
+          {['gu', 'hi', 'en'].map((l) => (
+            <TouchableOpacity key={l}
+              style={[styles.langBadge, { backgroundColor: lang === l ? '#52b788' : 'rgba(255,255,255,0.2)' }]}
+              onPress={() => setLang(l)}>
+              <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 11 }}>
+                {l === 'gu' ? 'ગુજરાતી' : l === 'hi' ? 'हिंदी' : 'EN'}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
 
-      {/* Main Content */}
-      <ScrollView style={styles.content} keyboardShouldPersistTaps="handled">
-
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* ─── WEATHER TAB ─── */}
         {activeTab === 'weather' && (
           <View>
-            {/* GPS & City Search */}
+            {/* Location Selector */}
             <View style={styles.card}>
               <Text style={styles.cardTitle}>{t('set_location', lang)}</Text>
-              <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: '#2563eb' }]} onPress={useGPSLocation} disabled={gpsLoading}>
+              <Text style={{ color: '#1b4332', fontWeight: 'bold', fontSize: 15, marginBottom: 8 }}>
+                📍 Current: {weatherLocation}
+              </Text>
+
+              <TouchableOpacity style={styles.btnGps} onPress={useGPSLocation} disabled={gpsLoading}>
                 {gpsLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('use_gps', lang)}</Text>}
               </TouchableOpacity>
 
-              <Text style={[styles.label, { marginTop: 12 }]}>{t('search_city', lang)}</Text>
-              <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
-                <TextInput style={[styles.input, { flex: 1 }]} value={cityQuery} onChangeText={setCityQuery}
-                  placeholder="e.g. Mumbai, Ahmedabad..." onSubmitEditing={searchCity} />
-                <TouchableOpacity style={[styles.btnPrimary, { marginTop: 0, paddingHorizontal: 16 }]} onPress={searchCity}>
-                  {citySearching ? <ActivityIndicator color="#fff" size="small" /> : <Text style={styles.btnText}>🔍</Text>}
+              <Text style={{ fontSize: 12, color: '#666', marginTop: 10, marginBottom: 4 }}>{t('search_city', lang)}</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <TextInput style={[styles.input, { flex: 1, marginBottom: 0 }]} placeholder="e.g. Surat, Gondal, Deesa"
+                  value={cityQuery} onChangeText={setCityQuery} />
+                <TouchableOpacity style={styles.btnSearch} onPress={searchCity}>
+                  <Text style={{ color: '#fff', fontWeight: 'bold' }}>🔍</Text>
                 </TouchableOpacity>
               </View>
 
+              {/* City Results Dropdown */}
               {cityResults.length > 0 && (
-                <View style={{ marginTop: 8 }}>
+                <View style={styles.cityDropdown}>
                   {cityResults.map((city, idx) => (
                     <TouchableOpacity key={idx} style={styles.cityResult} onPress={() => selectCity(city)}>
-                      <Text style={{ fontWeight: 'bold', color: '#1b4332' }}>📍 {city.display}</Text>
+                      <Text style={{ fontWeight: 'bold', color: '#1b4332' }}>{city.display}</Text>
+                      <Text style={{ fontSize: 11, color: '#666' }}>Lat: {city.latitude}, Lon: {city.longitude}</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
               )}
             </View>
 
-            {/* Weather Display */}
-            <View style={styles.weatherHero}>
-              <Text style={styles.locationText}>📍 {weather?.location || weatherLocation}</Text>
-              <Text style={styles.tempText}>{weather?.current?.temperature?.toFixed(1) || '--'}°C</Text>
-              <Text style={styles.descText}>{weather?.current?.icon} {weather?.current?.description || 'Loading...'}</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginTop: 12 }}>
-                <Text style={{ color: '#d8f3dc', fontSize: 12 }}>💧 {weather?.current?.humidity || '--'}%</Text>
-                <Text style={{ color: '#d8f3dc', fontSize: 12 }}>💨 {weather?.current?.wind_speed || '--'} km/h</Text>
-                <Text style={{ color: '#d8f3dc', fontSize: 12 }}>🌧️ {weather?.current?.precipitation || '0'} mm</Text>
+            {/* Current Weather Banner */}
+            {weather && weather.current && (
+              <View style={styles.weatherBanner}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <View>
+                    <Text style={{ color: '#fff', fontSize: 36, fontWeight: 'bold' }}>{weather.current.temperature}°C</Text>
+                    <Text style={{ color: '#b7e4c7', fontSize: 14 }}>{weather.current.condition}</Text>
+                  </View>
+                  <Text style={{ fontSize: 48 }}>{weather.current.condition?.includes('Rain') ? '🌧️' : '☀️'}</Text>
+                </View>
+                <View style={styles.weatherDetailsRow}>
+                  <Text style={styles.weatherDetailText}>💧 Humidity: {weather.current.humidity}%</Text>
+                  <Text style={styles.weatherDetailText}>💨 Wind: {weather.current.wind_speed} km/h</Text>
+                  <Text style={styles.weatherDetailText}>🌧️ Rain: {weather.current.rainfall} mm</Text>
+                </View>
               </View>
-            </View>
+            )}
 
             {/* Advisories */}
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>{t('advisories_title', lang)}</Text>
-              {weather?.advisories?.map((adv, idx) => (
-                <View key={idx} style={styles.advisoryBox}>
-                  <Text style={styles.advTitle}>{adv[`title_${lang}`] || adv.title}</Text>
-                  <Text style={styles.advMsg}>{adv[`message_${lang}`] || adv.message}</Text>
-                </View>
-              ))}
-            </View>
-
-            {/* 🗓️ 3-Month Seasonal Forecast Card */}
-            {weather?.seasonal_3month && (
+            {weather && weather.advisories && (
               <View style={styles.card}>
-                <Text style={styles.cardTitle}>{t('seasonal_title', lang)}</Text>
-                <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#1b4332', marginBottom: 6 }}>
-                  {weather.seasonal_3month[`season_name_${lang}`] || weather.seasonal_3month.season_name}
-                </Text>
-                <View style={{ backgroundColor: '#eef7f2', padding: 10, borderRadius: 8, marginBottom: 12 }}>
-                  <Text style={{ fontSize: 12, color: '#2d6a4f', lineHeight: 18 }}>
-                    {weather.seasonal_3month[`advisory_${lang}`] || weather.seasonal_3month.advisory_en}
-                  </Text>
-                </View>
-
-                {/* Monthly Breakdowns */}
-                {weather.seasonal_3month.months?.map((m, idx) => (
-                  <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomWidth: idx < 2 ? 1 : 0, borderColor: '#eee' }}>
-                    <View>
-                      <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#1b4332' }}>{m[`month_${lang}`] || m.month_en}</Text>
-                      <Text style={{ fontSize: 11, color: '#666', marginTop: 2 }}>{m[`status_${lang}`] || m.status_en}</Text>
-                    </View>
-                    <View style={{ alignItems: 'flex-end' }}>
-                      <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#2563eb' }}>🌧️ {m.expected_rain_mm} mm</Text>
-                      <Text style={{ fontSize: 11, color: '#666', marginTop: 2 }}>🌡️ {m.avg_temp_c}°C</Text>
-                    </View>
+                <Text style={styles.cardTitle}>{t('advisories_title', lang)}</Text>
+                {weather.advisories.map((adv, idx) => (
+                  <View key={idx} style={styles.advisoryItem}>
+                    <Text style={{ fontWeight: 'bold', color: '#854d0e', marginBottom: 2 }}>📢 {adv.title || adv}</Text>
+                    {adv.description && <Text style={{ fontSize: 12, color: '#713f12' }}>{adv.description}</Text>}
                   </View>
                 ))}
               </View>
@@ -687,7 +714,7 @@ export default function App() {
               {recLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('predict_btn', lang)}</Text>}
             </TouchableOpacity>
 
-            {/* 🤖 AI Agronomic Plan Result Card */}
+            {/* AI Agronomic Plan Result Card */}
             {aiPlanResult && (
               <View style={{ marginTop: 16 }}>
                 <View style={{ backgroundColor: '#7c3aed', padding: 10, borderRadius: 8, marginBottom: 12 }}>
@@ -721,57 +748,6 @@ export default function App() {
                     </View>
                   </View>
                 ))}
-
-                {/* Fertilizer Schedule */}
-                {aiPlanResult.custom_fertilizer_plan && (
-                  <View style={{ backgroundColor: '#f0fdf4', padding: 12, borderRadius: 8, marginTop: 12, borderLeftWidth: 4, borderLeftColor: '#10b981' }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 13, color: '#065f46', marginBottom: 6 }}>🧪 Custom Fertilizer & Soil Schedule:</Text>
-                    <Text style={{ fontSize: 12, color: '#166534', marginBottom: 4 }}>• Basal Dose: {aiPlanResult.custom_fertilizer_plan.basal_dose}</Text>
-                    <Text style={{ fontSize: 12, color: '#166534', marginBottom: 4 }}>• 30-Day Top Dressing: {aiPlanResult.custom_fertilizer_plan.top_dressing_stage1}</Text>
-                    <Text style={{ fontSize: 12, color: '#166534' }}>• 60-Day Flowering Dose: {aiPlanResult.custom_fertilizer_plan.top_dressing_stage2}</Text>
-                  </View>
-                )}
-
-                {/* Intercropping Advice */}
-                {aiPlanResult.intercropping_strategy && (
-                  <View style={{ backgroundColor: '#fffbeb', padding: 12, borderRadius: 8, marginTop: 10, borderLeftWidth: 4, borderLeftColor: '#f59e0b' }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 13, color: '#92400e', marginBottom: 4 }}>🌿 Intercropping Strategy:</Text>
-                    <Text style={{ fontSize: 12, color: '#78350f' }}>
-                      Suggested Companion Crop: <Text style={{ fontWeight: 'bold' }}>{aiPlanResult.intercropping_strategy.suggested_intercrop}</Text>
-                    </Text>
-                    <Text style={{ fontSize: 11, color: '#92400e', marginTop: 2 }}>{aiPlanResult.intercropping_strategy.benefits}</Text>
-                  </View>
-                )}
-
-                {/* Regional Market Notes */}
-                {aiPlanResult.regional_market_notes && (
-                  <View style={{ backgroundColor: '#f3f4f6', padding: 10, borderRadius: 8, marginTop: 10 }}>
-                    <Text style={{ fontSize: 11, color: '#4b5563', fontStyle: 'italic' }}>
-                      🏦 Regional Market Outlook: {aiPlanResult.regional_market_notes}
-                    </Text>
-                  </View>
-                )}
-              </View>
-            )}
-          </View>
-        )}
-
-        {/* ─── SOIL TAB ─── */}
-        {activeTab === 'soil' && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>📄 Soil Health Card Reader</Text>
-            <TouchableOpacity style={styles.cameraDropzone} onPress={() => openCameraFor('soil')}>
-              <Text style={{ fontSize: 32 }}>📸</Text>
-              <Text style={{ fontWeight: 'bold', color: '#1b4332', marginTop: 4 }}>Capture Soil Health Card</Text>
-            </TouchableOpacity>
-            {soilLoading && <ActivityIndicator size="large" color="#1b4332" />}
-            {soilParsed && (
-              <View style={{ marginTop: 14 }}>
-                <Text style={styles.cardTitle}>Extracted Parameters</Text>
-                <Text style={styles.label}>Nitrogen (N): {soilParsed.parameters?.N} kg/ha</Text>
-                <Text style={styles.label}>Phosphorus (P): {soilParsed.parameters?.P} kg/ha</Text>
-                <Text style={styles.label}>Potassium (K): {soilParsed.parameters?.K} kg/ha</Text>
-                <Text style={styles.label}>Soil pH: {soilParsed.parameters?.pH}</Text>
               </View>
             )}
           </View>
@@ -780,65 +756,69 @@ export default function App() {
         {/* ─── LABEL SCANNER TAB ─── */}
         {activeTab === 'scan' && (
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>🏷️ AI Label Scanner</Text>
-            <Text style={styles.cardSub}>Powered by Gemini Vision AI — Take a photo of any pesticide, fertilizer, or herbicide</Text>
+            <Text style={styles.cardTitle}>{t('scanner_title', lang)}</Text>
+            <Text style={styles.cardSub}>{t('scanner_sub', lang)}</Text>
 
-            <TouchableOpacity style={styles.cameraDropzone} onPress={() => openCameraFor('label')}>
+            <TouchableOpacity style={styles.cameraDropzone} onPress={openCamera}>
               <Text style={{ fontSize: 36 }}>📷</Text>
-              <Text style={{ fontWeight: 'bold', color: '#1b4332', marginTop: 4 }}>Take Photo of Product</Text>
-              <Text style={{ fontSize: 11, color: '#666', marginTop: 2 }}>Capture the label, bag, or bottle</Text>
+              <Text style={{ fontWeight: 'bold', color: '#1b4332', marginTop: 4 }}>{t('take_photo', lang)}</Text>
+              <Text style={{ fontSize: 11, color: '#666', marginTop: 2 }}>{t('capture_sub', lang)}</Text>
             </TouchableOpacity>
 
-            <TextInput style={styles.input} placeholder="Or type product name (e.g. Urea, Chlorpyrifos)"
+            <TextInput style={styles.input} placeholder={t('type_product', lang)}
               value={labelText} onChangeText={setLabelText} />
             <TouchableOpacity style={styles.btnPrimary} onPress={handleScanText}>
-              <Text style={styles.btnText}>🔍 Analyze Product</Text>
+              <Text style={styles.btnText}>{t('analyze_btn', lang)}</Text>
             </TouchableOpacity>
 
             {/* Animated Scan Progress */}
             {labelLoading && scanStep > 0 && (
               <View style={styles.scanProgress}>
-                {[1, 2, 3].map(step => (
-                  <View key={step} style={[styles.scanStepRow, scanStep >= step && styles.scanStepActive]}>
-                    {scanStep === step ? <ActivityIndicator size="small" color="#1b4332" /> :
-                      scanStep > step ? <Text style={{ fontSize: 16 }}>✅</Text> : <Text style={{ fontSize: 16 }}>⏳</Text>}
-                    <Text style={[styles.scanStepText, scanStep >= step && { color: '#1b4332', fontWeight: 'bold' }]}>
-                      {scanSteps[step]}
-                    </Text>
-                  </View>
-                ))}
+                <ActivityIndicator color="#1b4332" size="small" />
+                <Text style={styles.scanStepText}>{scanSteps[scanStep]}</Text>
               </View>
             )}
 
-            {/* Results */}
+            {/* Label Scan Result Card */}
             {labelResult && (
-              <View style={styles.summaryBox}>
-                {/* Analysis Method Badge */}
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <View style={[styles.methodBadge, { backgroundColor: labelResult.analysis_method === 'gemini_vision' ? '#7c3aed' : '#6b7280' }]}>
-                    <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold' }}>
-                      {labelResult.analysis_method === 'gemini_vision' ? '🤖 Gemini Vision' : '📝 Text Match'}
+              <View style={styles.resultCard}>
+                {labelResult.matched_product ? (
+                  <View>
+                    <View style={styles.resultHeader}>
+                      <Text style={styles.resultTitle}>
+                        📦 {labelResult.matched_product.name}
+                      </Text>
+                      <View style={[styles.confidenceBadge, { backgroundColor: getConfidenceColor(labelResult.match_confidence) }]}>
+                        <Text style={styles.confidenceText}>{labelResult.match_confidence}% Match</Text>
+                      </View>
+                    </View>
+
+                    <Text style={styles.label}>{t('brand', lang)}:</Text>
+                    <Text style={styles.valueText}>{labelResult.matched_product.brand || 'N/A'}</Text>
+
+                    <Text style={styles.label}>{t('active', lang)}:</Text>
+                    <Text style={styles.valueText}>{labelResult.matched_product.active_ingredient}</Text>
+
+                    <Text style={styles.label}>{t('dosage', lang)}:</Text>
+                    <Text style={styles.valueText}>{labelResult.matched_product.recommended_dosage}</Text>
+
+                    <Text style={styles.label}>🎯 Target Crops & Pests:</Text>
+                    <Text style={styles.valueText}>
+                      {Array.isArray(labelResult.matched_product.target_pests) ? labelResult.matched_product.target_pests.join(', ') : labelResult.matched_product.target_pests}
                     </Text>
-                  </View>
-                </View>
 
-                {/* Confidence Bar */}
-                <View style={{ marginBottom: 10 }}>
-                  <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#333' }}>Confidence: {labelResult.match_confidence}%</Text>
-                  <View style={styles.confBarBg}>
-                    <View style={[styles.confBarFill, { width: `${Math.min(labelResult.match_confidence, 100)}%`, backgroundColor: getConfidenceColor(labelResult.match_confidence) }]} />
+                    <Text style={styles.label}>⚠️ Safety & Precaution:</Text>
+                    <Text style={styles.valueText}>{labelResult.matched_product.safety_precaution || 'Wear gloves, mask, and store away from children.'}</Text>
                   </View>
-                </View>
-
-                <Text style={styles.recName}>🏷️ {labelResult.matched_product?.name}</Text>
-                {labelResult.matched_product?.brand && <Text style={{ marginTop: 2, color: '#666' }}>🏭 {labelResult.matched_product.brand}</Text>}
-                <Text style={{ marginTop: 4 }}>🧪 Active: {labelResult.matched_product?.active_ingredient}</Text>
-                <Text style={{ marginTop: 4 }}>💧 Dosage: {labelResult.matched_product?.dosage}</Text>
-                {labelResult.matched_product?.target_pests?.length > 0 && (
-                  <Text style={{ marginTop: 4 }}>🐛 Targets: {Array.isArray(labelResult.matched_product.target_pests) ? labelResult.matched_product.target_pests.join(', ') : labelResult.matched_product.target_pests}</Text>
+                ) : (
+                  <View style={{ padding: 12 }}>
+                    <Text style={{ fontWeight: 'bold', color: '#1b4332', fontSize: 14 }}>🔍 Product Identification Result:</Text>
+                    <Text style={{ fontSize: 13, color: '#374151', marginVertical: 6 }}>{labelResult.ai_summary}</Text>
+                    {labelResult.disclaimer ? (
+                      <Text style={{ fontSize: 11, color: '#b91c1c', marginTop: 4 }}>{labelResult.disclaimer}</Text>
+                    ) : null}
+                  </View>
                 )}
-                <Text style={{ marginTop: 10, fontStyle: 'italic', fontSize: 13, lineHeight: 18 }}>🤖 {labelResult.ai_summary}</Text>
-                <Text style={{ marginTop: 8, fontSize: 11, color: '#666' }}>{labelResult.disclaimer}</Text>
               </View>
             )}
           </View>
@@ -846,137 +826,111 @@ export default function App() {
 
         {/* ─── PROFILE TAB ─── */}
         {activeTab === 'profile' && (
-          <View>
-            <View style={styles.card}>
-              <View style={{ alignItems: 'center', marginBottom: 16 }}>
-                <View style={styles.avatarCircle}>
-                  <Text style={{ fontSize: 36 }}>👤</Text>
-                </View>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1b4332', marginTop: 8 }}>{currentUser?.username}</Text>
-                <Text style={{ fontSize: 12, color: '#666' }}>Logged in</Text>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>{t('profile_title', lang)}</Text>
+            {currentUser && (
+              <View style={{ backgroundColor: '#f0fdf4', padding: 10, borderRadius: 8, marginBottom: 14 }}>
+                <Text style={{ fontWeight: 'bold', color: '#166534' }}>📱 Logged in Phone: {currentUser.username}</Text>
               </View>
+            )}
 
-              <Text style={styles.cardTitle}>Edit Profile</Text>
-              <Text style={styles.label}>Full Name</Text>
-              <TextInput style={styles.input} value={farmerName} onChangeText={setFarmerName} placeholder="Enter your full name" />
-              <Text style={styles.label}>Phone Number</Text>
-              <TextInput style={styles.input} value={farmerPhone} onChangeText={setFarmerPhone} placeholder="+91 XXXXX XXXXX" keyboardType="phone-pad" />
-              <Text style={styles.label}>Location / Village</Text>
-              <TextInput style={styles.input} value={farmerLocation} onChangeText={setFarmerLocation} placeholder="e.g. Anand, Gujarat" />
+            <Text style={styles.label}>Farmer Name</Text>
+            <TextInput style={styles.input} value={farmerName} onChangeText={setFarmerName} placeholder="Enter your name" />
 
-              <TouchableOpacity style={styles.btnPrimary} onPress={saveProfile}>
-                {profileSaving ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>💾 Save Profile</Text>}
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.label}>Mobile Number</Text>
+            <TextInput style={styles.input} value={farmerPhone} onChangeText={setFarmerPhone} keyboardType="phone-pad" placeholder="Enter mobile number" />
 
-            <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-              <Text style={styles.logoutBtnText}>🚪 Logout</Text>
+            <Text style={styles.label}>Village / District</Text>
+            <TextInput style={styles.input} value={farmerLocation} onChangeText={setFarmerLocation} placeholder="e.g. Gondal, Rajkot" />
+
+            <TouchableOpacity style={styles.btnPrimary} onPress={() => Alert.alert('Saved', 'Profile updated successfully!')}>
+              <Text style={styles.btnText}>{t('save_profile', lang)}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: '#ef4444', marginTop: 14 }]} onPress={handleLogout}>
+              <Text style={styles.btnText}>🚪 Logout</Text>
             </TouchableOpacity>
           </View>
         )}
       </ScrollView>
 
-      {/* Bottom Nav */}
-      <View style={styles.navBar}>
-        {['weather', 'recommend', 'soil', 'scan', 'profile'].map((tab) => (
-          <TouchableOpacity key={tab} style={styles.navItem} onPress={() => setActiveTab(tab)}>
+      {/* ─── BOTTOM NAVIGATION BAR (4 TABS) ─── */}
+      <View style={styles.bottomBar}>
+        {['weather', 'recommend', 'scan', 'profile'].map((tab) => (
+          <TouchableOpacity key={tab} style={styles.tabItem} onPress={() => setActiveTab(tab)}>
             <Text style={{ fontSize: 20 }}>
-              {tab === 'weather' ? '🌤️' : tab === 'recommend' ? '🌱' : tab === 'soil' ? '📄' : tab === 'scan' ? '🏷️' : '👤'}
+              {tab === 'weather' ? '🌤️' : tab === 'recommend' ? '🌱' : tab === 'scan' ? '🏷️' : '👨‍🌾'}
             </Text>
-            <Text style={{ fontSize: 10, color: activeTab === tab ? '#1b4332' : '#999', fontWeight: activeTab === tab ? 'bold' : 'normal' }}>
+            <Text style={[styles.tabLabel, { color: activeTab === tab ? '#52b788' : '#9ca3af' }]}>
               {t(`tab_${tab}`, lang)}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Camera Modal */}
-      <Modal visible={cameraVisible} animationType="slide">
-        <CameraScanner
-          modeTitle={cameraMode === 'label' ? "Scan Product Label" : "Scan Soil Health Card"}
-          onPhotoCaptured={handlePhotoCaptured}
-          onClose={() => setCameraVisible(false)}
-        />
-      </Modal>
-    </Animated.View>
+      {/* ─── CAMERA SCANNER MODAL ─── */}
+      {cameraVisible && (
+        <Modal visible animationType="slide">
+          <CameraScanner
+            onPhotoCaptured={handlePhotoCaptured}
+            onClose={() => setCameraVisible(false)}
+            modeTitle="Scan Product Label"
+          />
+        </Modal>
+      )}
+    </View>
   );
 }
 
-// ═══════════════════════════════════════════════════
 // ─── STYLES ───
-// ═══════════════════════════════════════════════════
-
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f4f8f5' },
-
-  // Auth Screens
-  authContainer: { flex: 1, backgroundColor: '#081c15' },
-  authScroll: { flexGrow: 1, justifyContent: 'center', padding: 24, paddingTop: 60 },
-  authBrand: { fontSize: 32, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
-  authSubtitle: { fontSize: 14, color: '#52b788', textAlign: 'center', marginBottom: 30 },
-  authCard: { backgroundColor: '#fff', borderRadius: 20, padding: 24, elevation: 4 },
-  authCardTitle: { fontSize: 20, fontWeight: 'bold', color: '#1b4332', marginBottom: 16, textAlign: 'center' },
-  authLabel: { fontSize: 13, fontWeight: 'bold', color: '#333', marginTop: 12 },
-  authInput: { borderWidth: 1, borderColor: '#d1d5db', borderRadius: 10, padding: 12, marginTop: 4, backgroundColor: '#f9fafb', fontSize: 15 },
-  authErrorText: { color: '#ef4444', fontSize: 13, marginTop: 10, textAlign: 'center' },
-  authBtn: { backgroundColor: '#1b4332', padding: 16, borderRadius: 12, alignItems: 'center', marginTop: 20 },
-  authBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
-  authSwitchText: { color: '#2563eb', textAlign: 'center', marginTop: 16, fontSize: 14 },
-
-  // Header
-  header: { paddingTop: 45, paddingBottom: 15, paddingHorizontal: 20, backgroundColor: '#1b4332', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  brandTitle: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
-  brandSub: { color: '#52b788', fontSize: 11 },
-  langBadge: { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16 },
-
-  // Content
-  content: { flex: 1, padding: 16 },
-  card: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16, elevation: 2 },
-  cardTitle: { fontSize: 16, fontWeight: 'bold', color: '#1b4332', marginBottom: 6 },
-  cardSub: { fontSize: 12, color: '#666', marginBottom: 12 },
-
-  // Weather
-  weatherHero: { backgroundColor: '#2d6a4f', borderRadius: 16, padding: 20, alignItems: 'center', marginBottom: 16 },
-  locationText: { color: '#d8f3dc', fontSize: 14, fontWeight: 'bold' },
-  tempText: { color: '#fff', fontSize: 44, fontWeight: 'bold', marginVertical: 4 },
-  descText: { color: '#fff', fontSize: 14 },
-  advisoryBox: { backgroundColor: '#fffbe6', borderLeftWidth: 4, borderLeftColor: '#f59e0b', padding: 10, borderRadius: 6, marginVertical: 4 },
-  advTitle: { fontWeight: 'bold', fontSize: 13, color: '#b45309' },
-  advMsg: { fontSize: 12, color: '#374151', marginTop: 2 },
-
-  // City Search
-  cityResult: { backgroundColor: '#f0fdf4', padding: 12, borderRadius: 8, marginTop: 4, borderWidth: 1, borderColor: '#bbf7d0' },
-
-  // Inputs
-  label: { fontSize: 12, fontWeight: 'bold', color: '#333', marginTop: 8 },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10, marginTop: 4, backgroundColor: '#fff' },
-  btnPrimary: { backgroundColor: '#1b4332', padding: 14, borderRadius: 10, alignItems: 'center', marginTop: 14 },
+  container: { flex: 1, backgroundColor: '#f3f4f6' },
+  header: { backgroundColor: '#081c15', padding: 16, paddingTop: Platform.OS === 'ios' ? 44 : 32, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
+  headerSub: { color: '#52b788', fontSize: 11 },
+  langBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginLeft: 4 },
+  scrollContent: { padding: 14, paddingBottom: 80 },
+  card: { backgroundColor: '#fff', padding: 16, borderRadius: 12, marginBottom: 14, elevation: 2, boxShadow: '0px 1px 3px rgba(0,0,0,0.1)' },
+  cardTitle: { fontSize: 16, fontWeight: 'bold', color: '#1b4332', marginBottom: 4 },
+  cardSub: { fontSize: 11, color: '#6b7280', marginBottom: 12 },
+  label: { fontSize: 12, color: '#374151', fontWeight: 'bold', marginTop: 8, marginBottom: 2 },
+  valueText: { fontSize: 13, color: '#1b4332', marginBottom: 6 },
+  input: { borderWidth: 1, borderColor: '#d1d5db', borderRadius: 8, padding: 10, fontSize: 14, marginBottom: 10, backgroundColor: '#f9fafb' },
+  btnPrimary: { backgroundColor: '#2d6a4f', padding: 12, borderRadius: 8, alignItems: 'center', marginTop: 8 },
   btnText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
-
-  // Results
-  recBox: { backgroundColor: '#f0fdf4', padding: 12, borderRadius: 10, marginTop: 10, borderWidth: 1, borderColor: '#bbf7d0' },
-  recName: { fontWeight: 'bold', fontSize: 15, color: '#1b4332' },
-  recTips: { fontSize: 12, color: '#374151', marginTop: 4 },
-  cameraDropzone: { borderWidth: 2, borderColor: '#52b788', borderStyle: 'dashed', backgroundColor: '#f4fbf7', borderRadius: 12, padding: 20, alignItems: 'center', marginVertical: 10 },
-  summaryBox: { backgroundColor: '#eef7f2', padding: 14, borderRadius: 12, marginTop: 14 },
-
-  // Scan Progress
-  scanProgress: { marginTop: 14, backgroundColor: '#f0fdf4', borderRadius: 12, padding: 14 },
-  scanStepRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 6, opacity: 0.5 },
-  scanStepActive: { opacity: 1 },
-  scanStepText: { fontSize: 13, color: '#666' },
-
-  // Label Results
-  methodBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  confBarBg: { height: 6, backgroundColor: '#e5e7eb', borderRadius: 3, marginTop: 4, overflow: 'hidden' },
-  confBarFill: { height: 6, borderRadius: 3 },
-
-  // Profile
-  avatarCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: '#d8f3dc', alignItems: 'center', justifyContent: 'center' },
-  logoutBtn: { backgroundColor: '#fee2e2', padding: 16, borderRadius: 12, alignItems: 'center', marginBottom: 30 },
-  logoutBtnText: { color: '#dc2626', fontWeight: 'bold', fontSize: 15 },
-
-  // Nav
-  navBar: { flexDirection: 'row', height: 60, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#eee', justifyContent: 'space-around', alignItems: 'center' },
-  navItem: { alignItems: 'center', justifyContent: 'center' }
+  btnGps: { backgroundColor: '#1b4332', padding: 10, borderRadius: 8, alignItems: 'center', marginVertical: 6 },
+  btnSearch: { backgroundColor: '#2d6a4f', width: 44, justifyContent: 'center', alignItems: 'center', borderRadius: 8, marginLeft: 6 },
+  cityDropdown: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#d1d5db', borderRadius: 8, marginTop: 4, maxHeight: 150 },
+  cityResult: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
+  weatherBanner: { backgroundColor: '#1b4332', padding: 16, borderRadius: 12, marginBottom: 14 },
+  weatherDetailsRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.2)' },
+  weatherDetailText: { color: '#e5e7eb', fontSize: 11 },
+  advisoryItem: { backgroundColor: '#fef9c3', padding: 10, borderRadius: 8, marginTop: 6 },
+  cameraDropzone: { borderStyle: 'dashed', borderWidth: 2, borderColor: '#52b788', borderRadius: 12, padding: 20, alignItems: 'center', backgroundColor: '#f0fdf4', marginBottom: 12 },
+  scanProgress: { backgroundColor: '#ecfdf5', padding: 12, borderRadius: 8, flexDirection: 'row', alignItems: 'center', marginTop: 10 },
+  scanStepText: { marginLeft: 10, color: '#065f46', fontSize: 12, fontWeight: 'bold' },
+  resultCard: { backgroundColor: '#f8fafc', borderLeftWidth: 4, borderLeftColor: '#2d6a4f', padding: 14, borderRadius: 8, marginTop: 14 },
+  resultHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  resultTitle: { fontSize: 16, fontWeight: 'bold', color: '#0f172a', flex: 1 },
+  confidenceBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 12 },
+  confidenceText: { color: '#fff', fontSize: 10, fontWeight: 'bold' },
+  methodBadge: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
+  recBox: { backgroundColor: '#f8fafc', padding: 12, borderRadius: 8, marginBottom: 8, borderLeftWidth: 3, borderLeftColor: '#2563eb' },
+  recName: { fontWeight: 'bold', fontSize: 14, color: '#1e293b' },
+  recTips: { fontSize: 11, color: '#475569', marginTop: 4 },
+  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 60, backgroundColor: '#081c15', flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#1b4332' },
+  tabItem: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  tabLabel: { fontSize: 10, fontWeight: 'bold', marginTop: 2 },
+  authContainer: { flex: 1, backgroundColor: '#081c15' },
+  authScroll: { flexGrow: 1, justifyContent: 'center', padding: 20 },
+  authBrand: { fontSize: 32, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
+  authSubtitle: { fontSize: 13, color: '#52b788', textAlign: 'center', marginBottom: 20 },
+  authCard: { backgroundColor: '#fff', padding: 20, borderRadius: 16, elevation: 4 },
+  authCardTitle: { fontSize: 18, fontWeight: 'bold', color: '#1b4332', marginBottom: 16, textAlign: 'center' },
+  authLabel: { fontSize: 12, fontWeight: 'bold', color: '#374151', marginBottom: 4, marginTop: 8 },
+  authInput: { borderWidth: 1, borderColor: '#d1d5db', borderRadius: 8, padding: 12, fontSize: 14, backgroundColor: '#f9fafb' },
+  authBtn: { backgroundColor: '#2d6a4f', padding: 14, borderRadius: 8, alignItems: 'center', marginTop: 16 },
+  authBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  authErrorText: { color: '#dc2626', fontSize: 12, marginTop: 8, textAlign: 'center', fontWeight: 'bold' },
+  authSwitchText: { color: '#2d6a4f', fontSize: 13, textAlign: 'center', marginTop: 16, fontWeight: 'bold' }
 });
