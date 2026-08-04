@@ -10,7 +10,59 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <!-- Cache-busted stylesheet (v=440 forces fresh fetch) -->
+  <link rel="stylesheet" href="/static/css/styles.css?v=440">
+
+  <!-- CRITICAL LAYOUT OVERRIDE — embedded so it cannot be cached -->
+  <style>
+    html, body { height: 100%; background-color: #12241b; color: #1f2937; }
+
+    /* Fixed phone-frame approach — no overflow:hidden on parent */
+    #app-frame {
+      position: fixed !important;
+      top: 0; bottom: 0;
+      left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 480px;
+      background-color: #f4f8f5;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: visible !important;
+    }
+    @media (min-width: 500px) {
+      #app-frame {
+        top: 4vh; bottom: 4vh;
+        border-radius: 28px;
+        overflow: hidden !important;
+        border: 3px solid rgba(255,255,255,0.12);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      }
+    }
+
+    /* KEY FIX: main must shrink in flex column and scroll */
+    main {
+      flex: 1 1 0 !important;       /* 1 1 0 = grow, shrink, basis 0 */
+      min-height: 0 !important;     /* allow shrinking below content height */
+      overflow-y: auto !important;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px;
+      padding-bottom: 88px;         /* clear the bottom nav */
+    }
+
+    /* Bottom nav — in-flow flex child, NOT absolute */
+    .bottom-nav {
+      position: static !important;  /* undo any absolute positioning */
+      flex-shrink: 0 !important;
+      height: 72px;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #e5e7eb;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+      z-index: 20;
+    }
+  </style>
 
   <style>
     /* ─── Auth Overlay ─── */
