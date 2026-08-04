@@ -9,3 +9,4 @@ google-genai>=0.1.0
 rapidfuzz>=3.6.0
 pydantic>=2.6.0
 python-multipart>=0.0.9
+psycopg2-binary>=2.9.9

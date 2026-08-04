@@ -93,6 +93,7 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [regSuccess, setRegSuccess] = useState(null); // {phone, message} after registration
 
   // ─── App State ───
   const [activeTab, setActiveTab] = useState('weather');
@@ -218,7 +219,8 @@ export default function App() {
       await AsyncStorage.setItem('agrisense_user', JSON.stringify({ user_id: data.user_id, username: data.username }));
       setAuthToken(data.token);
       setCurrentUser({ user_id: data.user_id, username: data.username });
-      setIsLoggedIn(true);
+      // Show success screen before entering the app
+      setRegSuccess({ phone: data.username || data.phone, message: data.message || 'Account created!' });
     } catch (e) {
       setAuthError('Could not connect to server. Please check internet connection.');
     } finally {
@@ -262,18 +264,31 @@ export default function App() {
     }
   };
 
-  // ─── Auth: Logout ───
   const handleLogout = async () => {
-    await AsyncStorage.removeItem('agrisense_token');
-    await AsyncStorage.removeItem('agrisense_user');
-    setAuthToken(null);
-    setCurrentUser(null);
-    setIsLoggedIn(false);
-    setAuthPhone('');
-    setAuthPhoneConfirm('');
-    setAuthPassword('');
-    setAuthScreen('login');
-    fadeAnim.setValue(0);
+    Alert.alert(
+      lang === 'gu' ? 'લૉગઆઉટ' : lang === 'hi' ? 'लॉगआउट' : 'Logout',
+      lang === 'gu' ? 'શું તમે ખરેખર લૉગઆઉટ કરવા માંગો છો?' : lang === 'hi' ? 'क्या आप वाकई लॉगआउट करना चाहते हैं?' : 'Are you sure you want to log out?',
+      [
+        { text: lang === 'gu' ? 'રદ કરો' : lang === 'hi' ? 'रद्द करें' : 'Cancel', style: 'cancel' },
+        {
+          text: lang === 'gu' ? 'લૉગઆઉટ' : lang === 'hi' ? 'लॉगआउट' : 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            await AsyncStorage.removeItem('agrisense_token');
+            await AsyncStorage.removeItem('agrisense_user');
+            setAuthToken(null);
+            setCurrentUser(null);
+            setIsLoggedIn(false);
+            setRegSuccess(null);
+            setAuthPhone('');
+            setAuthPhoneConfirm('');
+            setAuthPassword('');
+            setAuthScreen('login');
+            fadeAnim.setValue(0);
+          }
+        }
+      ]
+    );
   };
 
   // ─── Weather: Fetch ───
@@ -580,6 +595,71 @@ export default function App() {
   }
 
   // ═══════════════════════════════════════════════════
+  // ─── REGISTRATION SUCCESS SCREEN ───
+  // ═══════════════════════════════════════════════════
+
+  if (regSuccess) {
+    const maskedPhone = regSuccess.phone
+      ? 'XXXXXXX' + String(regSuccess.phone).slice(-3)
+      : '';
+    return (
+      <View style={[styles.authContainer, { justifyContent: 'center', alignItems: 'center', padding: 24 }]}>
+        {/* Success Card */}
+        <View style={{
+          backgroundColor: '#fff',
+          borderRadius: 20,
+          padding: 32,
+          width: '100%',
+          alignItems: 'center',
+          shadowColor: '#000',
+          shadowOpacity: 0.15,
+          shadowRadius: 20,
+          elevation: 10,
+        }}>
+          <Text style={{ fontSize: 72, marginBottom: 12 }}>✅</Text>
+
+          <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#166534', textAlign: 'center', marginBottom: 8 }}>
+            {lang === 'gu' ? 'ખાતું સફળતાપૂર્વક બન્યું!' :
+             lang === 'hi' ? 'खाता सफलतापूर्वक बनाया गया!' :
+             'Account Created Successfully!'}
+          </Text>
+
+          <View style={{ backgroundColor: '#f0fdf4', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 20, marginVertical: 12, width: '100%', alignItems: 'center' }}>
+            <Text style={{ color: '#6b7280', fontSize: 13, marginBottom: 4 }}>
+              {lang === 'gu' ? 'નોંધાયેલ મોબાઈલ નંબર' :
+               lang === 'hi' ? 'पंजीकृत मोबाइल नंबर' :
+               'Registered Mobile Number'}
+            </Text>
+            <Text style={{ color: '#1b4332', fontWeight: 'bold', fontSize: 20, letterSpacing: 2 }}>
+              📱 {maskedPhone}
+            </Text>
+          </View>
+
+          <Text style={{ color: '#374151', fontSize: 14, textAlign: 'center', marginBottom: 20, lineHeight: 20 }}>
+            {lang === 'gu' ? 'તમારો AgriSense ખાતો તૈયાર છે. હવે એપ્લિકેશન ખોલો અને AI ખેતી સહાય મેળવો.' :
+             lang === 'hi' ? 'आपका AgriSense खाता तैयार है। अब ऐप खोलें और AI कृषि सहायता प्राप्त करें।' :
+             'Your AgriSense account is ready. Open the app to get AI farming assistance.'}
+          </Text>
+
+          <TouchableOpacity
+            style={[styles.authBtn, { width: '100%', marginTop: 4 }]}
+            onPress={() => {
+              setRegSuccess(null);
+              setIsLoggedIn(true);
+            }}
+          >
+            <Text style={styles.authBtnText}>
+              {lang === 'gu' ? '🌱 એપ્લિકેશન ખોલો' :
+               lang === 'hi' ? '🌱 ऐप खोलें' :
+               '🌱 Open App'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  // ═══════════════════════════════════════════════════
   // ─── MAIN APP INTERFACE ───
   // ═══════════════════════════════════════════════════
 
@@ -871,9 +951,21 @@ export default function App() {
               <Text style={styles.btnText}>{t('save_profile', lang)}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: '#ef4444', marginTop: 14 }]} onPress={handleLogout}>
-              <Text style={styles.btnText}>🚪 Logout</Text>
+            {/* ─── Logout Button ─── */}
+            <TouchableOpacity
+              style={[styles.btnPrimary, { backgroundColor: '#dc2626', marginTop: 20, borderRadius: 12 }]}
+              onPress={handleLogout}
+            >
+              <Text style={[styles.btnText, { fontSize: 15 }]}>
+                🚪 {lang === 'gu' ? 'લૉગઆઉટ' : lang === 'hi' ? 'लॉगआउट' : 'Logout'}
+              </Text>
             </TouchableOpacity>
+
+            <Text style={{ textAlign: 'center', color: '#9ca3af', fontSize: 11, marginTop: 10 }}>
+              {lang === 'gu' ? `📱 ${currentUser?.username || ''}` :
+               lang === 'hi' ? `📱 ${currentUser?.username || ''}` :
+               `📱 ${currentUser?.username || ''}`}
+            </Text>
           </View>
         )}
       </ScrollView>

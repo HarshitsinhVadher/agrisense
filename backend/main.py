@@ -19,7 +19,7 @@ from services.weather_service import get_weather_data, geocode_city
 from services.ocr_service import process_soil_card_image, parse_soil_health_card_text
 from services.label_service import scan_and_interpret_label, load_products_db
 from services.ai_crop_advisor import generate_geographical_crop_advice, detect_default_soil_type
-from services.auth_service import register_user, login_user, get_user_id_from_token
+from services.auth_service import register_user, login_user, get_user_id_from_token, init_auth_tables
 from services.regional_crop_lookup import fetch_real_crops_for_location
 from services.db_service import (
     init_sql_db, get_farmer_profile, update_farmer_profile,
@@ -93,7 +93,8 @@ def _get_user_id(request: Request) -> Optional[int]:
 
 @app.on_event("startup")
 def startup_event():
-    init_sql_db()
+    init_sql_db()       # SQLite: local history tables (soil, crop, labels)
+    init_auth_tables()  # PostgreSQL (or SQLite fallback): users + farmers
 
 # ─── Health Check & Root Routes (Required for Render Health Checks) ───
 

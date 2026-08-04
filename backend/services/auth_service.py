@@ -1,40 +1,160 @@
-import sqlite3
+"""
+AgriSense Authentication Service
+---------------------------------
+• Uses PostgreSQL (via DATABASE_URL env var) when deployed on Render.
+• Falls back to local SQLite when DATABASE_URL is not set (local dev).
+"""
+
 import hashlib
 import hmac
 import secrets
 import time
 import json
 import os
+import re
 from typing import Dict, Any, Optional, Tuple
 
-# Secret key for token signing — generated once per server lifetime
+# ─── DB Mode Detection ───────────────────────────────────────────────────────
+
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+USE_POSTGRES = bool(DATABASE_URL)
+
+# Secret key for token signing — stable via env var, random fallback for dev
 _SECRET_KEY = os.environ.get("AGRISENSE_SECRET", secrets.token_hex(32))
 
-def get_db_path() -> str:
+
+# ─── Connection Helpers ──────────────────────────────────────────────────────
+
+def _pg_conn():
+    """Return a psycopg2 connection to Render PostgreSQL."""
+    import psycopg2
+    import psycopg2.extras
+    # Render uses postgres:// but psycopg2 needs postgresql://
+    url = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    conn = psycopg2.connect(url)
+    return conn
+
+
+def _sqlite_conn():
+    """Return a sqlite3 connection to local agrisense.db."""
+    import sqlite3
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(os.path.dirname(script_dir), 'agrisense.db')
+    db_path = os.path.join(os.path.dirname(script_dir), 'agrisense.db')
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+# ─── Table Initialization ────────────────────────────────────────────────────
+
+def init_auth_tables():
+    """Create users and farmers tables if they don't exist (PostgreSQL or SQLite)."""
+    if USE_POSTGRES:
+        conn = _pg_conn()
+        cur = conn.cursor()
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(15) UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                password_salt TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS farmers (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                name TEXT NOT NULL DEFAULT 'Farmer',
+                phone TEXT DEFAULT '',
+                location TEXT DEFAULT '',
+                latitude REAL DEFAULT 22.57,
+                longitude REAL DEFAULT 72.93,
+                soil_type TEXT DEFAULT 'Loamy Soil',
+                "N" REAL DEFAULT 180.0,
+                "P" REAL DEFAULT 42.0,
+                "K" REAL DEFAULT 160.0,
+                "pH" REAL DEFAULT 7.2,
+                "EC" REAL DEFAULT 0.65,
+                "OC" REAL DEFAULT 0.52,
+                preferred_language TEXT DEFAULT 'gu',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        conn.commit()
+        cur.close()
+        conn.close()
+        print("[AuthService] PostgreSQL tables initialised.")
+    else:
+        import sqlite3
+        conn = _sqlite_conn()
+        cur = conn.cursor()
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                password_salt TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS farmers (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                name TEXT NOT NULL DEFAULT 'Farmer',
+                phone TEXT DEFAULT '',
+                location TEXT DEFAULT '',
+                latitude REAL DEFAULT 22.57,
+                longitude REAL DEFAULT 72.93,
+                soil_type TEXT DEFAULT 'Loamy Soil',
+                N REAL DEFAULT 180.0,
+                P REAL DEFAULT 42.0,
+                K REAL DEFAULT 160.0,
+                pH REAL DEFAULT 7.2,
+                EC REAL DEFAULT 0.65,
+                OC REAL DEFAULT 0.52,
+                preferred_language TEXT DEFAULT 'gu',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        ''')
+        conn.commit()
+        conn.close()
+        print("[AuthService] SQLite tables initialised (local dev mode).")
+
+
+# ─── Password Hashing ────────────────────────────────────────────────────────
 
 def _hash_password(password: str, salt: str = None) -> Tuple[str, str]:
     """Hash password with PBKDF2-HMAC-SHA256 and a random salt."""
     if salt is None:
         salt = secrets.token_hex(16)
-    pw_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt.encode('utf-8'), 100_000)
+    pw_hash = hashlib.pbkdf2_hmac(
+        'sha256', password.encode('utf-8'), salt.encode('utf-8'), 100_000
+    )
     return pw_hash.hex(), salt
 
+
+# ─── Token Handling ──────────────────────────────────────────────────────────
+
 def _generate_token(user_id: int, username: str) -> str:
-    """Generate a signed token containing user_id, username, and expiry."""
+    """Generate a signed token containing user_id, username, and 30-day expiry."""
     payload = json.dumps({
         "user_id": user_id,
         "username": username,
-        "exp": int(time.time()) + 86400 * 30  # 30-day expiry
+        "exp": int(time.time()) + 86400 * 30
     })
     signature = hmac.new(_SECRET_KEY.encode(), payload.encode(), hashlib.sha256).hexdigest()
     import base64
     token = base64.urlsafe_b64encode(payload.encode()).decode() + "." + signature
     return token
 
+
 def verify_token(token: str) -> Optional[Dict[str, Any]]:
-    """Verify and decode a token. Returns payload dict or None if invalid."""
+    """Verify and decode a token. Returns payload dict or None if invalid/expired."""
     try:
         import base64
         parts = token.split(".")
@@ -52,11 +172,19 @@ def verify_token(token: str) -> Optional[Dict[str, Any]]:
     except Exception:
         return None
 
-import re
+
+def get_user_id_from_token(token: str) -> Optional[int]:
+    """Extract user_id from a valid auth token."""
+    payload = verify_token(token)
+    if payload:
+        return payload.get("user_id")
+    return None
+
+
+# ─── Register ────────────────────────────────────────────────────────────────
 
 def register_user(username: str, password: str) -> Dict[str, Any]:
-    """Register a new user using a 10-digit Indian Mobile Number. Returns user info + auth token."""
-    # Clean phone input (remove spaces, hyphens, +91 prefix)
+    """Register a new user using a 10-digit Indian mobile number."""
     phone_clean = re.sub(r'\D', '', username or '')
     if phone_clean.startswith('91') and len(phone_clean) == 12:
         phone_clean = phone_clean[2:]
@@ -66,30 +194,56 @@ def register_user(username: str, password: str) -> Dict[str, Any]:
     if not password or len(password) < 4:
         return {"error": "Password must be at least 4 characters"}
 
-    conn = sqlite3.connect(get_db_path())
-    cursor = conn.cursor()
-
-    # Check if phone number already exists
-    cursor.execute('SELECT id FROM users WHERE username = ?', (phone_clean,))
-    if cursor.fetchone():
-        conn.close()
-        return {"error": "An account with this mobile number already exists. Please login."}
-
     pw_hash, salt = _hash_password(password)
-    cursor.execute(
-        'INSERT INTO users (username, password_hash, password_salt) VALUES (?, ?, ?)',
-        (phone_clean, pw_hash, salt)
-    )
-    user_id = cursor.lastrowid
 
-    # Auto-create a farmer profile for this user
-    cursor.execute('''
-        INSERT INTO farmers (user_id, name, phone, location, latitude, longitude, soil_type, N, P, K, pH, EC, OC, preferred_language)
-        VALUES (?, ?, ?, '', 22.57, 72.93, 'Loamy Soil', 180.0, 42.0, 160.0, 7.2, 0.65, 0.52, 'gu')
-    ''', (user_id, f"Farmer ({phone_clean[-4:]})", phone_clean))
+    if USE_POSTGRES:
+        try:
+            conn = _pg_conn()
+            cur = conn.cursor()
 
-    conn.commit()
-    conn.close()
+            # Check duplicate
+            cur.execute('SELECT id FROM users WHERE username = %s', (phone_clean,))
+            if cur.fetchone():
+                cur.close(); conn.close()
+                return {"error": "An account with this mobile number already exists. Please login."}
+
+            cur.execute(
+                'INSERT INTO users (username, password_hash, password_salt) VALUES (%s, %s, %s) RETURNING id',
+                (phone_clean, pw_hash, salt)
+            )
+            user_id = cur.fetchone()[0]
+
+            # Auto-create farmer profile
+            cur.execute('''
+                INSERT INTO farmers (user_id, name, phone, preferred_language)
+                VALUES (%s, %s, %s, %s)
+            ''', (user_id, f"Farmer ({phone_clean[-4:]})", phone_clean, 'gu'))
+
+            conn.commit()
+            cur.close()
+            conn.close()
+        except Exception as e:
+            print(f"[AuthService] PostgreSQL register error: {e}")
+            return {"error": "Database error during registration. Please try again."}
+    else:
+        conn = _sqlite_conn()
+        cur = conn.cursor()
+        cur.execute('SELECT id FROM users WHERE username = ?', (phone_clean,))
+        if cur.fetchone():
+            conn.close()
+            return {"error": "An account with this mobile number already exists. Please login."}
+
+        cur.execute(
+            'INSERT INTO users (username, password_hash, password_salt) VALUES (?, ?, ?)',
+            (phone_clean, pw_hash, salt)
+        )
+        user_id = cur.lastrowid
+        cur.execute('''
+            INSERT INTO farmers (user_id, name, phone, preferred_language)
+            VALUES (?, ?, ?, ?)
+        ''', (user_id, f"Farmer ({phone_clean[-4:]})", phone_clean, 'gu'))
+        conn.commit()
+        conn.close()
 
     token = _generate_token(user_id, phone_clean)
     return {
@@ -101,8 +255,11 @@ def register_user(username: str, password: str) -> Dict[str, Any]:
         "message": "Account created successfully!"
     }
 
+
+# ─── Login ───────────────────────────────────────────────────────────────────
+
 def login_user(username: str, password: str) -> Dict[str, Any]:
-    """Authenticate a user using Mobile Number & Password."""
+    """Authenticate a user using mobile number and password."""
     phone_clean = re.sub(r'\D', '', username or '')
     if phone_clean.startswith('91') and len(phone_clean) == 12:
         phone_clean = phone_clean[2:]
@@ -112,35 +269,42 @@ def login_user(username: str, password: str) -> Dict[str, Any]:
     if not password:
         return {"error": "Password is required"}
 
-    conn = sqlite3.connect(get_db_path())
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE username = ?', (phone_clean,))
-    row = cursor.fetchone()
-    conn.close()
+    if USE_POSTGRES:
+        try:
+            import psycopg2.extras
+            conn = _pg_conn()
+            conn.cursor_factory = psycopg2.extras.RealDictCursor
+            cur = conn.cursor()
+            cur.execute('SELECT * FROM users WHERE username = %s', (phone_clean,))
+            row = cur.fetchone()
+            cur.close()
+            conn.close()
+        except Exception as e:
+            print(f"[AuthService] PostgreSQL login error: {e}")
+            return {"error": "Database error during login. Please try again."}
+    else:
+        conn = _sqlite_conn()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM users WHERE username = ?', (phone_clean,))
+        row = cur.fetchone()
+        conn.close()
+        if row:
+            row = dict(row)
 
     if not row:
         return {"error": "No account found with this mobile number. Please register first."}
 
-    user = dict(row)
-    pw_hash, _ = _hash_password(password, user['password_salt'])
-
-    if pw_hash != user['password_hash']:
+    pw_hash, _ = _hash_password(password, row['password_salt'])
+    if pw_hash != row['password_hash']:
         return {"error": "Incorrect password. Please try again."}
 
-    token = _generate_token(user['id'], user['username'])
+    user_id = row['id']
+    token = _generate_token(user_id, row['username'])
     return {
         "success": True,
-        "user_id": user['id'],
-        "username": user['username'],
-        "phone": user['username'],
+        "user_id": user_id,
+        "username": row['username'],
+        "phone": row['username'],
         "token": token,
         "message": "Login successful!"
     }
-
-def get_user_id_from_token(token: str) -> Optional[int]:
-    """Extract user_id from a valid auth token."""
-    payload = verify_token(token)
-    if payload:
-        return payload.get("user_id")
-    return None
