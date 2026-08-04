@@ -7,7 +7,7 @@
   **Smart Agricultural Decision Support for Indian Farmers**
 
   [![Download APK](https://img.shields.io/badge/📥_Download_AgriSense_APK-v4.5-1b4332?style=for-the-badge&logo=android&logoColor=white)](https://github.com/HarshitsinhVadher/agrisense/releases/download/v4.5/AgriSense-v4.5-release.apk)
-  [![GitHub Release](https://img.shields.io/github/v/release/HarshitsinhVadher/agrisense?style=for-the-badge&color=2d6a4f)](https://github.com/HarshitsinhVadher/agrisense/releases/tag/v4.5)
+  [![GitHub Release](https://img.shields.io/badge/Release-v4.5-2d6a4f?style=for-the-badge&logo=github)](https://github.com/HarshitsinhVadher/agrisense/releases/tag/v4.5)
   [![Web App Live](https://img.shields.io/badge/🌐_Live_Web_App-agrisense.onrender.com-52b788?style=for-the-badge)](https://agrisense.onrender.com)
   [![License](https://img.shields.io/badge/License-MIT-081c15?style=for-the-badge)](LICENSE)
 
@@ -84,7 +84,7 @@ Powered by **Google Gemini Vision & Search Grounding**, **Random Forest Machine 
          ▼                   ▼                       ▼                       ▼                   ▼
 ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
 │ Render Postgres │ │  Gemini Vision  │ │ Random Forest   │ │ OpenStreetMap   │ │  Open-Meteo     │
-│ Database (Auth) │ │  AI & Grounding │ │ Crop Classifier │ │ Nominatim API   │ │ Weather Service │
+│ Database (Auth) │ │  AI & Grounding │ │ Crop Classifier │ │ Nominatim API   │ │  Weather Service │
 └─────────────────┘ └─────────────────┘ └─────────────────┘ └─────────────────┘ └─────────────────┘
 ```
 
@@ -182,7 +182,5 @@ Distributed under the MIT License. See `LICENSE` for more details.
 <div align="center">
 
   **AgriSense — Empowering Indian Agriculture with Artificial Intelligence** 🌾🤖
-
-  [![Download APK](https://img.shields.io/badge/📥_Download_AgriSense_APK-v4.5-1b4332?style=for-the-badge&logo=android&logoColor=white)](https://github.com/HarshitsinhVadher/agrisense/releases/download/v4.5/AgriSense-v4.5-release.apk)
 
 </div>
