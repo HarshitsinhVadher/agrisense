@@ -272,13 +272,17 @@ Output ONLY a JSON object with this exact structure:
 
 CRITICAL: Return ONLY raw JSON. recommended_crops MUST contain exactly 5 crops."""
 
+    api_key = (api_key or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY") or "").strip()
+
     result = None
-    if api_key and HAS_GEMINI:
+    if api_key and len(api_key) > 15 and HAS_GEMINI:
         try:
             client = genai.Client(api_key=api_key)
             models_to_try = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-flash-latest']
 
             for attempt in range(2):  # Main attempt + 1 Validation Retry
+                if result:
+                    break
                 retry_warn = ""
                 if attempt == 1:
                     retry_warn = f"CRITICAL RE-GEN WARNING: Your previous output contained a region mismatch hallucination! DO NOT mention outside regions. Focus ONLY on {location_name} and {zone_name}.\n\n"
@@ -305,12 +309,17 @@ CRITICAL: Return ONLY raw JSON. recommended_crops MUST contain exactly 5 crops."
                                 result = parsed
                                 break
                     except Exception as e:
-                        print(f"Gemini generation error ({model_name}): {e}")
-                        continue
+                        err_str = str(e)
+                        if "401" in err_str or "UNAUTHENTICATED" in err_str:
+                            print(f"[Gemini Auth] GEMINI_API_KEY on server is invalid or unauthenticated: {err_str[:120]}")
+                            break # Skip remaining models if API key is unauthenticated
+                        else:
+                            print(f"Gemini generation error ({model_name}): {e}")
+                            continue
         except Exception as global_err:
             print(f"Global Gemini advisor error: {global_err}")
 
-    # Fallback to rule-based system if Gemini unavailable or failed
+    # Fallback to rule-based system if Gemini unavailable, failed, or unauthenticated
     if not result:
         result = _build_smart_fallback(location_name, soil_type, N, P, K, ph, temperature, rainfall, lang, regional_crops)
 

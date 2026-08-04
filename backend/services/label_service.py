@@ -39,17 +39,17 @@ def scan_and_interpret_label(image_bytes: Optional[bytes] = None, text_input: Op
     1. If GEMINI_API_KEY is set and image provided → Gemini Vision direct analysis
     2. Fallback → local fuzzy matching against products_db.json
     """
-    api_key = os.environ.get("GEMINI_API_KEY")
+    api_key = (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY") or "").strip()
     products = load_products_db()
 
     # ─── Primary Path: Gemini Vision API (direct image analysis) ───
-    if api_key and HAS_GEMINI and image_bytes:
+    if api_key and len(api_key) > 15 and HAS_GEMINI and image_bytes:
         try:
             result = _analyze_with_gemini_vision(api_key, image_bytes, products, lang)
             if result and not result.get("error"):
                 return result
         except Exception as e:
-            print(f"Gemini Vision analysis failed, falling back to local match: {e}")
+            print(f"Gemini Vision analysis failed, falling back to local chemical DB match: {e}")
 
     # ─── Fallback Path: Text-based fuzzy matching ───
     raw_text = text_input or ""
