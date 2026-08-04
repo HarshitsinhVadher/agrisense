@@ -28,9 +28,9 @@ from services.db_service import (
 )
 
 app = FastAPI(
-    title="AgriSense API v3.0 — Auth, GPS, AI Vision",
-    version="3.0.0",
-    description="Backend REST API: Authentication, GPS Weather, Gemini Vision Label Scanner, Crop ML, Soil OCR & SQL DB"
+    title="AgriSense API v4.4 — Auth, GPS, AI Vision",
+    version="4.4.0",
+    description="Backend REST API: PostgreSQL Auth, GPS Weather, Gemini Vision Label Scanner, Crop ML & SQL DB"
 )
 
 app.add_middleware(
