@@ -69,8 +69,21 @@ const TRANSLATIONS = {
     farm_location: "Farm Village / District",
     soil_type: "Soil Type",
     language_pref: "Preferred Language",
-    save_profile_btn: "Save Profile",
-    history_title: "Recent Activity History"
+    save_profile_btn: "💾 Save Profile",
+    history_title: "Recent Activity History",
+
+    // Auth
+    auth_welcome: "Farmer Login",
+    auth_create: "Create Farmer Account",
+    auth_phone: "Mobile Number (10 Digits)",
+    auth_phone_confirm: "Re-type Mobile Number",
+    auth_pass: "Password",
+    phone_placeholder: "Enter 10-digit mobile number",
+    confirm_placeholder: "Re-enter 10-digit mobile number",
+    btn_login: "🔓 Login",
+    btn_register: "📝 Register Account",
+    switch_to_reg: "Don't have an account? Register here",
+    switch_to_login: "Already have an account? Login here"
   },
 
   gu: {
@@ -143,8 +156,21 @@ const TRANSLATIONS = {
     farm_location: "ગામ / જિલ્લો",
     soil_type: "જમીનનો પ્રકાર",
     language_pref: "પસંદગીની ભાષા",
-    save_profile_btn: "પ્રોફાઇલ સાચવો",
-    history_title: "હાલની પ્રવૃત્તિ ઇતિહાસ"
+    save_profile_btn: "💾 પ્રોફાઇલ સાચવો",
+    history_title: "હાલની પ્રવૃત્તિ ઇતિહાસ",
+
+    // Auth
+    auth_welcome: "ખેડૂત લૉગઇન",
+    auth_create: "નવું ખેડૂત ખાતું બનાવો",
+    auth_phone: "૧૦-અંકનો મોબાઈલ નંબર",
+    auth_phone_confirm: "મોબાઈલ નંબર ફરીથી લખો",
+    auth_pass: "ગુપ્ત પાસવર્ડ",
+    phone_placeholder: "૧૦-અંકનો મોબાઈલ નંબર દાખલ કરો",
+    confirm_placeholder: "મોબાઈલ નંબર ફરીથી દાખલ કરો",
+    btn_login: "🔓 પ્રવેશ કરો (લૉગઇન)",
+    btn_register: "📝 નવું ખાતું બનાવો",
+    switch_to_reg: "ખાતું નથી? અહીં નવું ખાતું બનાવો",
+    switch_to_login: "ખાતું છે? અહીં પ્રવેશ કરો"
   },
 
   hi: {
@@ -217,7 +243,20 @@ const TRANSLATIONS = {
     farm_location: "गांव / जिला",
     soil_type: "मृदा का प्रकार",
     language_pref: "पसंदीदा भाषा",
-    save_profile_btn: "प्रोफ़ाइल सहेजें",
-    history_title: "हाल की गतिविधि इतिहास"
+    save_profile_btn: "💾 प्रोफ़ाइल सहेजें",
+    history_title: "हाल की गतिविधि इतिहास",
+
+    // Auth
+    auth_welcome: "किसान लॉगिन",
+    auth_create: "नया किसान खाता बनाएं",
+    auth_phone: "10-अंकों का मोबाइल नंबर",
+    auth_phone_confirm: "मोबाइल नंबर पुनः दर्ज करें",
+    auth_pass: "पासवर्ड",
+    phone_placeholder: "10-अंकों का मोबाइल नंबर दर्ज करें",
+    confirm_placeholder: "मोबाइल नंबर दोबारा दर्ज करें",
+    btn_login: "🔓 लॉगिन करें",
+    btn_register: "📝 नया खाता बनाएं",
+    switch_to_reg: "खाता नहीं है? यहां नया खाता बनाएं",
+    switch_to_login: "खाता है? यहां लॉगिन करें"
   }
 };
