@@ -104,8 +104,15 @@ def read_root():
     frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend')
     index_file = os.path.join(frontend_dir, "index.html") if os.path.exists(frontend_dir) else None
     if index_file and os.path.exists(index_file):
-        return FileResponse(index_file)
-    return {"message": "AgriSense v3.0 API Server Active.", "status": "online"}
+        return FileResponse(
+            index_file,
+            headers={
+                "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            }
+        )
+    return {"message": "AgriSense v4.4 API Server Active.", "status": "online"}
 
 @app.get("/api/health")
 @app.head("/api/health")
