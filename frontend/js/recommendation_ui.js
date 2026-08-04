@@ -58,10 +58,11 @@ async function submitCropRecommendation(e) {
   resultsContainer.innerHTML = `<div style="text-align:center; padding:20px;"><div class="spinner"></div><p style="margin-top:8px; font-size:13px; color:#1b4332;">Running Random Forest Classifier...</p></div>`;
 
   try {
+    const lang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'en';
     const res = await fetch('/api/recommend-crop', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ N, P, K, ph, temperature, humidity, rainfall })
+      body: JSON.stringify({ N, P, K, ph, temperature, humidity, rainfall, lang })
     });
     const data = await res.json();
 
