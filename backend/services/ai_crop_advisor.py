@@ -334,53 +334,172 @@ def translate_advice_to_lang(advice: Dict[str, Any], lang: str) -> Dict[str, Any
 
     # ── Label maps ──────────────────────────────────────────────────────────
     water_map = {
-        'gu': {'Low': 'ઓછું', 'Medium': 'મધ્યમ', 'High': 'વધારે',
-               'Very High': 'ઘણું વધારે', 'low': 'ઓછું', 'medium': 'મધ્યમ', 'high': 'વધારે'},
-        'hi': {'Low': 'कम', 'Medium': 'मध्यम', 'High': 'अधिक',
-               'Very High': 'बहुत अधिक', 'low': 'कम', 'medium': 'मध्यम', 'high': 'अधिक'},
+        'gu': {'Low': 'ઓછું', 'Medium': 'મધ્યમ', 'High': 'વધારે', 'Very Low': 'ખૂબ ઓછું', 'Very High': 'ઘણું વધારે',
+               'low': 'ઓછું', 'medium': 'મધ્યમ', 'high': 'વધારે', 'very low': 'ખૂબ ઓછું', 'very high': 'ઘણું વધારે'},
+        'hi': {'Low': 'कम', 'Medium': 'मध्यम', 'High': 'अधिक', 'Very Low': 'बहुत कम', 'Very High': 'बहुत अधिक',
+               'low': 'कम', 'medium': 'मध्यम', 'high': 'अधिक', 'very low': 'बहुत कम', 'very high': 'बहुत अधिक'},
     }
     season_map = {
         'gu': {'Kharif': 'ખરીફ', 'Rabi': 'રવિ', 'Summer': 'ઉનાળો', 'Zaid': 'ઝાઇદ',
-               'kharif': 'ખરીફ', 'rabi': 'રવિ', 'summer': 'ઉનાળો'},
+               'kharif': 'ખરીફ', 'rabi': 'રવિ', 'summer': 'ઉનાળો', 'Days': 'દિવસો', 'Months': 'મહિના', 'Years': 'વર્ષ'},
         'hi': {'Kharif': 'खरीफ', 'Rabi': 'रबी', 'Summer': 'ग्रीष्म', 'Zaid': 'जायद',
-               'kharif': 'खरीफ', 'rabi': 'रबी', 'summer': 'ग्रीष्म'},
+               'kharif': 'खरीफ', 'rabi': 'रबी', 'summer': 'ग्रीष्म', 'Days': 'दिन', 'Months': 'महीने', 'Years': 'वर्ष'},
     }
     crop_name_map = {
-        'gu': {
-            'Groundnut': 'મગફળી', 'Cotton': 'કપાસ', 'Wheat': 'ઘઉં', 'Rice': 'ડાંગર',
-            'Bajra': 'બાજરી', 'Maize': 'મકાઈ', 'Sugarcane': 'શેરડી', 'Soybean': 'સોયાબીન',
-            'Onion': 'ડુંગળી', 'Potato': 'બટાકા', 'Tomato': 'ટામેટા', 'Banana': 'કેળા',
-            'Mango': 'કેરી', 'Cumin': 'જીરૂ', 'Fennel': 'વરિયાળી', 'Garlic': 'લસણ',
-            'Mustard': 'રાઈ', 'Castor': 'એરંડા', 'Sesame': 'તલ', 'Moong': 'મગ',
-            'Tur': 'તુવેર', 'Chickpea': 'ચણા', 'Lentil': 'મસૂર', 'Jowar': 'જુવાર',
-        },
-        'hi': {
-            'Groundnut': 'मूंगफली', 'Cotton': 'कपास', 'Wheat': 'गेहूं', 'Rice': 'चावल',
-            'Bajra': 'बाजरा', 'Maize': 'मक्का', 'Sugarcane': 'गन्ना', 'Soybean': 'सोयाबीन',
-            'Onion': 'प्याज', 'Potato': 'आलू', 'Tomato': 'टमाटर', 'Banana': 'केला',
-            'Mango': 'आम', 'Cumin': 'जीरा', 'Fennel': 'सौंफ', 'Garlic': 'लहसुन',
-            'Mustard': 'सरसों', 'Castor': 'अरंडी', 'Sesame': 'तिल', 'Moong': 'मूंग',
-            'Tur': 'अरहर', 'Chickpea': 'चना', 'Lentil': 'मसूर', 'Jowar': 'ज्वार',
-        },
+        'gu': [
+            ('Bhalia Wheat (Rainfed Wheat)', 'ભાલીયા ઘઉં (બિન-પિયત ઘઉં)'),
+            ('Bhalia Wheat', 'ભાલીયા ઘઉં'),
+            ('Paddy (Rice)', 'ડાંગર (ચોખા)'),
+            ('Rice', 'ડાંગર (ચોખા)'),
+            ('Sugarcane', 'શેરડી'),
+            ('Cotton', 'કપાસ'),
+            ('Bt Cotton', 'કપાસ'),
+            ('Banana', 'કેળા'),
+            ('Pigeonpea (Tur / Arhar)', 'તુવેર'),
+            ('Pigeonpea', 'તુવેર'),
+            ('Tur', 'તુવેર'),
+            ('Bajra (Pearl Millet)', 'બાજરી'),
+            ('Bajra', 'બાજરી'),
+            ('Castor (Erandi)', 'એરંડા'),
+            ('Castor', 'એરંડા'),
+            ('Isabgol (Psyllium Husk)', 'ઈસબગુલ'),
+            ('Isabgol', 'ઈસબગુલ'),
+            ('Cumin (Jeera)', 'જીરૂ'),
+            ('Cumin', 'જીરૂ'),
+            ('Date Palm (Khajoor)', 'ખજૂર (ખારેક)'),
+            ('Date Palm', 'ખજૂર'),
+            ('Potato', 'બટાકા'),
+            ('Mustard (Sarson)', 'રાઈ'),
+            ('Mustard', 'રાઈ'),
+            ('Groundnut', 'મગફળી'),
+            ('Wheat', 'ઘઉં'),
+            ('Sesame (Til)', 'તલ'),
+            ('Sesame', 'તલ'),
+            ('Garlic', 'લસણ'),
+            ('Onion', 'ડુંગળી'),
+            ('Tomato', 'ટામેટા'),
+            ('Mango', 'કેરી'),
+            ('Maize', 'મકાઈ'),
+            ('Turmeric', 'હળદર'),
+            ('Ginger', 'આદુ'),
+            ('Moong (Green Gram)', 'મગ'),
+            ('Moong', 'મગ'),
+            ('Gram (Chickpea / Chana)', 'ચણા'),
+            ('Gram', 'ચણા'),
+            ('Chickpea', 'ચણા'),
+            ('Sorghum (Jowar)', 'જુવાર'),
+            ('Jowar', 'જુવાર'),
+            ('Soybean', 'સોયાબીન')
+        ],
+        'hi': [
+            ('Bhalia Wheat (Rainfed Wheat)', 'भालिया गेहूं (वर्षा आधारित)'),
+            ('Bhalia Wheat', 'भालिया गेहूं'),
+            ('Paddy (Rice)', 'धान (चावल)'),
+            ('Rice', 'चावल'),
+            ('Sugarcane', 'गन्ना'),
+            ('Cotton', 'कपास'),
+            ('Bt Cotton', 'कपास'),
+            ('Banana', 'केला'),
+            ('Pigeonpea (Tur / Arhar)', 'अरहर (तुअर)'),
+            ('Pigeonpea', 'अरहर'),
+            ('Tur', 'तुअर'),
+            ('Bajra (Pearl Millet)', 'बाजरा'),
+            ('Bajra', 'बाजरा'),
+            ('Castor (Erandi)', 'अरंडी'),
+            ('Castor', 'अरंडी'),
+            ('Isabgol (Psyllium Husk)', 'इसबगोल'),
+            ('Isabgol', 'इसबगोल'),
+            ('Cumin (Jeera)', 'जीरा'),
+            ('Cumin', 'जीरा'),
+            ('Date Palm (Khajoor)', 'खजूर'),
+            ('Date Palm', 'खजूर'),
+            ('Potato', 'आलू'),
+            ('Mustard (Sarson)', 'सरसों'),
+            ('Mustard', 'सरसों'),
+            ('Groundnut', 'मूंगफली'),
+            ('Wheat', 'गेहूं'),
+            ('Sesame (Til)', 'तिल'),
+            ('Sesame', 'तिल'),
+            ('Garlic', 'लहसुन'),
+            ('Onion', 'प्याज'),
+            ('Tomato', 'टमाटर'),
+            ('Mango', 'आम'),
+            ('Maize', 'मक्का'),
+            ('Turmeric', 'हल्दी'),
+            ('Ginger', 'अदरक'),
+            ('Moong (Green Gram)', 'मूंग'),
+            ('Moong', 'मूंग'),
+            ('Gram (Chickpea / Chana)', 'चना'),
+            ('Gram', 'चना'),
+            ('Chickpea', 'चना'),
+            ('Sorghum (Jowar)', 'ज्वार'),
+            ('Jowar', 'ज्वार'),
+            ('Soybean', 'सोयाबीन')
+        ]
     }
 
     w_map = water_map.get(lang, {})
     s_map = season_map.get(lang, {})
-    c_map = crop_name_map.get(lang, {})
+    c_pairs = crop_name_map.get(lang, [])
+
+    # Common agronomic phrase translations for suitability reasons
+    reason_tr = {
+        'gu': {
+            'Famous GI-tagged Bhalia durum wheat grown on conserved residual soil moisture in deep black Bhal clay soils without irrigation.': 'ઊંડી કાળી ભાલ જમીનમાં સંગ્રહિત ભેજ પર પિયત વગર થતા પ્રખ્યાત જીઆઈ-ટેગ ધરાવતા ભાલીયા ઘઉં.',
+            'Major kharif cash crop grown extensively in Sanand, Bavla, and Dholka talukas.': 'સાણંદ, બાવળા અને ધોળકા તાલુકામાં વ્યાપકપણે લેવાતો મુખ્ય ખરીફ રોકડિયો પાક.',
+            'Primary food grain suitable for low-land kharif cultivation under canal/monsoon irrigation.': 'નહેર અથવા વરસાદી પાણી હેઠળ નીચાણવાળી જમીનમાં ખરીફ વાવેતર માટે અનુકૂળ મુખ્ય અન્નપાક.',
+            'High yield variety suited to local soil and climate.': 'સ્થાનિક જમીન અને હવામાન માટે અનુકૂળ ઉચ્ચ ઉત્પાદન આપતી જાત.',
+            'Quintal/Acre': 'ક્વિન્ટલ/એકર',
+            'Tonnes/Acre': 'ટન/એકર',
+            'Days': 'દિવસો',
+            'Months': 'મહિના'
+        },
+        'hi': {
+            'Famous GI-tagged Bhalia durum wheat grown on conserved residual soil moisture in deep black Bhal clay soils without irrigation.': 'बिना सिंचाई के गहरी काली भाल मिट्टी में संरक्षित नमी पर उगाई जाने वाली प्रसिद्ध जीआई-टैग भालिया गेहूं।',
+            'Major kharif cash crop grown extensively in Sanand, Bavla, and Dholka talukas.': 'साणंद, बावला और ढोलका तालुकों में व्यापक रूप से उगाई जाने वाली प्रमुख खरीफ नकदी फसल।',
+            'Primary food grain suitable for low-land kharif cultivation under canal/monsoon irrigation.': 'नहर या मानसूनी सिंचाई के तहत निचले इलाकों में खरीफ खेती के लिए उपयुक्त प्रमुख खाद्यान्न।',
+            'High yield variety suited to local soil and climate.': 'स्थानीय मिट्टी और जलवायु के लिए उपयुक्त उच्च उपज वाली किस्म।',
+            'Quintal/Acre': 'क्विंटल/एकड़',
+            'Tonnes/Acre': 'टन/एकड़',
+            'Days': 'दिन',
+            'Months': 'महीने'
+        }
+    }.get(lang, {})
 
     # ── Translate recommended_crops list ────────────────────────────────────
     translated_crops = []
     for crop in advice.get('recommended_crops', []):
         c = dict(crop)
-        # Translate crop name
-        c['crop_name'] = c_map.get(c.get('crop_name', ''), c.get('crop_name', ''))
+        raw_name = c.get('crop_name', '')
+
+        # Substring / exact match translation for crop names
+        for en_pattern, tr_text in c_pairs:
+            if en_pattern.lower() in raw_name.lower():
+                c['crop_name'] = tr_text
+                break
+
         # Translate water requirement
         wr = c.get('water_requirement', '')
         c['water_requirement'] = w_map.get(wr, wr)
-        # Translate season hints inside duration/reason if present
-        for season_en, season_tr in s_map.items():
-            if 'suitability_reason' in c:
-                c['suitability_reason'] = c['suitability_reason'].replace(season_en, season_tr)
+
+        # Translate yield unit & duration unit
+        if 'expected_yield_per_acre' in c:
+            for k, v in reason_tr.items():
+                c['expected_yield_per_acre'] = c['expected_yield_per_acre'].replace(k, v)
+
+        if 'season_duration' in c:
+            for k, v in s_map.items():
+                c['season_duration'] = c['season_duration'].replace(k, v)
+
+        # Translate suitability_reason
+        if 'suitability_reason' in c:
+            reason = c['suitability_reason']
+            for k, v in reason_tr.items():
+                reason = reason.replace(k, v)
+            for en_pattern, tr_text in c_pairs:
+                reason = reason.replace(en_pattern, tr_text)
+            c['suitability_reason'] = reason
+
         translated_crops.append(c)
 
     advice['recommended_crops'] = translated_crops
@@ -389,10 +508,12 @@ def translate_advice_to_lang(advice: Dict[str, Any], lang: str) -> Dict[str, Any
     soil_tr = {
         'gu': {'Loamy Soil': 'ગોરાડુ જમીન', 'Black Cotton Soil': 'કાળી જમીન',
                'Sandy Soil': 'રેતાળ જમીન', 'Alluvial Soil': 'કાંપ જમીન',
-               'Red Soil': 'લાલ જમીન', 'Clay Soil': 'ચીકણી જમીન'},
+               'Red Soil': 'લાલ જમીન', 'Clay Soil': 'ચીકણી જમીન',
+               'Medium Black Soil': 'મધ્યમ કાળી જમીન', 'Saline Soil': 'ક્ષારીય જમીન'},
         'hi': {'Loamy Soil': 'दोमट मिट्टी', 'Black Cotton Soil': 'काली मिट्टी',
                'Sandy Soil': 'रेतीली मिट्टी', 'Alluvial Soil': 'जलोढ़ मिट्टी',
-               'Red Soil': 'लाल मिट्टी', 'Clay Soil': 'चिकनी मिट्टी'},
+               'Red Soil': 'लाल मिट्टी', 'Clay Soil': 'चिकनी मिट्टी',
+               'Medium Black Soil': 'मध्यम काली मिट्टी', 'Saline Soil': 'लवणीय मिट्टी'},
     }
     soil_label = advice.get('detected_soil_type', '')
     advice['detected_soil_type'] = soil_tr.get(lang, {}).get(soil_label, soil_label)

@@ -26,7 +26,7 @@ async function loadWeatherData(lat = window.currentLat, lon = window.currentLon,
     window.currentWeatherData = data;
     renderWeatherHero(data, locName);
     renderAdvisories(data.advisories);
-    renderForecast(data.daily_forecast);
+    renderForecast(data.forecast || data.daily_forecast);
 
     // Trigger soil location data fetch for Crop AI tab
     if (typeof fetchLocationSoilData === 'function') {
@@ -109,12 +109,16 @@ function renderForecast(forecast) {
   }
 
   container.innerHTML = forecast.map(day => {
-    const icon = (day.condition || '').toLowerCase().includes('rain') ? '🌧️' : '☀️';
+    const icon = day.icon || ((day.description || day.condition || '').toLowerCase().includes('rain') ? '🌧️' : '☀️');
+    const dateStr = day.date || day.day || 'Day';
+    const maxT = day.max_temp !== undefined ? Math.round(day.max_temp) : Math.round(day.temp || 30);
+    const minT = day.min_temp !== undefined ? Math.round(day.min_temp) : Math.round((day.temp || 30) - 5);
+
     return `
       <div class="forecast-item">
-        <div class="forecast-day">${day.day || day.date}</div>
+        <div class="forecast-day">${dateStr}</div>
         <div class="forecast-icon">${icon}</div>
-        <div class="forecast-temp">${Math.round(day.max_temp || day.temp)}° / ${Math.round(day.min_temp || (day.temp - 5))}°</div>
+        <div class="forecast-temp">${maxT}° / ${minT}°</div>
       </div>
     `;
   }).join('');
