@@ -41,12 +41,18 @@ function setLanguage(lang) {
   updateUILabels();
   updateLogoutLabel();
 
-  if (window.currentWeatherData) {
+  if (window.currentLat && window.currentLon) {
     loadWeatherData(
-      window.currentWeatherData.latitude,
-      window.currentWeatherData.longitude,
-      window.currentWeatherData.location
+      window.currentLat,
+      window.currentLon,
+      window.currentLocationName
     );
+  }
+
+  // If crop recommendations are currently rendered, refresh them in new language
+  const recContainer = document.getElementById('recommend-results');
+  if (recContainer && recContainer.children.length > 0 && !recContainer.innerHTML.includes('spinner')) {
+    submitCropRecommendation();
   }
 }
 

@@ -10,14 +10,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Cache-busted stylesheet (v=440 forces fresh fetch) -->
-  <link rel="stylesheet" href="/static/css/styles.css?v=440">
+  <link rel="stylesheet" href="/static/css/styles.css?v=441">
 
-  <!-- CRITICAL LAYOUT OVERRIDE — embedded so it cannot be cached -->
   <style>
-    html, body { height: 100%; background-color: #12241b; color: #1f2937; }
+    html, body { height: 100%; background-color: #12241b; color: #1f2937; margin:0; padding:0; }
 
-    /* Fixed phone-frame approach — no overflow:hidden on parent */
     #app-frame {
       position: fixed !important;
       top: 0; bottom: 0;
@@ -26,11 +23,10 @@
       background-color: #f4f8f5;
       display: flex !important;
       flex-direction: column !important;
-      overflow: visible !important;
     }
     @media (min-width: 500px) {
       #app-frame {
-        top: 4vh; bottom: 4vh;
+        top: 3vh; bottom: 3vh;
         border-radius: 28px;
         overflow: hidden !important;
         border: 3px solid rgba(255,255,255,0.12);
@@ -38,22 +34,20 @@
       }
     }
 
-    /* KEY FIX: main must shrink in flex column and scroll */
     main {
-      flex: 1 1 0 !important;       /* 1 1 0 = grow, shrink, basis 0 */
-      min-height: 0 !important;     /* allow shrinking below content height */
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
       overflow-y: auto !important;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      padding: 16px;
-      padding-bottom: 88px;         /* clear the bottom nav */
+      padding: 14px;
+      padding-bottom: 84px;
     }
 
-    /* Bottom nav — in-flow flex child, NOT absolute */
     .bottom-nav {
-      position: static !important;  /* undo any absolute positioning */
+      position: static !important;
       flex-shrink: 0 !important;
-      height: 72px;
+      height: 68px;
       background: #fff;
       display: flex;
       justify-content: space-around;
@@ -62,123 +56,58 @@
       box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
       z-index: 20;
     }
-  </style>
 
-  <style>
-    /* ─── Auth Overlay ─── */
-    #auth-overlay {
-      position: fixed; inset: 0; z-index: 1000;
-      background: linear-gradient(160deg, #052e16 0%, #1b4332 50%, #2d6a4f 100%);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px; overflow-y: auto;
+    /* ─── Soil Pill Selectors ─── */
+    .soil-pill-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; }
+    .soil-pill {
+      white-space: nowrap; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;
+      background: #e5e7eb; color: #374151; border: none; cursor: pointer; transition: all 0.2s;
     }
+    .soil-pill.active { background: #1b4332; color: #fff; }
+
+    /* ─── City Search ─── */
+    .city-search-box { display: flex; gap: 6px; margin-top: 6px; }
+    .city-result-item { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; cursor: pointer; }
+    .city-result-item:hover { background: #f0fdf4; }
+
+    /* ─── Auth & Success overlays ─── */
+    #auth-overlay { position: fixed; inset: 0; z-index: 1000; background: linear-gradient(160deg, #052e16 0%, #1b4332 50%, #2d6a4f 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
     #auth-overlay.hidden { display: none; }
-
-    .auth-logo { font-size: 56px; margin-bottom: 6px; }
-    .auth-brand { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; color: #fff; margin: 0; }
-    .auth-subtitle { color: #74c69d; font-size: 13px; margin: 4px 0 20px; text-align: center; }
-
-    .auth-lang-bar { display: flex; gap: 8px; margin-bottom: 20px; }
-    .auth-lang-btn {
-      padding: 6px 16px; border-radius: 20px; border: none; cursor: pointer;
-      font-size: 13px; font-weight: 600; background: rgba(255,255,255,0.15); color: #fff; transition: all 0.2s;
-    }
-    .auth-lang-btn.active { background: #52b788; color: #fff; }
-
-    .auth-card {
-      background: #fff; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 380px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-    }
-    .auth-card-title { font-size: 20px; font-weight: 700; color: #1b4332; margin: 0 0 20px; text-align: center; }
-
-    .auth-label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; margin-top: 14px; }
-    .auth-input {
-      width: 100%; box-sizing: border-box; padding: 12px 14px; border: 2px solid #d1fae5;
-      border-radius: 10px; font-size: 15px; font-family: 'Inter', sans-serif;
-      background: #f0fdf4; color: #1a1a1a; outline: none; transition: border-color 0.2s;
-    }
-    .auth-input:focus { border-color: #52b788; }
-    .auth-error { color: #dc2626; font-size: 13px; margin-top: 10px; text-align: center; padding: 8px; background: #fef2f2; border-radius: 8px; }
-    .auth-btn {
-      width: 100%; padding: 14px; border: none; border-radius: 12px; margin-top: 18px;
-      background: linear-gradient(135deg, #2d6a4f, #52b788); color: #fff;
-      font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Outfit', sans-serif; transition: opacity 0.2s;
-    }
-    .auth-btn:hover { opacity: 0.9; }
-    .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .auth-switch { text-align: center; margin-top: 16px; color: #2d6a4f; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline; }
-
-    /* ─── Registration Success ─── */
-    #reg-success-overlay {
-      position: fixed; inset: 0; z-index: 1001;
-      background: linear-gradient(160deg, #052e16 0%, #1b4332 60%);
-      display: flex; align-items: center; justify-content: center; padding: 24px;
-    }
+    .auth-card { background: #fff; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+    #reg-success-overlay { position: fixed; inset: 0; z-index: 1001; background: linear-gradient(160deg, #052e16 0%, #1b4332 60%); display: flex; align-items: center; justify-content: center; padding: 24px; }
     #reg-success-overlay.hidden { display: none; }
-    .success-card {
-      background: #fff; border-radius: 24px; padding: 36px 28px; max-width: 360px; width: 100%;
-      text-align: center; box-shadow: 0 25px 70px rgba(0,0,0,0.4);
-    }
-    .success-icon { font-size: 72px; margin-bottom: 12px; }
-    .success-title { font-size: 22px; font-weight: 800; color: #166534; margin: 0 0 8px; font-family: 'Outfit', sans-serif; }
-    .success-phone-box { background: #f0fdf4; border-radius: 12px; padding: 12px 20px; margin: 16px 0; }
-    .success-phone-label { font-size: 12px; color: #6b7280; margin-bottom: 4px; }
-    .success-phone-num { font-size: 22px; font-weight: 800; color: #1b4332; letter-spacing: 2px; }
-    .success-desc { font-size: 14px; color: #374151; line-height: 1.6; margin-bottom: 20px; }
-
-    /* ─── Logout bar in Profile ─── */
-    .logout-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid #d1fae5; }
-    .logout-phone-badge {
-      display: flex; align-items: center; gap: 10px; background: #f0fdf4;
-      border-radius: 10px; padding: 10px 14px; margin-bottom: 16px;
-    }
-    .logout-phone-badge span { font-size: 13px; color: #166534; font-weight: 600; }
-    .btn-logout {
-      width: 100%; padding: 13px; background: #dc2626; color: #fff; border: none;
-      border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;
-      font-family: 'Outfit', sans-serif; transition: opacity 0.2s;
-    }
-    .btn-logout:hover { opacity: 0.88; }
-
-    /* ─── Spinner in button ─── */
-    .btn-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- AUTH OVERLAY (Phone Login / Register)              -->
+<!-- AUTH OVERLAY                                        -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div id="auth-overlay">
-  <div class="auth-logo">🌱</div>
-  <p class="auth-brand">AgriSense</p>
-  <p class="auth-subtitle" id="auth-subtitle-text">AI-Powered Farming Assistant</p>
+  <div style="font-size:52px;">🌱</div>
+  <p style="font-family:'Outfit',sans-serif; font-size:32px; font-weight:800; color:#fff; margin:0;">AgriSense</p>
+  <p id="auth-subtitle-text" style="color:#74c69d; font-size:13px; margin:4px 0 20px;">AI-Powered Farming Assistant</p>
 
-  <!-- Language selector on auth screen -->
-  <div class="auth-lang-bar">
-    <button class="auth-lang-btn" onclick="setAuthLang('gu')">ગુજરાતી</button>
+  <div style="display:flex; gap:8px; margin-bottom:20px;">
+    <button class="auth-lang-btn active" onclick="setAuthLang('gu')">ગુજરાતી</button>
     <button class="auth-lang-btn" onclick="setAuthLang('hi')">हिंदी</button>
-    <button class="auth-lang-btn active" onclick="setAuthLang('en')">English</button>
+    <button class="auth-lang-btn" onclick="setAuthLang('en')">English</button>
   </div>
 
   <div class="auth-card">
-    <p class="auth-card-title" id="auth-card-title">Farmer Login</p>
-
-    <label class="auth-label" id="auth-phone-label">📱 Mobile Number (10 Digits)</label>
+    <p id="auth-card-title" style="font-size:20px; font-weight:700; color:#1b4332; margin:0 0 20px; text-align:center;">Farmer Login</p>
+    <label id="auth-phone-label" class="auth-label">📱 Mobile Number (10 Digits)</label>
     <input class="auth-input" type="tel" id="auth-phone" maxlength="10" placeholder="Enter 10-digit mobile number" inputmode="numeric">
 
-    <!-- Confirm phone — register only -->
     <div id="auth-confirm-block" style="display:none">
-      <label class="auth-label" id="auth-confirm-label">📱 Re-type Mobile Number</label>
+      <label id="auth-confirm-label" class="auth-label">📱 Re-type Mobile Number</label>
       <input class="auth-input" type="tel" id="auth-phone-confirm" maxlength="10" placeholder="Re-enter 10-digit mobile number" inputmode="numeric">
     </div>
 
-    <label class="auth-label" id="auth-pass-label">🔒 Password</label>
+    <label id="auth-pass-label" class="auth-label">🔒 Password</label>
     <input class="auth-input" type="password" id="auth-password" placeholder="••••••••">
 
     <div id="auth-error" class="auth-error" style="display:none"></div>
-
     <button class="auth-btn" id="auth-submit-btn" onclick="handleAuthSubmit()">🔓 Login</button>
     <p class="auth-switch" id="auth-switch-link" onclick="toggleAuthMode()">Don't have an account? Register here</p>
   </div>
@@ -189,22 +118,22 @@
 <!-- ═══════════════════════════════════════════════════ -->
 <div id="reg-success-overlay" class="hidden">
   <div class="success-card">
-    <div class="success-icon">✅</div>
+    <div style="font-size:72px; margin-bottom:12px;">✅</div>
     <p class="success-title" id="success-title">Account Created Successfully!</p>
     <div class="success-phone-box">
       <p class="success-phone-label" id="success-phone-label">Registered Mobile Number</p>
       <p class="success-phone-num" id="success-phone-num">📱 XXXXXXX210</p>
     </div>
-    <p class="success-desc" id="success-desc">Your AgriSense account is ready. Open the app to get AI farming assistance.</p>
+    <p class="success-desc" id="success-desc">Your AgriSense account is ready.</p>
     <button class="auth-btn" onclick="enterApp()">🌱 Open App</button>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- MAIN APP (hidden until logged in)                  -->
+<!-- MAIN APP FRAME                                     -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div id="app-frame" style="display:none">
-  <!-- Top Header Bar -->
+  <!-- Header -->
   <header>
     <div class="brand-container">
       <span class="brand-icon">🌱</span>
@@ -213,46 +142,73 @@
         <p data-i18n="subtitle">AI-Powered Farming Assistant</p>
       </div>
     </div>
-    <!-- Language Pill Buttons (replaces old dropdown) -->
     <div style="display:flex; gap:4px;">
-      <button class="auth-lang-btn active" id="lang-btn-gu" onclick="setLanguage('gu')" style="padding:5px 10px; font-size:11px;">ગુ</button>
-      <button class="auth-lang-btn" id="lang-btn-hi" onclick="setLanguage('hi')" style="padding:5px 10px; font-size:11px;">हि</button>
-      <button class="auth-lang-btn" id="lang-btn-en" onclick="setLanguage('en')" style="padding:5px 10px; font-size:11px;">EN</button>
+      <button class="auth-lang-btn active" id="lang-btn-gu" onclick="setLanguage('gu')" style="padding:4px 9px; font-size:11px;">ગુ</button>
+      <button class="auth-lang-btn" id="lang-btn-hi" onclick="setLanguage('hi')" style="padding:4px 9px; font-size:11px;">हि</button>
+      <button class="auth-lang-btn" id="lang-btn-en" onclick="setLanguage('en')" style="padding:4px 9px; font-size:11px;">EN</button>
     </div>
   </header>
 
-  <!-- Toast Notification Overlay -->
   <div id="toast-container"></div>
 
-  <!-- Main View Container -->
+  <!-- Main Scroll View -->
   <main>
-    <!-- TAB 1: WEATHER & ADVISORY -->
+    <!-- TAB 1: WEATHER -->
     <div id="tab-weather" class="tab-content active">
-      <div id="weather-hero" class="weather-hero">
+      <!-- Location Selector Card -->
+      <div class="card">
+        <h3 class="card-title" data-i18n="set_location">📍 Set Location</h3>
+        <button class="btn btn-secondary" onclick="useGPSLocationWeb()" data-i18n="use_gps" style="margin-bottom:10px;">📍 Use My GPS Location</button>
+
+        <label data-i18n="search_city">Or search a city:</label>
+        <div class="city-search-box">
+          <input type="text" id="city-search-input" data-i18n-placeholder="search_placeholder" placeholder="e.g. Surat, Gondal, Deesa, Rajkot">
+          <button class="btn" onclick="handleCitySearch()" style="width:auto; padding:0 14px;">🔍</button>
+        </div>
+        <div id="city-search-results"></div>
+      </div>
+
+      <div id="weather-hero" class="weather-hero" style="margin-top:12px;">
         <div class="spinner"></div>
         <p style="margin-top:8px;">Fetching location weather...</p>
       </div>
-      <div style="margin-top:14px; text-align:right;">
-        <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:12px;" onclick="searchLocation()" data-i18n="search_location">📍 Change Location / City</button>
-      </div>
+
       <div class="card" style="margin-top:14px;">
-        <h3 class="card-title" data-i18n="advisory_heading">Agricultural Advisories</h3>
+        <h3 class="card-title" data-i18n="advisories_title">Agricultural Advisories</h3>
         <div id="advisories-container"></div>
       </div>
+
       <div class="card">
-        <h3 class="card-title" data-i18n="forecast_heading">7-Day Forecast</h3>
+        <h3 class="card-title" data-i18n="forecast_7day">7-Day Weather Forecast</h3>
         <div id="forecast-container" class="forecast-list"></div>
       </div>
     </div>
 
-    <!-- TAB 2: CROP RECOMMENDATION -->
+    <!-- TAB 2: CROP AI RECOMMENDATION -->
     <div id="tab-recommend" class="tab-content">
       <div class="card">
-        <h2 class="card-title" data-i18n="recommend_title">AI Crop Recommendation</h2>
-        <p class="card-subtitle" data-i18n="recommend_subtitle">AI model trained on soil-climate profiles</p>
+        <h2 class="card-title" data-i18n="crop_title">🌱 AI Crop Recommender</h2>
+        <p class="card-subtitle" data-i18n="crop_sub">4-Layer Context Fusion: Location + Soil Type + NPK Deficits + 3-Month Weather</p>
+
+        <!-- Target Region Badge -->
+        <div style="background:#eef7f2; padding:8px 12px; border-radius:8px; margin-bottom:12px; font-size:12px; font-weight:700; color:#1b4332;" id="crop-target-region-display">
+          📍 Target Region: Anand, Gujarat
+        </div>
+
+        <!-- Soil Type Selectors -->
+        <label data-i18n="soil_type_label">Soil Type & Texture:</label>
+        <div class="soil-pill-row">
+          <button class="soil-pill active" data-soil="Auto-Detect" onclick="setSoilType('Auto-Detect')">✨ Auto-Detect</button>
+          <button class="soil-pill" data-soil="Black Cotton Soil (કાળી જમીન)" onclick="setSoilType('Black Cotton Soil (કાળી જમીન)')">⚫ Black Cotton</button>
+          <button class="soil-pill" data-soil="Sandy Loam Soil (રેતાળ જમીન)" onclick="setSoilType('Sandy Loam Soil (રેતાળ જમીન)')">🏖️ Sandy Loam</button>
+          <button class="soil-pill" data-soil="Alluvial Soil (કાંપ જમીન)" onclick="setSoilType('Alluvial Soil (કાંપ જમીન)')">🏞️ Alluvial</button>
+          <button class="soil-pill" data-soil="Red Clay Soil (લાલ જમીન)" onclick="setSoilType('Red Clay Soil (લાલ જમીન)')">🔴 Red Clay</button>
+        </div>
+
         <div class="btn-row">
           <button class="btn btn-secondary" onclick="autofillFromWeather()" data-i18n="btn_auto_fill_weather">🌤️ Auto-fill Weather</button>
         </div>
+
         <form onsubmit="submitCropRecommendation(event)">
           <div class="form-group">
             <label data-i18n="nitrogen">Nitrogen (N) kg/ha</label>
@@ -261,6 +217,7 @@
               <span id="val-N" class="range-val">80</span>
             </div>
           </div>
+
           <div class="form-group">
             <label data-i18n="phosphorus">Phosphorus (P) kg/ha</label>
             <div class="range-slider-group">
@@ -268,6 +225,7 @@
               <span id="val-P" class="range-val">45</span>
             </div>
           </div>
+
           <div class="form-group">
             <label data-i18n="potassium">Potassium (K) kg/ha</label>
             <div class="range-slider-group">
@@ -275,13 +233,15 @@
               <span id="val-K" class="range-val">50</span>
             </div>
           </div>
+
           <div class="form-group">
-            <label data-i18n="ph_level">Soil pH Level</label>
+            <label data-i18n="ph">Soil pH Level</label>
             <div class="range-slider-group">
               <input type="range" id="input-ph" min="3.5" max="10.0" step="0.1" value="6.5" oninput="syncSlider('input-ph', 'val-ph')">
               <span id="val-ph" class="range-val">6.5</span>
             </div>
           </div>
+
           <div class="form-group">
             <label data-i18n="temperature">Avg Temp (°C)</label>
             <div class="range-slider-group">
@@ -289,6 +249,7 @@
               <span id="val-temp" class="range-val">26</span>
             </div>
           </div>
+
           <div class="form-group">
             <label data-i18n="humidity">Humidity (%)</label>
             <div class="range-slider-group">
@@ -296,6 +257,7 @@
               <span id="val-humidity" class="range-val">75</span>
             </div>
           </div>
+
           <div class="form-group">
             <label data-i18n="rainfall">Rainfall (mm)</label>
             <div class="range-slider-group">
@@ -303,80 +265,74 @@
               <span id="val-rain" class="range-val">110</span>
             </div>
           </div>
-          <button type="submit" class="btn" data-i18n="btn_get_recommendation">🌱 Recommend Suitable Crops</button>
+
+          <!-- Zone Info Badge -->
+          <div id="zone-info-badge" style="display:none; background:#ecfdf5; border:1px solid #6ee7b7; padding:10px; border-radius:8px; margin-bottom:12px;"></div>
+
+          <button type="submit" class="btn" data-i18n="predict_btn">🌱 Predict Suitable Crops</button>
         </form>
       </div>
+
       <div id="recommend-results"></div>
     </div>
 
     <!-- TAB 3: LABEL SCANNER -->
     <div id="tab-scan" class="tab-content">
       <div class="card">
-        <h2 class="card-title" data-i18n="scanner_title">AI Label Scanner</h2>
-        <p class="card-subtitle" data-i18n="scanner_subtitle">Gemini Vision AI — Take a photo of any pesticide, fertilizer, or seed package</p>
+        <h2 class="card-title" data-i18n="scanner_title">🏷️ AI Label Scanner</h2>
+        <p class="card-subtitle" data-i18n="scanner_sub">Powered by Gemini Vision AI — Take a photo of any pesticide, fertilizer, or seed package</p>
+
         <label for="label-file-input" class="upload-dropzone">
           <div class="upload-icon">📷</div>
-          <div class="upload-text" data-i18n="upload_label_btn">Upload Product Photo / Camera</div>
+          <div class="upload-text" data-i18n="take_photo">📷 Take Photo of Product</div>
           <input type="file" id="label-file-input" accept="image/*" style="display:none;" onchange="handleLabelScanUpload(this)">
         </label>
+
         <div class="form-group" style="margin-top:10px;">
-          <label data-i18n="or_type_text">Or enter product name (e.g. Urea, Chlorpyrifos, Ferterra)</label>
+          <label data-i18n="type_product">Or type product name (e.g. Urea, Chlorpyrifos, Ferterra)</label>
           <input type="text" id="label-text-input" placeholder="e.g. Neem Shield, Chlorpyrifos, Urea 46%">
         </div>
-        <button class="btn" onclick="submitTextLabelScan()" data-i18n="scan_btn">🔍 Scan &amp; Analyze Label</button>
+
+        <button class="btn" onclick="submitTextLabelScan()" data-i18n="analyze_btn">🔍 Analyze Product</button>
       </div>
+
       <div id="label-scan-results"></div>
     </div>
 
-    <!-- TAB 4: FARMER PROFILE + LOGOUT -->
+    <!-- TAB 4: FARMER PROFILE -->
     <div id="tab-profile" class="tab-content">
       <div class="card">
-        <h2 class="card-title" data-i18n="profile_title">Farmer Profile &amp; Settings</h2>
+        <h2 class="card-title" data-i18n="profile_title">👨‍🌾 Farmer Profile & Settings</h2>
         <form onsubmit="saveProfileData(event)">
           <div class="form-group">
-            <label data-i18n="farmer_name">Farmer Name</label>
+            <label>Farmer Name</label>
             <input type="text" id="prof-name" placeholder="Enter your name">
           </div>
           <div class="form-group">
-            <label data-i18n="phone">Mobile Number</label>
+            <label>Mobile Number</label>
             <input type="text" id="prof-phone" placeholder="+91 XXXXX XXXXX" readonly style="background:#f3f4f6; color:#6b7280;">
           </div>
           <div class="form-group">
-            <label data-i18n="farm_location">Village / District</label>
+            <label>Village / District</label>
             <input type="text" id="prof-location" placeholder="e.g. Gondal, Rajkot">
           </div>
-          <div class="form-group">
-            <label data-i18n="soil_type">Soil Type</label>
-            <select id="prof-soil-type">
-              <option value="Loamy Soil">Loamy Soil (ગોરાડુ જમીન)</option>
-              <option value="Black Cotton Soil">Black Cotton Soil (કાળી જમીન)</option>
-              <option value="Sandy Soil">Sandy Arid Soil (રેતાળ જમીન)</option>
-              <option value="Alluvial Soil">Alluvial Soil (કાંપ વાળી જમીન)</option>
-            </select>
-          </div>
-          <button type="submit" class="btn" data-i18n="save_profile_btn">💾 Save Profile</button>
+          <button type="submit" class="btn" data-i18n="save_profile">💾 Save Profile</button>
         </form>
 
-        <!-- ─── Logout Section ─── -->
-        <div class="logout-section">
-          <div class="logout-phone-badge">
+        <div class="logout-section" style="margin-top:20px; padding-top:16px; border-top:1px solid #e5e7eb;">
+          <div class="logout-phone-badge" style="display:flex; align-items:center; gap:8px; background:#f0fdf4; padding:8px 12px; border-radius:8px; margin-bottom:12px;">
             <span>📱</span>
-            <span id="logout-phone-display">Logged in</span>
+            <span id="logout-phone-display" style="font-weight:700; color:#166534;">Logged in</span>
           </div>
-          <button class="btn-logout" id="logout-btn" onclick="handleLogout()">
+          <button class="btn-logout" id="logout-btn" onclick="handleLogout()" style="width:100%; padding:12px; background:#dc2626; color:#fff; border:none; border-radius:10px; font-weight:700; cursor:pointer;">
             🚪 <span id="logout-label">Logout</span>
           </button>
         </div>
       </div>
-
-      <div class="card">
-        <h3 class="card-title" data-i18n="history_title">Recent Activity History</h3>
-        <div id="history-container"></div>
-      </div>
     </div>
   </main>
 
-  <!-- Bottom Navigation Bar — 4 tabs only (no Soil Health) -->
+  <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
     <div id="nav-weather" class="nav-item active" onclick="switchTab('weather')">
       <div class="nav-icon">🌤️</div>
@@ -384,7 +340,7 @@
     </div>
     <div id="nav-recommend" class="nav-item" onclick="switchTab('recommend')">
       <div class="nav-icon">🌱</div>
-      <div data-i18n="tab_recommend">Crop Advice</div>
+      <div data-i18n="tab_recommend">Crop AI</div>
     </div>
     <div id="nav-scan" class="nav-item" onclick="switchTab('scan')">
       <div class="nav-icon">🏷️</div>
