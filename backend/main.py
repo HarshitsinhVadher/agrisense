@@ -365,11 +365,25 @@ def read_history(request: Request, farmer_id: int = 1):
     user_id = _get_user_id(request)
     return fetch_all_history_sql(farmer_id=farmer_id, user_id=user_id)
 
-# ─── Static Frontend Mount ───
+# ─── Static Frontend Mount & Root Route ───
 
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend')
 if os.path.exists(frontend_dir):
     app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+
+@app.get("/")
+def serve_index():
+    index_path = os.path.join(frontend_dir, 'index.html')
+    if os.path.exists(index_path):
+        return FileResponse(
+            index_path,
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            }
+        )
+    return {"message": "AgriSense API is running"}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
