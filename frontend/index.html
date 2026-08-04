@@ -70,12 +70,223 @@
     .city-result-item { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; cursor: pointer; }
     .city-result-item:hover { background: #f0fdf4; }
 
-    /* ─── Auth & Success overlays ─── */
-    #auth-overlay { position: fixed; inset: 0; z-index: 1000; background: linear-gradient(160deg, #052e16 0%, #1b4332 50%, #2d6a4f 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-    #auth-overlay.hidden { display: none; }
-    .auth-card { background: #fff; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
-    #reg-success-overlay { position: fixed; inset: 0; z-index: 1001; background: linear-gradient(160deg, #052e16 0%, #1b4332 60%); display: flex; align-items: center; justify-content: center; padding: 24px; }
-    #reg-success-overlay.hidden { display: none; }
+    /* ─── Modern Auth & Success Screen Design System ─── */
+    #auth-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: radial-gradient(circle at top right, #1b4332 0%, #081c15 60%, #05130e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+    }
+    #auth-overlay.hidden { display: none !important; }
+
+    .auth-brand-logo {
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
+      box-shadow: 0 12px 30px rgba(82, 183, 138, 0.35);
+      margin-bottom: 12px;
+      object-fit: cover;
+      background: #1b4332;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .auth-brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      margin: 0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .auth-brand-sub {
+      color: #52b788;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 4px 0 18px;
+      letter-spacing: 0.2px;
+    }
+
+    .auth-lang-switcher {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: 30px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .auth-lang-btn {
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 12px;
+      font-weight: 700;
+      background: transparent;
+      color: #d1d5db;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .auth-lang-btn.active {
+      background: #2d6a4f;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(45, 106, 79, 0.4);
+    }
+
+    .auth-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px 26px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.15);
+      animation: authSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes authSlideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-card-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1b4332;
+      margin: 0 0 20px;
+      text-align: center;
+      letter-spacing: -0.3px;
+    }
+
+    .auth-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    .auth-input {
+      width: 100%;
+      border: 1.5px solid #d1d5db;
+      border-radius: 12px;
+      padding: 13px 15px;
+      font-size: 14px;
+      font-weight: 600;
+      background-color: #f9fafb;
+      color: #111827 !important;
+      outline: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .auth-input:focus {
+      border-color: #2d6a4f;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.12);
+    }
+
+    .auth-error {
+      background-color: #fef2f2;
+      border-left: 4px solid #ef4444;
+      color: #991b1b;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 14px;
+    }
+
+    .auth-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 22px;
+      box-shadow: 0 6px 18px rgba(45, 106, 79, 0.35);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(45, 106, 79, 0.45);
+      background: linear-gradient(135deg, #347a5b 0%, #1e4a37 100%);
+    }
+
+    .auth-btn:active {
+      transform: translateY(0);
+    }
+
+    .auth-switch {
+      color: #2d6a4f;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 18px;
+      margin-bottom: 0;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .auth-switch:hover {
+      color: #1b4332;
+      text-decoration: underline;
+    }
+
+    /* ─── Success Screen ─── */
+    #reg-success-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1001;
+      background: radial-gradient(circle at top right, #1b4332 0%, #081c15 60%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    #reg-success-overlay.hidden { display: none !important; }
+
+    .success-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      animation: authSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .success-phone-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 14px;
+      margin: 16px 0;
+    }
+    .success-phone-label { font-size: 12px; color: #6b7280; margin-bottom: 4px; font-weight: 600; }
+    .success-phone-num { font-size: 20px; color: #166534; font-weight: 800; letter-spacing: 1px; }
+    .success-title { font-size: 22px; font-weight: 800; color: #166534; margin: 8px 0; }
+    .success-desc { font-size: 13px; color: #374151; margin-bottom: 20px; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -84,18 +295,18 @@
 <!-- AUTH OVERLAY                                        -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div id="auth-overlay">
-  <div style="font-size:52px;">🌱</div>
-  <p style="font-family:'Outfit',sans-serif; font-size:32px; font-weight:800; color:#fff; margin:0;">AgriSense</p>
-  <p id="auth-subtitle-text" style="color:#74c69d; font-size:13px; margin:4px 0 20px;">AI-Powered Farming Assistant</p>
+  <img src="/static/favicon.png" alt="AgriSense Logo" class="auth-brand-logo" onerror="this.style.display='none'">
+  <p class="auth-brand-title">AgriSense</p>
+  <p id="auth-subtitle-text" class="auth-brand-sub">AI-Powered Farming Assistant</p>
 
-  <div style="display:flex; gap:8px; margin-bottom:20px;">
+  <div class="auth-lang-switcher">
     <button class="auth-lang-btn active" onclick="setAuthLang('gu')">ગુજરાતી</button>
     <button class="auth-lang-btn" onclick="setAuthLang('hi')">हिंदी</button>
     <button class="auth-lang-btn" onclick="setAuthLang('en')">English</button>
   </div>
 
   <div class="auth-card">
-    <p id="auth-card-title" style="font-size:20px; font-weight:700; color:#1b4332; margin:0 0 20px; text-align:center;">Farmer Login</p>
+    <p id="auth-card-title" class="auth-card-title">Farmer Login</p>
     <label id="auth-phone-label" class="auth-label">📱 Mobile Number (10 Digits)</label>
     <input class="auth-input" type="tel" id="auth-phone" maxlength="10" placeholder="Enter 10-digit mobile number" inputmode="numeric">
 
