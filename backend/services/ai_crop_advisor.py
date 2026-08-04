@@ -318,6 +318,80 @@ CRITICAL: Return ONLY raw JSON. recommended_crops MUST contain exactly 5 crops."
     return translate_advice_to_lang(result, lang)
 
 
+def translate_advice_to_lang(advice: Dict[str, Any], lang: str) -> Dict[str, Any]:
+    """Translate key advice fields into Gujarati or Hindi. Returns advice unchanged for English."""
+    if lang not in ('gu', 'hi') or not isinstance(advice, dict):
+        return advice
+
+    # ── Label maps ──────────────────────────────────────────────────────────
+    water_map = {
+        'gu': {'Low': 'ઓછું', 'Medium': 'મધ્યમ', 'High': 'વધારે',
+               'Very High': 'ઘણું વધારે', 'low': 'ઓછું', 'medium': 'મધ્યમ', 'high': 'વધારે'},
+        'hi': {'Low': 'कम', 'Medium': 'मध्यम', 'High': 'अधिक',
+               'Very High': 'बहुत अधिक', 'low': 'कम', 'medium': 'मध्यम', 'high': 'अधिक'},
+    }
+    season_map = {
+        'gu': {'Kharif': 'ખરીફ', 'Rabi': 'રવિ', 'Summer': 'ઉનાળો', 'Zaid': 'ઝાઇદ',
+               'kharif': 'ખરીફ', 'rabi': 'રવિ', 'summer': 'ઉનાળો'},
+        'hi': {'Kharif': 'खरीफ', 'Rabi': 'रबी', 'Summer': 'ग्रीष्म', 'Zaid': 'जायद',
+               'kharif': 'खरीफ', 'rabi': 'रबी', 'summer': 'ग्रीष्म'},
+    }
+    crop_name_map = {
+        'gu': {
+            'Groundnut': 'મગફળી', 'Cotton': 'કપાસ', 'Wheat': 'ઘઉં', 'Rice': 'ડાંગર',
+            'Bajra': 'બાજરી', 'Maize': 'મકાઈ', 'Sugarcane': 'શેરડી', 'Soybean': 'સોયાબીન',
+            'Onion': 'ડુંગળી', 'Potato': 'બટાકા', 'Tomato': 'ટામેટા', 'Banana': 'કેળા',
+            'Mango': 'કેરી', 'Cumin': 'જીરૂ', 'Fennel': 'વરિયાળી', 'Garlic': 'લસણ',
+            'Mustard': 'રાઈ', 'Castor': 'એરંડા', 'Sesame': 'તલ', 'Moong': 'મગ',
+            'Tur': 'તુવેર', 'Chickpea': 'ચણા', 'Lentil': 'મસૂર', 'Jowar': 'જુવાર',
+        },
+        'hi': {
+            'Groundnut': 'मूंगफली', 'Cotton': 'कपास', 'Wheat': 'गेहूं', 'Rice': 'चावल',
+            'Bajra': 'बाजरा', 'Maize': 'मक्का', 'Sugarcane': 'गन्ना', 'Soybean': 'सोयाबीन',
+            'Onion': 'प्याज', 'Potato': 'आलू', 'Tomato': 'टमाटर', 'Banana': 'केला',
+            'Mango': 'आम', 'Cumin': 'जीरा', 'Fennel': 'सौंफ', 'Garlic': 'लहसुन',
+            'Mustard': 'सरसों', 'Castor': 'अरंडी', 'Sesame': 'तिल', 'Moong': 'मूंग',
+            'Tur': 'अरहर', 'Chickpea': 'चना', 'Lentil': 'मसूर', 'Jowar': 'ज्वार',
+        },
+    }
+
+    w_map = water_map.get(lang, {})
+    s_map = season_map.get(lang, {})
+    c_map = crop_name_map.get(lang, {})
+
+    # ── Translate recommended_crops list ────────────────────────────────────
+    translated_crops = []
+    for crop in advice.get('recommended_crops', []):
+        c = dict(crop)
+        # Translate crop name
+        c['crop_name'] = c_map.get(c.get('crop_name', ''), c.get('crop_name', ''))
+        # Translate water requirement
+        wr = c.get('water_requirement', '')
+        c['water_requirement'] = w_map.get(wr, wr)
+        # Translate season hints inside duration/reason if present
+        for season_en, season_tr in s_map.items():
+            if 'suitability_reason' in c:
+                c['suitability_reason'] = c['suitability_reason'].replace(season_en, season_tr)
+        translated_crops.append(c)
+
+    advice['recommended_crops'] = translated_crops
+
+    # ── Translate detected_soil_type label ──────────────────────────────────
+    soil_tr = {
+        'gu': {'Loamy Soil': 'ગોરાડુ જમીન', 'Black Cotton Soil': 'કાળી જમીન',
+               'Sandy Soil': 'રેતાળ જમીન', 'Alluvial Soil': 'કાંપ જમીન',
+               'Red Soil': 'લાલ જમીન', 'Clay Soil': 'ચીકણી જમીન'},
+        'hi': {'Loamy Soil': 'दोमट मिट्टी', 'Black Cotton Soil': 'काली मिट्टी',
+               'Sandy Soil': 'रेतीली मिट्टी', 'Alluvial Soil': 'जलोढ़ मिट्टी',
+               'Red Soil': 'लाल मिट्टी', 'Clay Soil': 'चिकनी मिट्टी'},
+    }
+    soil_label = advice.get('detected_soil_type', '')
+    advice['detected_soil_type'] = soil_tr.get(lang, {}).get(soil_label, soil_label)
+
+    return advice
+
+
+
 def _build_smart_fallback(
     location: str, soil_type: str, N: float, P: float, K: float,
     ph: float, temp: float, rain: float, lang: str,
