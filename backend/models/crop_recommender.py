@@ -96,8 +96,10 @@ class CropRecommender:
         if self.model is None or self.encoder is None:
             return self._heuristic_fallback(N, P, K, temperature, humidity, ph, rainfall, lang)
             
-        features = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
-        probs = self.model.predict_proba(features)[0]
+        import pandas as pd
+        feature_names = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
+        features_df = pd.DataFrame([[N, P, K, temperature, humidity, ph, rainfall]], columns=feature_names)
+        probs = self.model.predict_proba(features_df)[0]
         
         top_indices = np.argsort(probs)[::-1][:3]
         
