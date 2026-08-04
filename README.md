@@ -8,7 +8,7 @@
 
   [![Download APK](https://img.shields.io/badge/📥_Download_AgriSense_APK-v4.5-1b4332?style=for-the-badge&logo=android&logoColor=white)](https://github.com/HarshitsinhVadher/agrisense/raw/main/AgriSense-v4.5-release.apk)
   [![GitHub Release](https://img.shields.io/badge/Release-v4.5-2d6a4f?style=for-the-badge&logo=github)](https://github.com/HarshitsinhVadher/agrisense/tags)
-  [![Web App Live](https://img.shields.io/badge/🌐_Live_Web_App-agrisense--app.onrender.com-52b788?style=for-the-badge)](https://agrisense-app.onrender.com)
+  [![Web App Live](https://img.shields.io/badge/🌐_Live_Web_App-agrisense--00qs.onrender.com-52b788?style=for-the-badge)](https://agrisense-00qs.onrender.com)
   [![License](https://img.shields.io/badge/License-MIT-081c15?style=for-the-badge)](LICENSE)
 
 </div>
@@ -28,7 +28,7 @@ Powered by **Google Gemini Vision & Search Grounding**, **Random Forest Machine 
 | Platform | Access Link | Description |
 |:---|:---|:---|
 | 📱 **Android App (APK)** | [**Download AgriSense v4.5 APK**](https://github.com/HarshitsinhVadher/agrisense/raw/main/AgriSense-v4.5-release.apk) | Standalone release build with custom Android 8.0+ Adaptive Icons (`77.1 MB`). |
-| 🌐 **Web Application** | [**agrisense-app.onrender.com**](https://agrisense-app.onrender.com) | Responsive PWA web app accessible from any smartphone or desktop browser. |
+| 🌐 **Web Application** | [**agrisense-00qs.onrender.com**](https://agrisense-00qs.onrender.com) | Responsive PWA web app accessible from any smartphone or desktop browser. |
 | 🏷️ **Latest Tagged Build** | [**GitHub v4.5 Release Tag**](https://github.com/HarshitsinhVadher/agrisense/tags) | Release tags, source code, and version history. |
 
 ---
