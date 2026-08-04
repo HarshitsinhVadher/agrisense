@@ -159,9 +159,8 @@ def geocode(
     lon: Optional[float] = Query(None, description="Longitude")
 ):
     if lat is not None and lon is not None:
-        from services.regional_crop_lookup import find_nearest_district_by_gps
-        nearest = find_nearest_district_by_gps(lat, lon)
-        display_name = f"{nearest['district_name']}, Gujarat" if nearest else f"GPS ({lat:.2f}, {lon:.2f})"
+        from services.weather_service import reverse_geocode_coords
+        display_name = reverse_geocode_coords(lat, lon)
         return {
             "display": display_name,
             "latitude": lat,

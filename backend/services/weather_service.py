@@ -110,6 +110,51 @@ def geocode_city(query: str) -> list:
 
     return []
 
+def reverse_geocode_coords(lat: float, lon: float) -> str:
+    """
+    Reverse geocode GPS coordinates to exact village, town, taluka, and district name
+    using OpenStreetMap Nominatim.
+    """
+    try:
+        headers = {"User-Agent": "AgriSense-App/3.0 (agricultural crop recommendation, contact@agrisense.in)"}
+        url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&addressdetails=1"
+        resp = requests.get(url, headers=headers, timeout=5)
+        if resp.status_code == 200:
+            data = resp.json()
+            addr = data.get("address", {})
+            place_name = (
+                addr.get("village") or
+                addr.get("town") or
+                addr.get("suburb") or
+                addr.get("neighbourhood") or
+                addr.get("hamlet") or
+                addr.get("city") or
+                addr.get("county") or
+                addr.get("district")
+            )
+            county = addr.get("county") or addr.get("district") or ""
+            state = addr.get("state", "Gujarat")
+
+            parts = []
+            if place_name:
+                parts.append(place_name)
+            if county and county.lower() != (place_name or "").lower():
+                parts.append(county)
+            if state and state.lower() != (place_name or "").lower():
+                parts.append(state)
+
+            if parts:
+                return ", ".join(parts)
+    except Exception as e:
+        print(f"Reverse geocode error for ({lat}, {lon}): {e}")
+
+    # Fallback to nearest district if Nominatim is unreachable
+    from services.regional_crop_lookup import find_nearest_district_by_gps
+    nearest = find_nearest_district_by_gps(lat, lon)
+    if nearest:
+        return f"{nearest['district_name']}, Gujarat"
+    return f"Location ({lat:.2f}, {lon:.2f})"
+
 import time
 
 _WEATHER_CACHE: Dict[str, Dict[str, Any]] = {}
